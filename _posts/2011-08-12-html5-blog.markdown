@@ -1,0 +1,13 @@
+---
+layout: project
+title:  "HTML5 Blog"
+date:   2011-08-12 00:00:00
+categories: project personal
+thumbnail: "/assets/img/projects.thumbnails/html5blogThumb.png"
+screenshot: "/assets/img/projects.screenshots/jsblog.00.png"
+project: "https://github.com/jbutz/JSBlog"
+demo: "http://jbutz.github.com/JSBlog/"
+tags: html5 javascript
+---
+I created this little journal or blog to see how the localStorage object in HTML5 handled saving and retrieving JSON objects. 
+As it turns out you just store things and do all of the JSON work yourself.

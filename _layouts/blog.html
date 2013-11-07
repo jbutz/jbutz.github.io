@@ -1,0 +1,55 @@
+---
+sitemap:
+  priority: 0.7
+  changefreq: monthly
+---
+{% include header.html %}
+<div class="row">
+	<div class="small-12 columns">
+		<h2>{{ page.title }}</h2>
+	</div>
+</div>
+{% for post in paginator.posts %} {% if post.categories contains 'blog' %}
+<article>
+<div class="row">
+	<div class="small-12 columns">
+		<h4><a href="{{ post.url }}">{{ post.title }}</a> <small>{{ post.date | date_to_string  }}</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		{{ post.content }}
+	</div>
+</div>
+</article>
+<hr>
+{% endif %}{% endfor %}
+
+<div class="row">
+	<div class="small-4 small-centered columns">
+		<div style="text-align: center">
+		<ul class="button-group" style="display: inline-block">
+			{% if paginator.previous_page %}
+				{% if paginator.previous_page == 1 %}
+					<li><a href="/blog" class="small button">&larr;</a></li>
+				{% else %}
+			  		<li><a href="/blog/page{{ paginator.previous_page }}" class="small button">&larr;</a></li>
+				{% endif %}
+			{% else %}
+				<li><a href="#" class="small button disabled">&larr;</a></li>
+			{% endif %}
+
+			{% if paginator.next_page %}
+				<li><a href="/blog/page{{ paginator.next_page }}" class="small button">&rarr;</a></li>
+			{% else %}
+				<li><a href="#" class="small button disabled">&rarr;</a></li>
+			{% endif %}
+		</ul>
+	</div>
+	</div>
+</div>
+
+
+
+
+{% include footer.html %}

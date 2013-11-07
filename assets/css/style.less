@@ -1,0 +1,182 @@
+---
+---
+/* http://www.colorcombos.com/color-schemes/430/ColorCombo430.html */
+
+/*
+ 158
+ 3D6A7D
+ D3CEC3
+ FFFFFF
+*/
+/* Colors */
+@sGreen: #3D6A7D;/*#218559;*/
+@sBlue: @sGreen;/*#06A2CB;*/
+@sBlueH: @sGreen;/*#098FB2;*/
+@sGrey: #192823;
+
+/* Mixins */
+.navBackground {
+	background-color: @sBlue;
+}
+
+/*
+ * Header & Nav
+ */
+header {
+	background-color: @sGreen;
+	color: @sGrey;
+	a {
+		color: @sGrey;
+	}
+	a:visted {
+		color: @sGrey;
+	}
+	a:hover {
+		color: @sGrey;
+	}
+	
+	h1 {
+		color: #FFF;
+		/*text-shadow: 2px 2px 1px #D3CEC3;/*rgba(100, 100, 100, 1);*/
+		a {
+			color: #FFF;
+		}
+		a:visted {
+			color: #FFF;
+		}
+		a:hover {
+			color: #FFF;
+		}
+	}
+}
+nav {
+	.navBackground;
+	div.top-bar {
+		.navBackground;
+		margin-bottom: 0;
+
+		.top-bar-section {
+			ul, ul li a, ul li.active>a {
+				.navBackground;
+			}
+			ul li a:hover {
+				background-color: @sBlueH;
+			}
+		}
+	}
+	div.top-bar.expanded {
+		.title-area {
+			.navBackground;
+		}
+	}
+}
+
+/*
+ * Body
+ */
+body {
+	/*background-image:url("/assets/img/background.png");/*! Based on http://subtlepatterns.com/low-contrast-linen/ */
+}
+
+/*
+ * Posts
+ */
+.postTitle {
+	display: inline-block;
+}
+.postDate {
+	margin-left: 1.0em;
+}
+article ul, div.post ul {
+	margin-left: 1.5em;
+}
+
+/*
+ * Pricing Tables
+ */
+.pricing-table{
+	.price {
+		padding: 5px;
+	}
+}
+
+/*
+ * Tech Sprites
+ */
+/** Tech Sprites **/
+[class^="sprite-"], [class*=" sprite-"] {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    *margin-right: .3em;
+    line-height: 16px;
+    vertical-align: text-top;
+    background-image: url("../img/tech-sprite.png");
+    background-repeat: no-repeat;
+}
+.sprite-null {
+	background-position: 16px, 16px;
+}
+.sprite-html5 {
+    background-position: 0 0;
+}
+.sprite-nodejs {
+    background-position: -16px 0;
+}
+.sprite-android {
+    background-position: -32px 0;
+}
+.sprite-javascript {
+    background-position: -48px 0;
+}
+.sprite-jquery {
+    background-position: 0 -16px;
+}
+.sprite-php {
+    background-position: -16px -16px;
+}
+.sprite-backbone {
+    background-position: -32px -16px;
+}
+.sprite-googleapps {
+    background-position: -48px -16px;
+}
+.sprite-googledrive {
+    background-position: 0 -32px;
+}
+.sprite-googledev {
+    background-position: -16px -32px;
+}
+.sprite-powershell {
+    background-position: -32px -32px;
+}
+.sprite-bootstrap {
+    background-position: -48px -32px;
+}
+.sprite-googlechromestore {
+    background-position: 0 -48px;
+}
+.sprite-googlechrome {
+    background-position: -16px -48px;
+}
+.sprite-ruby {
+    background-position: -32px -48px;
+}
+.sprite-redmine {
+    background-position: -48px -48px;
+}
+.sprite-csharp {
+    background-position: 0 -64px;
+}
+.sprite-sublimetext {
+    background-position: -16px -64px;
+}
+/** /Tech Sprites **/
+
+/* Highlight */
+div {
+	.highlight {
+		margin: 0.5em 0;
+	}
+}

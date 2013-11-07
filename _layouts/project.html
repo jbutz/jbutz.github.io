@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<div class="row">
+	<div class="small-12 columns">
+		<h2 class="postTitle">{{ page.title }}</h2> <span class="postDate">{{ page.date | date: "%B %Y" }}</span>
+	</div>
+</div>
+<div class="row">
+	<div class="large-6 columns">
+		<a href="{{ page.screenshot }}" class="th radius">
+			<img src="{{ page.screenshot }}" alt="{{ page.title }}" />
+		</a>
+	</div>
+	<div class="large-6 small-12 columns">
+		{{ content }}
+		{% if page.project %}<a href="{{ page.project }}" class="button secondary">View Project</a>{% endif %}
+		{% if page.demo %}<a href="{{ page.demo }}" class="button secondary">View Demo</a>{% endif %}
+		{% if page.plugin_page %}<a href="{{ page.plugin_page }}" class="button secondary">View Plugin Page</a>{% endif %}
+	</div>
+</div>

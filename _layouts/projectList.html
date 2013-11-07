@@ -1,0 +1,17 @@
+{% include header.html %}
+<div class="row">
+	<div class="small-12 columns">
+		<h2>{{ page.title }}</h2>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<ul class="small-block-grid-2 large-block-grid-4">
+			{% sorted_for post in site.posts sort_by:title %} {% if post.categories contains 'project' %}
+			<li>{% include smallProject.html %}</li>
+			{% endif %}{% endsorted_for %}
+		</ul>
+	</div>
+</div>
+{{ content }}
+{% include footer.html %}

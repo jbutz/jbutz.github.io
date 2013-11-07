@@ -1,0 +1,19 @@
+<ul class="pricing-table">
+	<li class="title"><a href="{{ post.url }}">{{ post.title }}</a></li>
+	<li class="price"><img src="{{ post.thumbnail }}" title="" alt=""/></li>
+	{% if page.showProjectType %}
+	<li class="bullet-item">
+		{% if post.categories contains 'personal' %}Personal Project{% endif %}
+		{% if post.categories contains 'other' %}Misc. Project{% endif %}
+	</li>
+	{% endif %}
+	<li class="description">
+		{% if post.tags  != empty %}
+		{% for sprite in post.tags %}
+		<i class="sprite-{{sprite}}"></i>
+		{% endfor %}
+		{% else %}
+		<i class="sprite-null"></i>
+		{% endif %}
+	</li>
+</ul>

@@ -1,0 +1,10 @@
+---
+layout: project
+title:  "Work Order Tracking"
+date:   2011-09-16 00:00:00
+categories: project other
+thumbnail: "/assets/img/projects.thumbnails/wotrk.png"
+screenshot: "/assets/img/projects.screenshots/wotrk.00.png"
+tags: php jquery
+---
+Work Order Tracking is a time tracking system that tightly integrated with a third-party ERP system as the back-end. It allows the accurate tracking of both billable and non-billable time for team members. Billable time is automatically accumulated on Work Orders, and Non-billable time can be tracked via several reports. This tool has allowed for the development of more accurate metrics and more accurate billing.

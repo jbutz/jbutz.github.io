@@ -1,0 +1,11 @@
+---
+layout: project
+title:  "PHP RESTful API Class"
+date:   2011-06-07 00:00:00
+categories: project personal
+thumbnail: "/assets/img/projects.thumbnails/phpThumb.png"
+screenshot: "/assets/img/projects.screenshots/phprestful.00.png"
+project: "https://github.com/jbutz/REST-PHP-Class"
+tags: php
+---
+In an attempt to learn more about RESTful APIs and how to use them I created a set of classes to both receive and send RESTful queries.

@@ -1,0 +1,40 @@
+---
+layout: default
+title: 
+sitemap:
+  priority: 0.7
+  changefreq: monthly
+---
+<div class="row">
+	<div class="small-12 columns">
+		<h2>Personal Projects</h2>
+		<ul class="small-block-grid-2 large-block-grid-4">
+			{% for post in site.posts %} {% if post.categories contains 'personal' AND post.categories contains 'project' %}
+			<li>{% include smallProject.html %}</li>
+			{% endif %}{% endfor %}
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="small-12 columns">
+		<h2>Other Projects</h2>
+		<ul class="small-block-grid-2 large-block-grid-4">
+			{% for post in site.posts %} {% if post.categories contains 'other' AND post.categories contains 'project' %}
+			<li>{% include smallProject.html %}</li>
+			{% endif %}{% endfor %}
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		var min = 0;
+		$('.pricing-table .title').each(function()
+		{
+			if($(this).height() > min)
+				min = $(this).height();
+		});
+		$('.pricing-table .title').height(min);
+	})
+</script>

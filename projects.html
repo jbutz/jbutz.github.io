@@ -1,0 +1,17 @@
+---
+layout: projectList
+title: Projects
+showProjectType: true
+---
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		var min = 0;
+		$('.pricing-table .title').each(function()
+		{
+			if($(this).height() > min)
+				min = $(this).height();
+		});
+		$('.pricing-table .title').height(min);
+	})
+</script>
