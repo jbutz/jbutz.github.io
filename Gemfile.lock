@@ -1,7 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.6.3)
     commonjs (0.2.6)
+    execjs (2.0.2)
     less (2.3.2)
       commonjs (~> 0.2.6)
     libv8 (3.16.14.3)
@@ -14,5 +19,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  coffee-script
   less
   therubyracer

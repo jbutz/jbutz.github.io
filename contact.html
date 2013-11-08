@@ -2,11 +2,6 @@
 layout: default
 title: Contact Me
 ---
- <script type="text/javascript">
- var RecaptchaOptions = {
-    theme : 'clean'
- };
- </script>
 <div class="row">
 	<div class="small-12 columns">
 	<h2>Contact Me</h2>
@@ -16,37 +11,26 @@ title: Contact Me
 	<div class="small-12 columns">
 		<p>If you would like to get a hold of me please use the form below. I'll get back to you as soon as I can.</p>
 		<div class="contactAlerts"></div>
-		<form method="POST" action="contact.php" id="contactForm">
+		<form method="POST" action="http://jasonbutzinfo.herokuapp.com/messages" id="contactForm">
 
 			<div class="row">
 				<div class="small-12 large-4 columns">
-					<label>Your Name</label>  
-					<input type="text" placeholder="Your Name" name="name" /> 
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="small-12 large-4 columns">
-					<label>Your E-Mail Address</label>  
-					<input type="email" placeholder="Your E-Mail Address" name="email" />
+					<label for="message[author]">Your Name</label>
+					<input type="text" placeholder="Your Name" name="message[author]" />
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="small-12 large-4 columns">
-					<label>Your Message</label>  
-					<textarea name="message"></textarea>
+					<label for="message[author_email]">Your E-Mail Address</label>
+					<input type="email" placeholder="Your E-Mail Address" name="message[author_email]" />
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="small-12 large-8 columns">
-					<script type="text/javascript" src="//www.google.com/recaptcha/api/challenge?k=6LdRp9oSAAAAAIC-4tjbtob4Rt_JIIdiCB7gQtlN"></script>
-					<noscript>
-						<iframe src="//www.google.com/recaptcha/api/noscript?k=6LdRp9oSAAAAAIC-4tjbtob4Rt_JIIdiCB7gQtlN" height="300" width="500" frameborder="0"></iframe><br>
-						<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-						<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-					</noscript>
+				<div class="small-12 large-4 columns">
+					<label for="message[content]">Your Message</label>
+					<textarea name="message[content]"></textarea>
 				</div>
 			</div>
 
@@ -59,4 +43,3 @@ title: Contact Me
 		</form>
 	</div>
 </div>
-<script type="text/javascript" src="/assets/js/contact.js"></script>
