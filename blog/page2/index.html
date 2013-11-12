@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Jason Butz - Blog</title>
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="alternate" type="application/rss+xml" title="Blog Feed" href="http://www.jasonbutz.info/blog/atom.xml" />
+	<link rel="alternate" type="application/rss+xml" title="Projects Feed" href="http://www.jasonbutz.info/project/atom.xml" />
+
+	<!-- Foundation -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/css/normalize.min.css"/>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/css/foundation.min.css"/>
+	<link rel="stylesheet" href="/assets/css/social_foundicons.css"/>
+
+	<link rel="stylesheet" href="/assets/css/syntax.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.min.js"></script>
+	<script type="text/javascript" src="/assets/js/plugins.js"></script>
+</head>
+<body>
+	<header>
+		<div class="row">
+			<div class="small-8 large-6 columns">
+				<h1><a href="/">Jason Butz</a></h1>
+			</div>
+			<div class="small-4 large-6 columns">
+				<nav class="contain-to-grid">
+					<div class="top-bar">
+						<ul class="title-area">
+							<li class="name"><!-- Leave this empty --></li>
+							<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+						</ul>
+						<section class="top-bar-section">
+							<ul class="right">
+								<li class="active"><a href="/">Home</a></li>
+								<li><a href="/projects.html">Projects</a></li>
+								<li><a href="/blog">Blog</a></li>
+								<li><a href="/contact.html">Contact Me</a></li>
+							</ul>
+						</section>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<section id="mainContent">
+		<div class="small-12 large-8 large-centered columns">
+<div class="row">
+	<div class="small-12 columns">
+		<h2>Blog</h2>
+	</div>
+</div>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
+		<h4><a href="/blog/2013/06/21/service-now.html">Service Now</a> <small>21 Jun 2013</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p>I recently switched jobs, and at the new company my department makes use of <a href='http://www.servicenow.com'>Service Now</a>. I must say, I am impressed with the product. It is sold as an ITIL compatible help desk solution, but it is so much more. You are able to customize nearly every aspect of the system if you wish. Want to rearrange a page? Done. Want a wizard so people enter their issues correctly? Done. All of this customization is done through their interface, which I expect you can customize, and through JavaScript scripts.</p>
+
+<p>Their platform runs on Java and uses Mozilla&#8217;s rhino JavaScript engine for the server-side script processing. Everything is stored in a relational database, but you don&#8217;t really have direct access to it.</p>
+
+<p>The system is very flexible, and it even has some build in functionality for web services. You can connect to their service using WSDL and SOAP or by using HTTP requests to get JSON, XML, CSV responses back. I think there may also be PDF responses? I&#8217;m not sure since I haven&#8217;t used them. Here is one of the big issues: I said you could use HTTP requests, but you don&#8217;t really get to make RESTful requests. You end up with these horrendous lists of parameters on your requests that can get very unruly.</p>
+
+<p>There is one other big issue in my mind. Everything is done with JavaScript, which isn&#8217;t bad. However, their JavaScript does not look especially nice. It also doesn&#8217;t promote very good practices. Some things get put into functions, and then the functions are called. Others are just monolithic in nature and have no functions and are all &#8220;global&#8221;. I have been using a lot of IIFEs since I have no idea what the environment is like for my code, and I have no clue if the scripts are all thrown together, or if they are run individually.</p>
+
+<p>That is really it for big issues. They have taken a lot of the annoying aspects out of making a web application. They take care of rendering for the most part, they have ACLs, they have logging, they have scheduled tasks. They even have decent documentation, which is always nice to find.</p>
+	</div>
+</div>
+</article>
+<hr>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
+		<h4><a href="/blog/2013/05/14/foundation-instead-of-bootstrap.html">Foundation instead of Bootstrap?</a> <small>14 May 2013</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p>There seem to be an increasing number of people throwing rants about overuse of <a href='http://twitter.github.io/bootstrap/'>Twitter Bootstrap</a>. This is not one of them, I like Twitter Bootstrap. It is great for people who are not designers and need to put together something that looks decent. It makes putting together a site easy. That said, you can kind of tell when it is used. The buttons are usually a dead giveaway, and customizing it is not for the faint of heart.</p>
+
+<p>For those reasons I decided to give something else a try for a <a href='http://www.bottlesapp.in'>project</a> I am putting together. I decided to give <a href='http://foundation.zurb.com'>Foundation</a> a try. It has a gem available, so it is designed to work nicely with Ruby on Rails, and it seems to be very flexible.</p>
+
+<p>The documentation on the grid system requires you to read the whole thing, not just skim it and start going. One very nice thing about their grid system is that there are different classes for different size screens. It&#8217;s great for when you want space on either side of the screen on large screens, but want to lose the extra space on a smaller one. If you don&#8217;t understand what I mean take at the <a href='http://www.bottlesapp.in'>Bottles</a> coming soon page. Compare it between your computer and phone.</p>
+
+<p>I haven&#8217;t had to do too much customizing to Foundation yet, but it looks like it is meant to handle that a bit better than Bootstrap.</p>
+	</div>
+</div>
+</article>
+<hr>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
+		<h4><a href="/blog/2013/05/03/bootstrap-lightbox-update.html">Bootstrap Lightbox Update</a> <small>03 May 2013</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p>I took a bit of a break from working on <a href='https://github.com/jbutz/bootstrap-lightbox'>Bootstrap Lightbox</a>. I just needed to get away and be lazy for a while, but I am back. The other week I re-wrote the whole thing again. I&#8217;m sure that gets tiring for some, but I had several reasons:</p>
+<ul class='no-bullet'>
+<li>I wanted to do a little as necessary as Twitter updates Bootstrap</li>
+<li>I wanted Bootstrap Lightbox to focus on images</li>
+<li>I needed more JavaScript practice</li>
+</ul>
+<p>So, here is what is going on. The <a href='http://twitter.github.io/bootstrap/javascript.html#modals'>modal JavaScript</a> is now a dependency. I take its functions and extend them and only modify the ones for lightbox that need it. This reduced the amount of work required significantly. If people want to extend or tweak Bootstrap Lightbox to use with non-image content or with carousels then they are welcome to do so, but that isn&#8217;t what Bootstrap Lightbox is for. I&#8217;m focusing on images and that makes the code much easier to work with. This will make it a lot easier to add in some image gallery functionality. The old JavaScript was a mess, but now it is a lot cleaner and easier to understand.</p>
+
+<p>So, what do I plan to do next? I am thinking about adding a feature so that you don&#8217;t need to add any extra HTML to your page. The feature would be optional, but it would provide a good basis to take care of image galleries.</p>
+
+<p>The new version is still a work in progress, but I think I have it all working. It should be released soon.</p>
+	</div>
+</div>
+</article>
+<hr>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
+		<h4><a href="/blog/2013/04/12/ruby-on-rails-exceptions.html">Ruby on Rails Exceptions</a> <small>12 Apr 2013</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p>I&#8217;ve been learning Ruby and Ruby on Rails recently, and I was working on an application today that gave me some trouble in one particular area. The application is a simple application to allow IT to post the status of different systems so people can be aware of any issues. There are three models involved:</p>
+
+<ul>
+<li>Services</li>
+
+<li>Statuses</li>
+
+<li>Events</li>
+</ul>
+
+<p>An event references both a service and a status. I needed to be able to ensure a status being deleted wasn&#8217;t referenced by any events. The callback and the database query were easy, but I was having issues when it came to showing an error as to why the status wasn&#8217;t deleted. After a bit of Googling I found that exceptions seems to be the best way to do this. That was good to know, but I still had to figure out how to use them for this case. I had trouble finding any good example of an exception being used, so I figure I ought to post what I came up with.</p>
+
+<p><em>status_controller.rb</em></p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>StatusesController</span> <span class='o'>&lt;</span> <span class='no'>ApplicationController</span>
+<span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+  <span class='k'>def</span> <span class='nf'>destroy</span>
+    <span class='vi'>@status</span> <span class='o'>=</span> <span class='no'>Status</span><span class='o'>.</span><span class='n'>find</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:id</span><span class='o'>]</span><span class='p'>)</span>
+    <span class='k'>begin</span>
+      <span class='vi'>@status</span><span class='o'>.</span><span class='n'>destroy</span>
+    <span class='k'>rescue</span> <span class='no'>Exception</span> <span class='o'>=&gt;</span> <span class='n'>e</span>
+      <span class='n'>flash</span><span class='o'>[</span><span class='ss'>:error</span><span class='o'>]</span> <span class='o'>=</span> <span class='n'>e</span><span class='o'>.</span><span class='n'>message</span>
+      <span class='n'>redirect_to</span> <span class='n'>statuses_url</span>
+      <span class='k'>return</span>
+    <span class='k'>end</span>
+
+    <span class='n'>respond_to</span> <span class='k'>do</span> <span class='o'>|</span><span class='nb'>format</span><span class='o'>|</span>
+      <span class='nb'>format</span><span class='o'>.</span><span class='n'>html</span> <span class='p'>{</span> <span class='n'>redirect_to</span> <span class='n'>statuses_url</span> <span class='p'>}</span>
+      <span class='nb'>format</span><span class='o'>.</span><span class='n'>json</span> <span class='p'>{</span> <span class='n'>head</span> <span class='ss'>:no_content</span> <span class='p'>}</span>
+    <span class='k'>end</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p><em>status.rb</em></p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Status</span> <span class='o'>&lt;</span> <span class='ss'>ActiveRecord</span><span class='p'>:</span><span class='ss'>:Base</span>
+<span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+  <span class='n'>before_destroy</span> <span class='ss'>:check_existing_events</span>
+
+  <span class='kp'>private</span>
+<span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
+  <span class='k'>def</span> <span class='nf'>check_existing_events</span>
+    <span class='k'>raise</span> <span class='no'>Exception</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='s2'>&quot;Events exist that use that status.&quot;</span><span class='p'>)</span> <span class='k'>unless</span> <span class='no'>Event</span><span class='o'>.</span><span class='n'>where</span><span class='p'>(</span><span class='ss'>:status_id</span> <span class='o'>=&gt;</span> <span class='nb'>self</span><span class='o'>.</span><span class='n'>id</span><span class='p'>)</span><span class='o'>.</span><span class='n'>count</span> <span class='o'>==</span> <span class='mi'>0</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+	</div>
+</div>
+</article>
+<hr>
+
+
+<div class="row">
+	<div class="small-4 small-centered columns">
+		<div style="text-align: center">
+		<ul class="button-group" style="display: inline-block">
+			
+				
+					<li><a href="/blog" class="small button">&larr;</a></li>
+				
+			
+
+			
+				<li><a href="#" class="small button disabled">&rarr;</a></li>
+			
+		</ul>
+	</div>
+	</div>
+</div>
+
+
+
+
+		</div>
+	</section>
+	<footer>
+		<div class="row">
+			<div class="small-12 columns">
+				<p>
+					<small><a href="http://www.jasonbutz.info/blog/atom.xml" title="Blog RSS Feed"><i class="foundicon-rss">&nbsp;Blog RSS Feed</i></a></small>
+					&nbsp;&nbsp;
+					<small><a href="http://www.jasonbutz.info/project/atom.xml" title="Projects RSS Feed"><i class="foundicon-rss">&nbsp;Projects RSS Feed</i></a></small>
+					<br />
+					<small>Jason Butz &copy; 2012 - 2013</small><br>
+				</p>
+			</div>
+		</div>
+	</footer>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation/foundation.topbar.min.js"></script>
+	<script type="text/javascript">$(document).foundation();</script>
+	<script type="text/javascript" src="/assets/js/site.js"></script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-45171709-1', 'jasonbutz.info');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>
