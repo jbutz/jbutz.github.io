@@ -91,7 +91,7 @@
 <span class='k'>end</span>
 </code></pre></div>
 <p><em>status.rb</em></p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Status</span> <span class='o'>&lt;</span> <span class='ss'>ActiveRecord</span><span class='p'>:</span><span class='ss'>:Base</span>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>Status</span> <span class='o'>&lt;</span> <span class='no'>ActiveRecord</span><span class='o'>::</span><span class='no'>Base</span>
 <span class='o'>.</span><span class='n'>.</span><span class='o'>.</span>
   <span class='n'>before_destroy</span> <span class='ss'>:check_existing_events</span>
 

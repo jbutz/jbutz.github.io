@@ -31,7 +31,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/timetracker.html</loc>
     
-    <lastmod>2013-08-21T20:00:00-04:00</lastmod>
+    <lastmod>2013-08-22T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -67,7 +67,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/servicenowcli.html</loc>
     
-    <lastmod>2013-06-18T20:00:00-04:00</lastmod>
+    <lastmod>2013-06-19T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -76,7 +76,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/sublimetest-glide.html</loc>
     
-    <lastmod>2013-06-04T20:00:00-04:00</lastmod>
+    <lastmod>2013-06-05T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -112,7 +112,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/redmine-mailstatus.html</loc>
     
-    <lastmod>2013-03-13T20:00:00-04:00</lastmod>
+    <lastmod>2013-03-14T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -121,7 +121,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/chrome-wordpress.html</loc>
     
-    <lastmod>2013-02-08T10:09:52-05:00</lastmod>
+    <lastmod>2013-02-08T15:09:52Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -130,7 +130,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/laravel-akismet.html</loc>
     
-    <lastmod>2013-01-16T19:00:00-05:00</lastmod>
+    <lastmod>2013-01-17T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -139,7 +139,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/push-drive.html</loc>
     
-    <lastmod>2012-12-31T19:00:00-05:00</lastmod>
+    <lastmod>2013-01-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -148,7 +148,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/docgraph.html</loc>
     
-    <lastmod>2012-09-30T20:00:00-04:00</lastmod>
+    <lastmod>2012-10-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -157,7 +157,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/android-webview.html</loc>
     
-    <lastmod>2012-07-01T20:00:00-04:00</lastmod>
+    <lastmod>2012-07-02T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -166,7 +166,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/gapps-tool.html</loc>
     
-    <lastmod>2012-06-30T20:00:00-04:00</lastmod>
+    <lastmod>2012-07-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -175,7 +175,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/cleanup-voicemail.html</loc>
     
-    <lastmod>2012-05-31T20:00:00-04:00</lastmod>
+    <lastmod>2012-06-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -184,7 +184,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/bootstrap-lightbox.html</loc>
     
-    <lastmod>2012-04-19T20:00:00-04:00</lastmod>
+    <lastmod>2012-04-20T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -193,7 +193,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/node-webserver.html</loc>
     
-    <lastmod>2012-02-21T19:00:00-05:00</lastmod>
+    <lastmod>2012-02-22T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -202,7 +202,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/wotrk.html</loc>
     
-    <lastmod>2011-09-15T20:00:00-04:00</lastmod>
+    <lastmod>2011-09-16T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -211,7 +211,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/backbone-ajaxqueue.html</loc>
     
-    <lastmod>2011-09-15T20:00:00-04:00</lastmod>
+    <lastmod>2011-09-16T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -220,7 +220,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/prodsched.html</loc>
     
-    <lastmod>2011-08-31T20:00:00-04:00</lastmod>
+    <lastmod>2011-09-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -229,7 +229,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/html5-tictactoe.html</loc>
     
-    <lastmod>2011-08-12T20:00:00-04:00</lastmod>
+    <lastmod>2011-08-13T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -238,7 +238,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/html5-blog.html</loc>
     
-    <lastmod>2011-08-11T20:00:00-04:00</lastmod>
+    <lastmod>2011-08-12T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -247,7 +247,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/php-rest.html</loc>
     
-    <lastmod>2011-06-06T20:00:00-04:00</lastmod>
+    <lastmod>2011-06-07T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -256,7 +256,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/other/etools.html</loc>
     
-    <lastmod>2010-12-31T19:00:00-05:00</lastmod>
+    <lastmod>2011-01-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -265,7 +265,7 @@
   <url>
     <loc>http://www.jasonbutz.info/project/personal/phpdaycare.html</loc>
     
-    <lastmod>2010-04-30T20:00:00-04:00</lastmod>
+    <lastmod>2010-05-01T00:00:00Z</lastmod>
     
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
