@@ -21,8 +21,9 @@ class MessagesController < ApplicationController
 
         EmailMessages.contact(@message).deliver
 
-        format.html { redirect_to generate_url(Rails.application.config.contact_redirect_url, info: ["E-Mail sent"]) }
-        format.json { render json: @message }
+        format.html { redirect_to generate_url(Rails.application.config.contact_redirect_url, info: "Your message has been sent.") }
+        #format.json { render nothing: true }
+        format.json { render json: {success: "Your message has been sent.", message: @message} }
       end
     end
   end

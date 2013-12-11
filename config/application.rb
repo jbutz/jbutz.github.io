@@ -27,3 +27,8 @@ module JasonbutzInfo
 
   end
 end
+
+silence_warnings do
+    require 'pry'
+    IRB = Pry
+end

@@ -21,14 +21,13 @@ gem "slim-rails", "~> 2.0.1"
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
-
 # make sure we didn't get spam
 gem "rakismet", "~> 1.4.0"
+
+# CORS for API access
+gem 'rack-cors', :require => 'rack/cors'
+
+gem 'pry'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -36,8 +35,8 @@ group :doc do
 end
 
 group :development, :test do
-	gem 'rb-fsevent', '~> 0.9.3', require: RUBY_PLATFORM =~ /darwin/i ? 'rb-fsevent' : false
-	gem 'rb-inotify', '~> 0.9', require: RUBY_PLATFORM =~ /linux/i ? 'rb-inotify' : false
+	#gem 'rb-fsevent', '~> 0.9.3', require: RUBY_PLATFORM =~ /darwin/i ? 'rb-fsevent' : false
+	#gem 'rb-inotify', '~> 0.9', require: RUBY_PLATFORM =~ /linux/i ? 'rb-inotify' : false
 	gem 'terminal-notifier-guard', require: false
 
 	gem 'guard'
@@ -45,7 +44,7 @@ group :development, :test do
 	gem 'rspec-rails'
 	gem 'capybara'
 
-	gem 'pry'
+	
 end
 
 group :production do
@@ -53,7 +52,13 @@ group :production do
 	gem 'postmark-rails'
 
 	# Web Server
-	gem 'puma'
+	#gem 'puma'
+
+	# Stop Heroku's complaining
+	gem 'rails_12factor'
+
+	# New Relic
+	gem 'newrelic_rpm'
 end
 
 # Use Capistrano for deployment

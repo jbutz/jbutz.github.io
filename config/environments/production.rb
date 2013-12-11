@@ -44,6 +44,10 @@ JasonbutzInfo::Application.configure do
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
+  config.log_level = :debug
+  #config.logger = Logger.new(STDOUT)
+  #config.logger.level = Logger::DEBUG
+  #config.consider_all_requests_local = true
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
