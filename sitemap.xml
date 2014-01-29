@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jasonbutz.info/blog/2014/01/29/service-now-workflow-email.html</loc>
+    
+    <lastmod>2014-01-29T12:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
     <loc>http://www.jasonbutz.info/blog/2013/10/25/service-now-passing-data.html</loc>
     
     <lastmod>2013-10-25T10:00:00-04:00</lastmod>
@@ -323,6 +332,12 @@
   
   <url>
     <loc>http://www.jasonbutz.info/blog/page6/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page7/index.html</loc>
   </url>
   
   

@@ -59,6 +59,44 @@
 <article>
 <div class="row">
 	<div class="small-12 columns">
+		<h4><a href="/blog/2014/01/29/service-now-workflow-email.html">ServiceNow - Workflow E-Mails</a> <small>29 Jan 2014</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p>Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&#8217;t.</p>
+
+<p>This is how you normally access a variable on a Request Item from a script:</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>current</span><span class='p'>.</span><span class='nx'>variables</span><span class='p'>[</span><span class='s1'>&#39;variable_name&#39;</span><span class='p'>].</span><span class='nx'>getGlideObject</span><span class='p'>().</span><span class='nx'>getDisplayValue</span><span class='p'>();</span> <span class='c1'>// For the displayed value</span>
+<span class='nx'>current</span><span class='p'>.</span><span class='nx'>variables</span><span class='p'>[</span><span class='s1'>&#39;variable_name&#39;</span><span class='p'>].</span><span class='nx'>getGlideObject</span><span class='p'>().</span><span class='nx'>getValue</span><span class='p'>();</span> <span class='c1'>// For the real value (sys_id when it is a reference)</span>
+</code></pre></div>
+<p>In order to run a script with e-mail you have to use the <code>mail_script</code> tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;mail_script&gt;</span>
+template.print( current.variables[&#39;primary_contact&#39;].getGlideObject().getDisplayValue() );
+<span class='nt'>&lt;/mail_script&gt;</span>
+</code></pre></div>
+<p>If my case I had about 20 variables that needed to go in the e-mail and I didn&#8217;t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:</p>
+<div class='highlight'><pre><code class='html'><span class='nt'>&lt;mail_script&gt;</span>
+var item_var = function(key)
+{
+	template.print( current.variables[key].getGlideObject().getDisplayValue() );
+}
+<span class='nt'>&lt;/mail_script&gt;</span>
+
+... blah blah blah ...
+<span class='nt'>&lt;strong&gt;</span>Variable One:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var1&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
+<span class='nt'>&lt;strong&gt;</span>Variable Two:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var2&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
+<span class='nt'>&lt;strong&gt;</span>Variable Three:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var3&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
+...
+</code></pre></div>
+	</div>
+</div>
+</article>
+<hr>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
 		<h4><a href="/blog/2013/10/25/service-now-passing-data.html">ServiceNow - Passing Data</a> <small>25 Oct 2013</small></h4>
 	</div>
 </div>
@@ -260,24 +298,6 @@
 </div>
 </article>
 <hr>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2013/07/24/new-site-with-jekyll.html">New Site with Jekyll</a> <small>24 Jul 2013</small></h4>
-	</div>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>The old version of my site was powered by laravel, and for what I used it for that was over-kill. I have tried out <a href='http://octopress.org'>Octopress</a> in the past and liked it, so I thought I would try the source and use <a href='http://jekyllrb.com'>Jekyll</a>. It quickly turned into my new site! Jekyll is very easy to learn and gives you an amazing amount of flexibility out of the box. Once you add on the plugins you can create there seems to be almost no limit.</p>
-
-<p>I was initially only going to handle the projects that I post, since that is the biggest part of this site. Then I decided I wanted to add in the blog I had started. That work working well, but they I ran into some difficulty with having pagination on the blog, but not on the projects. Luckily, I was able to find a <a href='http://realjenius.com/2012/12/01/jekyll-category-tag-paging-feeds/'>blog post</a> that lead me down the path to a plugin that would work for my situation.</p>
-
-<p><a href='http://jekyllrb.com'>Jekyll</a> seems to be amazing and I look forward to seeing what else I can do with it.</p>
-	</div>
-</div>
-</article>
-<hr>
 
 
 <div class="row">
@@ -309,7 +329,7 @@
 					&nbsp;&nbsp;
 					<small><a href="http://www.jasonbutz.info/project/atom.xml" title="Projects RSS Feed"><i class="foundicon-rss">&nbsp;Projects RSS Feed</i></a></small>
 					<br />
-					<small>Jason Butz &copy; 2012 - 2013</small><br>
+					<small>Jason Butz &copy; 2012 - 2014</small><br>
 				</p>
 			</div>
 		</div>
