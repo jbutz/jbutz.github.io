@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Jason Butz - Blog</title>
+	<title>Jason Butz - ServiceNow - Navigation Handlers</title>
 	<meta name="viewport" content="width=device-width">
 
 	<link rel="alternate" type="application/rss+xml" title="Blog Feed" href="http://www.jasonbutz.info/blog/atom.xml" />
@@ -52,19 +52,13 @@
 		<div class="small-12 large-8 large-centered columns">
 <div class="row">
 	<div class="small-12 columns">
-		<h2>Blog</h2>
-	</div>
-</div>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2014/01/31/service-now-navigation-handler.html">ServiceNow - Navigation Handlers</a> <small>31 Jan 2014</small></h4>
+		<h2>ServiceNow - Navigation Handlers <small>31 Jan 2014</small></h2>
 	</div>
 </div>
 <div class="row">
 	<div class="small-12 columns">
-		<p>Today I had a need to toy with a default ServiceNow functionality called Navigation Handlers. This is a feature that doesn&#8217;t show up at all on the Wiki. The only reference I could find to it was on a <a href='http://www.servicenowguru.com/system-ui/ui-pages-system-ui/overriding-ess-checkout-view-catalog-requests/'>ServiceNow Guru article</a> that my predecessor had followed to disable it. Since there is no wiki article on Navigation Handlers I thought I might do a small write up about what I have figured out about them.</p>
+		<div class="post">
+			<p>Today I had a need to toy with a default ServiceNow functionality called Navigation Handlers. This is a feature that doesn&#8217;t show up at all on the Wiki. The only reference I could find to it was on a <a href='http://www.servicenowguru.com/system-ui/ui-pages-system-ui/overriding-ess-checkout-view-catalog-requests/'>ServiceNow Guru article</a> that my predecessor had followed to disable it. Since there is no wiki article on Navigation Handlers I thought I might do a small write up about what I have figured out about them.</p>
 
 <p><strong>Navigation Handlers</strong></p>
 
@@ -223,128 +217,32 @@
 <span class='nx'>g_request</span><span class='p'>.</span><span class='nx'>virtual</span><span class='p'>()</span>
 <span class='nx'>g_request</span><span class='p'>.</span><span class='nx'>wait</span><span class='p'>()</span>
 </code></pre></div>
+		</div>
 	</div>
 </div>
-</article>
-<hr>
- 
-<article>
+
 <div class="row">
 	<div class="small-12 columns">
-		<h4><a href="/blog/2014/01/29/service-now-workflow-email.html">ServiceNow - Workflow E-Mails</a> <small>29 Jan 2014</small></h4>
+		<hr>
+		<div id="disqus_thread"></div>
+		<script type="text/javascript">
+			/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+			var disqus_shortname = 'jasonbutzblog'; // required: replace example with your forum shortname
+			var disqus_identifier = '/blog/2014/01/31/service-now-navigation-handler';
+			var disqus_title = 'ServiceNow - Navigation Handlers';
+			var disqus_url = 'http://www.jasonbutz.info/blog/2014/01/31/service-now-navigation-handler.html';
+
+			/* * * DON'T EDIT BELOW THIS LINE * * */
+			(function() {
+				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			})();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 	</div>
 </div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&#8217;t.</p>
-
-<p>This is how you normally access a variable on a Request Item from a script:</p>
-<script src='https://gist.github.com/8743166.js?file=example0.js'> </script>
-<p>In order to run a script with e-mail you have to use the <code>mail_script</code> tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:</p>
-<script src='https://gist.github.com/8743166.js?file=example1.html'> </script>
-<p>If my case I had about 20 variables that needed to go in the e-mail and I didn&#8217;t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:</p>
-<script src='https://gist.github.com/8743166.js?file=example2.html'> </script>
-	</div>
-</div>
-</article>
-<hr>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2013/10/25/service-now-passing-data.html">ServiceNow - Passing Data</a> <small>25 Oct 2013</small></h4>
-	</div>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>At work we came across an interesting issue when dealing with ServiceNow this week. We are working on implimenting Incident and needed to be able to create a change or a request from the incident. The new record needed to have its <code>parent</code> field set to reference the inicident. Some of the original code does this for requests by redirecting the user to the Service Catalog and setting a parameter in the URL that is meant to will in a field on the form. Unfortunatly that doesn&#8217;t work in our case. Our changes are generated by using a wizard, and our requests are done with a record producer. We figured out a way to work around the issue and pass the values to the wizard and record producer. I thought it was something people might like to see.</p>
-
-<p>Here is what the <em>Create Request</em> UI action looks like:</p>
-<div class='highlight'><pre><code class='javascript'><span class='c1'>// Update saves incidents before going to the catalog homepage</span>
-<span class='nx'>current</span><span class='p'>.</span><span class='nx'>update</span><span class='p'>();</span>
-<span class='c1'>// Build the URL</span>
-<span class='kd'>var</span> <span class='nx'>url</span> <span class='o'>=</span> <span class='s2'>&quot;com.glideapp.servicecatalog_cat_item_view.do?sysparm_id=abcdef0123456789&amp;incident_sysid=&quot;</span><span class='p'>;</span>
-<span class='nx'>url</span> <span class='o'>+=</span> <span class='nx'>current</span><span class='p'>.</span><span class='nx'>sys_id</span><span class='p'>;</span>
-<span class='c1'>// Redirect the user</span>
-<span class='nx'>action</span><span class='p'>.</span><span class='nx'>setRedirectURL</span><span class='p'>(</span><span class='nx'>url</span><span class='p'>);</span>
-</code></pre></div>
-<p>What I am doing here is setting the URL for the record producer. Then I am adding a custom parameter on the end, <code>incident_sysid</code>, and setting it to the incident&#8217;s <code>sys_id</code>. You can do the same thing for a wizard. Then on the first panel of the wizard, or on the record producer, you need to add a field to put the value into. I added the field and then used a UI Policy to hide the field. Then I created an onLoad Client Script that takes the parameter from the URL and fills in the form field. Here is the client script I am using with both the wizard and record producer.</p>
-<div class='highlight'><pre><code class='javascript'><span class='kd'>function</span> <span class='nx'>onLoad</span><span class='p'>()</span>
-<span class='p'>{</span>
-   <span class='kd'>var</span> <span class='nx'>url</span> <span class='o'>=</span> <span class='nb'>window</span><span class='p'>.</span><span class='nx'>location</span><span class='p'>.</span><span class='nx'>href</span><span class='p'>;</span>
-   <span class='kd'>var</span> <span class='nx'>match</span> <span class='o'>=</span> <span class='nx'>url</span><span class='p'>.</span><span class='nx'>match</span><span class='p'>(</span><span class='sr'>/&amp;incident_sysid=([a-zA-Z0-9]+)/</span><span class='p'>);</span>
-   <span class='kd'>var</span> <span class='nx'>sysid</span> <span class='o'>=</span> <span class='nx'>match</span><span class='p'>[</span><span class='mi'>1</span><span class='p'>];</span>
-   <span class='nx'>g_form</span><span class='p'>.</span><span class='nx'>setValue</span><span class='p'>(</span><span class='s1'>&#39;parent&#39;</span><span class='p'>,</span> <span class='nx'>sysid</span><span class='p'>);</span>
-<span class='p'>}</span>
-</code></pre></div>
-<p>The script runs a regular expression against the current URL to pull out the <code>sys_id</code> and set it to the value of the field. Keep in mind that if you are using a wizard you will need to update the record producer at the end to set the value on the new record. If you are using just a record producer you can name the field the same thing in both the producer and the dictionary and it will automatically copy over.</p>
-	</div>
-</div>
-</article>
-<hr>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2013/09/10/i-got-mentioned.html">I Got Mentioned</a> <small>10 Sep 2013</small></h4>
-	</div>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>Last week a newletter went out that I had never heard of. It is called &#8220;Hacks &amp;&amp; Happenings&#8221; and it is put out by a group called <a href='http://indyhackers.org/'>Indy Hackers</a>. In their <a href='http://us6.campaign-archive1.com/?u=244b5370d41b5cf4146ec517c&amp;id=c5483caef3'>September 2013 Issue</a> my <a href='/project/personal/timetracker.html'>Time Track</a> project was mentioned! I didn&#8217;t even know about it until my boss forwarded me the newsletter.</p>
-
-<p>Needless to say, I am now following the newletter and keeping an eye on the Indy Hackers website for any meetups I want to take part in. Thank you Indy Hackers.</p>
-	</div>
-</div>
-</article>
-<hr>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2013/08/23/importance-urgency.html">Importance vs. Urgency</a> <small>23 Aug 2013</small></h4>
-	</div>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>A little while back my boss introduced me to the Importance vs. Urgency Matrix. It was a nice concept and I saw the reasoning behind it, but I didn&#8217;t pay it much heed. More recently I have started using it a great deal. I have two white boards in my office. One I keep blank for use as needed. The other one has a list of the primary things that are on my radar listed, with a color coded letter next to them. Then at the top I have a matrix similar to the one below and each letter is placed in a quadrant. That is how I keep track of the major things I have to do, and which I should pay the most attention to. Let me explain the matrix.</p>
-
-<p>Along one axis is the importance, along the other is urgency. Things that are important and urgent fall into the quadrant I labeled &#8220;1&#8221;. Things that are important, but not urgent fall into the quadrant labeled &#8220;2&#8221;. Things that are urgent but not important fall into quadrant &#8220;3&#8221;. I think you can figure out quadrant &#8220;4&#8221;. I only break things down into the four quadrants and then let them vie for priority amongst themselves. You can use the whole setup and have things broken down every more finely.</p>
-<p><a class='th radius' href='/assets/img/posts/importance-urgency-00.png' style='display: inline-block;'>
-	<img alt='Importance vs. Urgency Matrix' src='/assets/img/posts/importance-urgency-00.png' />
-</a></p>
-<p>I work on things based on the order of the quadrant they fall in. If something is in quadrant 1 that is where I will try and focus most of my time. I work on things from quadrant 2 and people bring them up and progress is needed. If something falls in quadrant 3 I will work on it a little bit as people as. I treat it like quadrant 2, but with less priority. If something is in quadrant 4 then I will more or less ignore it until it moves somewhere else.</p>
-
-<p>Let me go into the reasoning behind this ordering. If something is both important and urgent then it makes sense to work on that first, right? I think that is fairly apparent, so I won&#8217;t spend much time on that. The next bit could be taken differently by different people. I put important but not urgent things ahead of urgent but not important things. My reasoning on that is people freak out over small things. If someone is freaking out over an e-mail not arriving in a timely manner then you could say that is considered an urgent issue, they certainly think so. But is it really that important? Most of the time it&#8217;s not. You have to try and be unbiased when judging these things. If a problem or project is especially dear to someone then they will consider it more important, but you have to look at the bigger picture to decide. If something isn&#8217;t important and isn&#8217;t urgent then you will probably waste your time if you focus on it. In my experience things in this category will gain some urgency every once in a while and then drop back down to not being urgent.</p>
-
-<p>Here is an example of what my whiteboard looks like, except my list goes all the way up to N. I don&#8217;t have it written anywhere what the different colors mean so that people don&#8217;t know, but the red items are ones I should focus on as much as possible. Green means to focus on every once in a while so I can show progress. Blue means ignore it until someone else brings it up. I&#8217;m planning to get some painters tape and use that to make better lines on my board since they are hand drawn right now. I&#8217;ll probably post an update to this with a picture once I have that done.</p>
-<p><a class='th radius' href='/assets/img/posts/importance-urgency-01.png' style='display: inline-block;'>
-	<img alt='Importance vs. Urgency Whiteboard' src='/assets/img/posts/importance-urgency-01.png' />
-</a></p>
-	</div>
-</div>
-</article>
-<hr>
-
-
-<div class="row">
-	<div class="small-4 small-centered columns">
-		<div style="text-align: center">
-		<ul class="button-group" style="display: inline-block">
-			
-				<li><a href="#" class="small button disabled">&larr;</a></li>
-			
-
-			
-				<li><a href="/blog/page2" class="small button">&rarr;</a></li>
-			
-		</ul>
-	</div>
-	</div>
-</div>
-
-
-
 
 		</div>
 	</section>

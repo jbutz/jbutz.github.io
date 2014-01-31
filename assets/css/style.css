@@ -34,3 +34,4 @@ article ul,div.post ul{margin-left:1.5em}
 .sprite-csharp{background-position:0 -64px}
 .sprite-sublimetext{background-position:-16px -64px}
 div .highlight{margin:0.5em 0}
+code{font-weight:normal}

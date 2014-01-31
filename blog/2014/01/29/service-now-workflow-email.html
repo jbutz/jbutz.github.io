@@ -61,28 +61,11 @@
 			<p>Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&#8217;t.</p>
 
 <p>This is how you normally access a variable on a Request Item from a script:</p>
-<div class='highlight'><pre><code class='javascript'><span class='nx'>current</span><span class='p'>.</span><span class='nx'>variables</span><span class='p'>[</span><span class='s1'>&#39;variable_name&#39;</span><span class='p'>].</span><span class='nx'>getGlideObject</span><span class='p'>().</span><span class='nx'>getDisplayValue</span><span class='p'>();</span> <span class='c1'>// For the displayed value</span>
-<span class='nx'>current</span><span class='p'>.</span><span class='nx'>variables</span><span class='p'>[</span><span class='s1'>&#39;variable_name&#39;</span><span class='p'>].</span><span class='nx'>getGlideObject</span><span class='p'>().</span><span class='nx'>getValue</span><span class='p'>();</span> <span class='c1'>// For the real value (sys_id when it is a reference)</span>
-</code></pre></div>
+<script src='https://gist.github.com/8743166.js?file=example0.js'> </script>
 <p>In order to run a script with e-mail you have to use the <code>mail_script</code> tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;mail_script&gt;</span>
-template.print( current.variables[&#39;primary_contact&#39;].getGlideObject().getDisplayValue() );
-<span class='nt'>&lt;/mail_script&gt;</span>
-</code></pre></div>
+<script src='https://gist.github.com/8743166.js?file=example1.html'> </script>
 <p>If my case I had about 20 variables that needed to go in the e-mail and I didn&#8217;t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;mail_script&gt;</span>
-var item_var = function(key)
-{
-	template.print( current.variables[key].getGlideObject().getDisplayValue() );
-}
-<span class='nt'>&lt;/mail_script&gt;</span>
-
-... blah blah blah ...
-<span class='nt'>&lt;strong&gt;</span>Variable One:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var1&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
-<span class='nt'>&lt;strong&gt;</span>Variable Two:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var2&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
-<span class='nt'>&lt;strong&gt;</span>Variable Three:<span class='nt'>&lt;/strong&gt;&lt;mail_script&gt;</span>item_var(&#39;var3&#39;)<span class='nt'>&lt;/mail_script&gt;</span>
-...
-</code></pre></div>
+<script src='https://gist.github.com/8743166.js?file=example2.html'> </script>
 		</div>
 	</div>
 </div>
