@@ -44,7 +44,7 @@
 <p><strong>g_uri.set(parameter,value)</strong></p>
 
 <p>This method sets a parameter on the URL. It will either add the parameter or update it if it already exists. For example, if the URL is currently &#8216;sc_request.do&#8217; and you call <code>g_uri.set(&#39;sys_id&#39;,&#39;abcdef0123456789&#39;)</code> the URL will be <code>sc_request.do?sys_id=abcdef0123456789</code>.</p>
-<hr /><div class='highlight'><pre><code class='javascript'><span class='err'>#</span> <span class='nx'>These</span> <span class='nx'>are</span> <span class='nx'>the</span> <span class='nx'>available</span> <span class='nx'>methods</span> <span class='k'>for</span> <span class='nx'>g_uri</span> <span class='nx'>and</span> <span class='nx'>g_request</span>
+<hr /><div class='highlight'><pre><code class='javascript'><span class='c1'>// These are the available methods for g_uri and g_request</span>
 <span class='nx'>g_uri</span><span class='p'>.</span><span class='nx'>action</span><span class='p'>()</span>
 <span class='nx'>g_uri</span><span class='p'>.</span><span class='nx'>addIgnoreParam</span><span class='p'>()</span>
 <span class='nx'>g_uri</span><span class='p'>.</span><span class='kr'>class</span><span class='p'>()</span>
