@@ -39,7 +39,7 @@ This method sets a parameter on the URL. It will either add the parameter or upd
 --
 
 {% highlight javascript %}
-# These are the available methods for g_uri and g_request
+// These are the available methods for g_uri and g_request
 g_uri.action()
 g_uri.addIgnoreParam()
 g_uri.class()
