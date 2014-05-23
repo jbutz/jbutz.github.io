@@ -58,121 +58,130 @@
 <div class="row">
 	<div class="small-12 columns">
 		<div class="post">
-			<p>Etsy open-sourced their deployment tool a while back, but I didn&#8217;t learn about it until more recently. It is called <a href='https://github.com/etsy/deployinator'>Deployinator</a> and runs on Ruby. I&#8217;m looking at using it for a project at work, but I ran into a horrible lack of documentation. The one example that is in the repo isn&#8217;t bad, it just doesn&#8217;t show you how to have multiple deploy buttons. In the case I may use it in, I will need multiple. If you aren&#8217;t sure what I mean by &#8220;multiple deploy buttons&#8221; check out the picture on <a href='http://codeascraft.com/2010/05/20/quantum-of-deployment/'>this page</a>.</p>
+			<p>Etsy open-sourced their deployment tool a while back, but I didn’t learn about it until more recently. It is called <a href="https://github.com/etsy/deployinator">Deployinator</a> and runs on Ruby. I’m looking at using it for a project at work, but I ran into a horrible lack of documentation. The one example that is in the repo isn’t bad, it just doesn’t show you how to have multiple deploy buttons. In the case I may use it in, I will need multiple. If you aren’t sure what I mean by “multiple deploy buttons” check out the picture on <a href="http://codeascraft.com/2010/05/20/quantum-of-deployment/">this page</a>.</p>
 
 <p>After digging through the code I finally got that working and I think others might want to avoid digging through the code.</p>
 
-<p>If you don&#8217;t configure the buttons, called environments, then you get one &#8220;Deploy production&#8221; button, like you see below.</p>
-<p><a class='th radius' href='/assets/img/posts/etsy-deployinator-00.png' style='display: inline-block;'>
-	<img alt='Deployinator default enviroment' src='/assets/img/posts/etsy-deployinator-00.png' />
+<p>If you don’t configure the buttons, called environments, then you get one “Deploy production” button, like you see below.</p>
+
+<p><a href="/assets/img/posts/etsy-deployinator-00.png" class="th radius" style="display: inline-block;">
+	<img src="/assets/img/posts/etsy-deployinator-00.png" alt="Deployinator default enviroment" />
 </a></p>
+
 <p>Below is what you get for the demo stack. Only a few of the methods are actually required for the default setup. The required methods for the default setup are <code>demo_production</code>, <code>demo_production_version</code>, and <code>demo_head_build</code>.</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>module</span> <span class='nn'>Deployinator</span>
-  <span class='k'>module</span> <span class='nn'>Stacks</span>
-    <span class='k'>module</span> <span class='nn'>Demo</span>
-      <span class='k'>def</span> <span class='nf'>demo_git_repo_url</span>
-        <span class='s2'>&quot;git://github.com/etsy/statsd.git&quot;</span>
-      <span class='k'>end</span>
 
-      <span class='k'>def</span> <span class='nf'>demo_git_checkout_path</span>
-        <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>checkout_root</span><span class='si'>}</span><span class='s2'>/</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'>&quot;</span>
-      <span class='k'>end</span>
+<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Deployinator</span>
+  <span class="k">module</span> <span class="nn">Stacks</span>
+    <span class="k">module</span> <span class="nn">Demo</span>
+      <span class="k">def</span> <span class="nf">demo_git_repo_url</span>
+        <span class="s2">&quot;git://github.com/etsy/statsd.git&quot;</span>
+      <span class="k">end</span>
 
-      <span class='k'>def</span> <span class='nf'>checkout_root</span>
-        <span class='s2'>&quot;/tmp&quot;</span>
-      <span class='k'>end</span>
+      <span class="k">def</span> <span class="nf">demo_git_checkout_path</span>
+        <span class="s2">&quot;</span><span class="si">#{</span><span class="n">checkout_root</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="k">end</span>
 
-      <span class='k'>def</span> <span class='nf'>demo_production_version</span>
-        <span class='sx'>%x{cat </span><span class='si'>#{</span><span class='n'>demo_git_checkout_path</span><span class='si'>}</span><span class='sx'>/version.txt}</span>
-      <span class='k'>end</span>
+      <span class="k">def</span> <span class="nf">checkout_root</span>
+        <span class="s2">&quot;/tmp&quot;</span>
+      <span class="k">end</span>
 
-      <span class='k'>def</span> <span class='nf'>demo_production_build</span>
-        <span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='n'>demo_production_version</span><span class='p'>)</span>
-      <span class='k'>end</span>
+      <span class="k">def</span> <span class="nf">demo_production_version</span>
+        <span class="sx">%x{cat </span><span class="si">#{</span><span class="n">demo_git_checkout_path</span><span class="si">}</span><span class="sx">/version.txt}</span>
+      <span class="k">end</span>
 
-      <span class='k'>def</span> <span class='nf'>demo_head_build</span>
-        <span class='sx'>%x{git ls-remote </span><span class='si'>#{</span><span class='n'>demo_git_repo_url</span><span class='si'>}</span><span class='sx'> HEAD | cut -c1-7}</span><span class='o'>.</span><span class='n'>chomp</span>
-      <span class='k'>end</span>
+      <span class="k">def</span> <span class="nf">demo_production_build</span>
+        <span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="n">demo_production_version</span><span class="p">)</span>
+      <span class="k">end</span>
 
-      <span class='k'>def</span> <span class='nf'>demo_production</span><span class='p'>(</span><span class='n'>options</span><span class='o'>=</span><span class='p'>{})</span>
-        <span class='n'>old_build</span> <span class='o'>=</span> <span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='n'>demo_production_version</span><span class='p'>)</span>
+      <span class="k">def</span> <span class="nf">demo_head_build</span>
+        <span class="sx">%x{git ls-remote </span><span class="si">#{</span><span class="n">demo_git_repo_url</span><span class="si">}</span><span class="sx"> HEAD | cut -c1-7}</span><span class="o">.</span><span class="n">chomp</span>
+      <span class="k">end</span>
 
-        <span class='n'>git_cmd</span> <span class='o'>=</span> <span class='n'>old_build</span> <span class='p'>?</span> <span class='ss'>:git_freshen_clone</span> <span class='p'>:</span> <span class='ss'>:github_clone</span>
-        <span class='nb'>send</span><span class='p'>(</span><span class='n'>git_cmd</span><span class='p'>,</span> <span class='n'>stack</span><span class='p'>,</span> <span class='s2'>&quot;sh -c&quot;</span><span class='p'>)</span>
+      <span class="k">def</span> <span class="nf">demo_production</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+        <span class="n">old_build</span> <span class="o">=</span> <span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="n">demo_production_version</span><span class="p">)</span>
 
-        <span class='n'>git_bump_version</span> <span class='n'>stack</span><span class='p'>,</span> <span class='s2'>&quot;&quot;</span>
+        <span class="n">git_cmd</span> <span class="o">=</span> <span class="n">old_build</span> <span class="p">?</span> <span class="ss">:git_freshen_clone</span> <span class="p">:</span> <span class="ss">:github_clone</span>
+        <span class="nb">send</span><span class="p">(</span><span class="n">git_cmd</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="s2">&quot;sh -c&quot;</span><span class="p">)</span>
 
-        <span class='n'>build</span> <span class='o'>=</span> <span class='n'>demo_head_build</span>
+        <span class="n">git_bump_version</span> <span class="n">stack</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
 
-        <span class='k'>begin</span>
-          <span class='n'>run_cmd</span> <span class='sx'>%Q{echo &quot;ssh host do_something&quot;}</span>
-          <span class='n'>log_and_stream</span> <span class='s2'>&quot;Done!&lt;br&gt;&quot;</span>
-        <span class='k'>rescue</span>
-          <span class='n'>log_and_stream</span> <span class='s2'>&quot;Failed!&lt;br&gt;&quot;</span>
-        <span class='k'>end</span>
+        <span class="n">build</span> <span class="o">=</span> <span class="n">demo_head_build</span>
 
-        <span class='c1'># log this deploy / timing</span>
-        <span class='n'>log_and_shout</span><span class='p'>(</span><span class='ss'>:old_build</span> <span class='o'>=&gt;</span> <span class='n'>old_build</span><span class='p'>,</span> <span class='ss'>:build</span> <span class='o'>=&gt;</span> <span class='n'>build</span><span class='p'>,</span> <span class='ss'>:send_email</span> <span class='o'>=&gt;</span> <span class='kp'>true</span><span class='p'>)</span>
-      <span class='k'>end</span>
-    <span class='k'>end</span>
-  <span class='k'>end</span>
-<span class='k'>end</span>
-</code></pre></div>
+        <span class="k">begin</span>
+          <span class="n">run_cmd</span> <span class="sx">%Q{echo &quot;ssh host do_something&quot;}</span>
+          <span class="n">log_and_stream</span> <span class="s2">&quot;Done!&lt;br&gt;&quot;</span>
+        <span class="k">rescue</span>
+          <span class="n">log_and_stream</span> <span class="s2">&quot;Failed!&lt;br&gt;&quot;</span>
+        <span class="k">end</span>
+
+        <span class="c1"># log this deploy / timing</span>
+        <span class="n">log_and_shout</span><span class="p">(</span><span class="ss">:old_build</span> <span class="o">=&gt;</span> <span class="n">old_build</span><span class="p">,</span> <span class="ss">:build</span> <span class="o">=&gt;</span> <span class="n">build</span><span class="p">,</span> <span class="ss">:send_email</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
 <p>The code that sets up the environments is in <code>helpers.rb</code>. The environments are defined by an array of hashes, this is what the code for the default environment looks like:</p>
-<div class='highlight'><pre><code class='ruby'><span class='o'>[</span><span class='p'>{</span>
-  <span class='ss'>:name</span>            <span class='o'>=&gt;</span> <span class='s2'>&quot;production&quot;</span><span class='p'>,</span>
-  <span class='ss'>:title</span>           <span class='o'>=&gt;</span> <span class='s2'>&quot;Deploy </span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'> production&quot;</span><span class='p'>,</span>
-  <span class='ss'>:method</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'>_production&quot;</span><span class='p'>,</span>
-  <span class='ss'>:current_version</span> <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_production_version&quot;</span><span class='p'>)},</span>
-  <span class='ss'>:current_build</span>   <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_production_version&quot;</span><span class='p'>))},</span>
-  <span class='ss'>:next_build</span>      <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:head_build</span><span class='p'>)}</span>
-<span class='p'>}</span><span class='o'>]</span>
-</code></pre></div>
+
+<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="p">{</span>
+  <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span>
+  <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy </span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2"> production&quot;</span><span class="p">,</span>
+  <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2">_production&quot;</span><span class="p">,</span>
+  <span class="ss">:current_version</span> <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_production_version&quot;</span><span class="p">)},</span>
+  <span class="ss">:current_build</span>   <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_production_version&quot;</span><span class="p">))},</span>
+  <span class="ss">:next_build</span>      <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:head_build</span><span class="p">)}</span>
+<span class="p">}</span><span class="o">]</span></code></pre></div>
+
 <p>Once I found this code, and found the typo in my method name I was easily able to add more environments. To add environments to the demo stack that is provided all you have to do is define a <code>demo_environments</code> method in the stack file. Below is an example with a qa and production environment defined in a dynamic way.</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>demo_environment</span>
-  <span class='o'>[</span><span class='p'>{</span>
-    <span class='ss'>:name</span>            <span class='o'>=&gt;</span> <span class='s2'>&quot;qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:title</span>           <span class='o'>=&gt;</span> <span class='s2'>&quot;Deploy </span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'> qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:method</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'>_qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:current_version</span> <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_qa_version&quot;</span><span class='p'>)},</span>
-    <span class='ss'>:current_build</span>   <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_qa_version&quot;</span><span class='p'>))},</span>
-    <span class='ss'>:next_build</span>      <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:head_build</span><span class='p'>)}</span>
-  <span class='p'>},</span>
-  <span class='p'>{</span>
-    <span class='ss'>:name</span>            <span class='o'>=&gt;</span> <span class='s2'>&quot;production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:title</span>           <span class='o'>=&gt;</span> <span class='s2'>&quot;Deploy </span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'> production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:method</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='s2'>_production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:current_version</span> <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_production_version&quot;</span><span class='p'>)},</span>
-    <span class='ss'>:current_build</span>   <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:&quot;</span><span class='si'>#{</span><span class='n'>stack</span><span class='si'>}</span><span class='ss'>_production_version&quot;</span><span class='p'>))},</span>
-    <span class='ss'>:next_build</span>      <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:head_build</span><span class='p'>)}</span>
-  <span class='p'>}</span><span class='o'>]</span>
-<span class='k'>end</span>
-</code></pre></div>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
+  <span class="o">[</span><span class="p">{</span>
+    <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;qa&quot;</span><span class="p">,</span>
+    <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy </span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2"> qa&quot;</span><span class="p">,</span>
+    <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2">_qa&quot;</span><span class="p">,</span>
+    <span class="ss">:current_version</span> <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_qa_version&quot;</span><span class="p">)},</span>
+    <span class="ss">:current_build</span>   <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_qa_version&quot;</span><span class="p">))},</span>
+    <span class="ss">:next_build</span>      <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:head_build</span><span class="p">)}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span>
+    <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy </span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2"> production&quot;</span><span class="p">,</span>
+    <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2">_production&quot;</span><span class="p">,</span>
+    <span class="ss">:current_version</span> <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_production_version&quot;</span><span class="p">)},</span>
+    <span class="ss">:current_build</span>   <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="nb">send</span><span class="p">(</span><span class="ss">:&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="ss">_production_version&quot;</span><span class="p">))},</span>
+    <span class="ss">:next_build</span>      <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:head_build</span><span class="p">)}</span>
+  <span class="p">}</span><span class="o">]</span>
+<span class="k">end</span></code></pre></div>
+
 <p>After adding this environment you will need to add a few additional methods ( <code>demo_qa</code> and <code>demo_qa_version</code> ). If you wanted you could also define the environments like so:</p>
-<div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>demo_environment</span>
-  <span class='o'>[</span><span class='p'>{</span>
-    <span class='ss'>:name</span>            <span class='o'>=&gt;</span> <span class='s2'>&quot;qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:title</span>           <span class='o'>=&gt;</span> <span class='s2'>&quot;Deploy demo qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:method</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;demo_qa&quot;</span><span class='p'>,</span>
-    <span class='ss'>:current_version</span> <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:demo_qa_version</span><span class='p'>)},</span>
-    <span class='ss'>:current_build</span>   <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:demo_qa_version</span><span class='p'>))},</span>
-    <span class='ss'>:next_build</span>      <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:head_build</span><span class='p'>)}</span>
-  <span class='p'>},</span>
-  <span class='p'>{</span>
-    <span class='ss'>:name</span>            <span class='o'>=&gt;</span> <span class='s2'>&quot;production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:title</span>           <span class='o'>=&gt;</span> <span class='s2'>&quot;Deploy demo production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:method</span>          <span class='o'>=&gt;</span> <span class='s2'>&quot;demo_production&quot;</span><span class='p'>,</span>
-    <span class='ss'>:current_version</span> <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:demo_production_version</span><span class='p'>)},</span>
-    <span class='ss'>:current_build</span>   <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='no'>Version</span><span class='o'>.</span><span class='n'>get_build</span><span class='p'>(</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:demo_production_version</span><span class='p'>))},</span>
-    <span class='ss'>:next_build</span>      <span class='o'>=&gt;</span> <span class='nb'>proc</span><span class='p'>{</span><span class='nb'>send</span><span class='p'>(</span><span class='ss'>:head_build</span><span class='p'>)}</span>
-  <span class='p'>}</span><span class='o'>]</span>
-<span class='k'>end</span>
-</code></pre></div>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
+  <span class="o">[</span><span class="p">{</span>
+    <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;qa&quot;</span><span class="p">,</span>
+    <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy demo qa&quot;</span><span class="p">,</span>
+    <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;demo_qa&quot;</span><span class="p">,</span>
+    <span class="ss">:current_version</span> <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:demo_qa_version</span><span class="p">)},</span>
+    <span class="ss">:current_build</span>   <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="nb">send</span><span class="p">(</span><span class="ss">:demo_qa_version</span><span class="p">))},</span>
+    <span class="ss">:next_build</span>      <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:head_build</span><span class="p">)}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span>
+    <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy demo production&quot;</span><span class="p">,</span>
+    <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;demo_production&quot;</span><span class="p">,</span>
+    <span class="ss">:current_version</span> <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:demo_production_version</span><span class="p">)},</span>
+    <span class="ss">:current_build</span>   <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="no">Version</span><span class="o">.</span><span class="n">get_build</span><span class="p">(</span><span class="nb">send</span><span class="p">(</span><span class="ss">:demo_production_version</span><span class="p">))},</span>
+    <span class="ss">:next_build</span>      <span class="o">=&gt;</span> <span class="nb">proc</span><span class="p">{</span><span class="nb">send</span><span class="p">(</span><span class="ss">:head_build</span><span class="p">)}</span>
+  <span class="p">}</span><span class="o">]</span>
+<span class="k">end</span></code></pre></div>
+
 <p>Here is what you end up with.</p>
-<p><a class='th radius' href='/assets/img/posts/etsy-deployinator-01.png' style='display: inline-block;'>
-	<img alt='Deployinator default enviroment' src='/assets/img/posts/etsy-deployinator-01.png' />
+
+<p><a href="/assets/img/posts/etsy-deployinator-01.png" class="th radius" style="display: inline-block;">
+	<img src="/assets/img/posts/etsy-deployinator-01.png" alt="Deployinator default enviroment" />
 </a></p>
-<p>So far this has been the biggest thing that wasn&#8217;t explained. Anything else I come across I&#8217;ll add here as well.</p>
+
+<p>So far this has been the biggest thing that wasn’t explained. Anything else I come across I’ll add here as well.</p>
+
 		</div>
 	</div>
 </div>
