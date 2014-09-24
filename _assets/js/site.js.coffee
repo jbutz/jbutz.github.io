@@ -1,5 +1,3 @@
----
----
 $('form#contactForm').submit (e)->
 	# Check if we are even supposed to attempt ajax
 	if $('#contactForm input[name="try_ajax"]').val() != "true"

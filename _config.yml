@@ -1,5 +1,5 @@
 name: Jason Butz
-pygments: true
+highlighter: pygments
 timezone: America/Indianapolis
 permalink: /:categories/:title.html
 tagline: A developer with a love for the web
