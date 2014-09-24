@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jasonbutz.info/blog/2014/09/24/servicenow-record-producers.html</loc>
+    
+    <lastmod>2014-09-24T12:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
     <loc>http://www.jasonbutz.info/blog/2014/05/23/goruck-light.html</loc>
     
     <lastmod>2014-05-23T12:00:00-04:00</lastmod>
@@ -315,8 +324,6 @@
   <url>
     <loc>http://www.jasonbutz.info/projects.html</loc>
   </url>
-  
-  
   
   
   

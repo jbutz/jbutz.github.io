@@ -11,6 +11,29 @@
    
    
    <item>
+    <title>ServiceNow Record Producer Caveats</title>
+    <link>http://www.jasonbutz.info/blog/2014/09/24/servicenow-record-producers.html</link>
+    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
+    <pubDate>Wed, 24 Sep 2014 12:00:00 -0400</pubDate>
+    <guid>http://www.jasonbutz.info/blog/2014/09/24/servicenow-record-producers.html</guid>
+    <description><![CDATA[
+     <p>I recently ran into a problem when using Record Producers. In the script for the Record Producer I am using the <code>applyTemplate</code> function on the <code>current</code> GlideRecord. The template used varies, which is why I can’t use the template field on the Record Producer. I kept ending up with duplicate task records with the exact same value in the number field.</p>
+
+<p>After some tinkering I came to the conclusion that the <code>applyTemplate</code> method causes an insert, and that the Record Producer also does an insert after running the Record Producer script. After a lot of frustration I was looking through the Sandbox instance of ServiceNow when I noticed that the <em>New LDAP Server</em> inserted the <code>current</code> GlideRecord and they used the <code>setAbortAction</code> method. So I decided to give that a try.</p>
+
+<p>Here is what I ended up with at the end of my Record Producer:</p>
+
+<p><code>javascript
+current.update();
+current.setAbortAction(true);
+</code></p>
+
+<p>This works because the insert done by the Record Producer is aborted, and thus stops the duplicates.</p>
+
+     ]]></description>
+   </item>
+   
+   <item>
     <title>GORUCK Light</title>
     <link>http://www.jasonbutz.info/blog/2014/05/23/goruck-light.html</link>
     <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
@@ -95,7 +118,7 @@
 
 <p>–</p>
 
-<div class="highlight"><pre><code class="javascript"><span class="c1">// These are the available methods for g_uri and g_request</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// These are the available methods for g_uri and g_request</span>
 <span class="nx">g_uri</span><span class="p">.</span><span class="nx">action</span><span class="p">()</span>
 <span class="nx">g_uri</span><span class="p">.</span><span class="nx">addIgnoreParam</span><span class="p">()</span>
 <span class="nx">g_uri</span><span class="p">.</span><span class="kr">class</span><span class="p">()</span>
@@ -266,7 +289,7 @@
 
 <p>Here is what the <em>Create Request</em> UI action looks like:</p>
 
-<div class="highlight"><pre><code class="javascript"><span class="c1">// Update saves incidents before going to the catalog homepage</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Update saves incidents before going to the catalog homepage</span>
 <span class="nx">current</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
 <span class="c1">// Build the URL</span>
 <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;com.glideapp.servicecatalog_cat_item_view.do?sysparm_id=abcdef0123456789&amp;incident_sysid=&quot;</span><span class="p">;</span>
@@ -276,7 +299,7 @@
 
 <p>What I am doing here is setting the URL for the record producer. Then I am adding a custom parameter on the end, <code>incident_sysid</code>, and setting it to the incident’s <code>sys_id</code>. You can do the same thing for a wizard. Then on the first panel of the wizard, or on the record producer, you need to add a field to put the value into. I added the field and then used a UI Policy to hide the field. Then I created an onLoad Client Script that takes the parameter from the URL and fills in the form field. Here is the client script I am using with both the wizard and record producer.</p>
 
-<div class="highlight"><pre><code class="javascript"><span class="kd">function</span> <span class="nx">onLoad</span><span class="p">()</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">onLoad</span><span class="p">()</span>
 <span class="p">{</span>
    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">;</span>
    <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/&amp;incident_sysid=([a-zA-Z0-9]+)/</span><span class="p">);</span>
@@ -350,7 +373,7 @@
 
 <p>Below is what you get for the demo stack. Only a few of the methods are actually required for the default setup. The required methods for the default setup are <code>demo_production</code>, <code>demo_production_version</code>, and <code>demo_head_build</code>.</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">module</span> <span class="nn">Deployinator</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Deployinator</span>
   <span class="k">module</span> <span class="nn">Stacks</span>
     <span class="k">module</span> <span class="nn">Demo</span>
       <span class="k">def</span> <span class="nf">demo_git_repo_url</span>
@@ -403,7 +426,7 @@
 
 <p>The code that sets up the environments is in <code>helpers.rb</code>. The environments are defined by an array of hashes, this is what the code for the default environment looks like:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="o">[</span><span class="p">{</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">[</span><span class="p">{</span>
   <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span>
   <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy </span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2"> production&quot;</span><span class="p">,</span>
   <span class="ss">:method</span>          <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2">_production&quot;</span><span class="p">,</span>
@@ -414,7 +437,7 @@
 
 <p>Once I found this code, and found the typo in my method name I was easily able to add more environments. To add environments to the demo stack that is provided all you have to do is define a <code>demo_environments</code> method in the stack file. Below is an example with a qa and production environment defined in a dynamic way.</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
   <span class="o">[</span><span class="p">{</span>
     <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;qa&quot;</span><span class="p">,</span>
     <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy </span><span class="si">#{</span><span class="n">stack</span><span class="si">}</span><span class="s2"> qa&quot;</span><span class="p">,</span>
@@ -435,7 +458,7 @@
 
 <p>After adding this environment you will need to add a few additional methods ( <code>demo_qa</code> and <code>demo_qa_version</code> ). If you wanted you could also define the environments like so:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">demo_environment</span>
   <span class="o">[</span><span class="p">{</span>
     <span class="ss">:name</span>            <span class="o">=&gt;</span> <span class="s2">&quot;qa&quot;</span><span class="p">,</span>
     <span class="ss">:title</span>           <span class="o">=&gt;</span> <span class="s2">&quot;Deploy demo qa&quot;</span><span class="p">,</span>
@@ -498,24 +521,6 @@
 
 <p>That is really it for big issues. They have taken a lot of the annoying aspects out of making a web application. They take care of rendering for the most part, they have ACLs, they have logging, they have scheduled tasks. They even have decent documentation, which is always nice to find.</p>
 
-
-     ]]></description>
-   </item>
-   
-   <item>
-    <title>Foundation instead of Bootstrap?</title>
-    <link>http://www.jasonbutz.info/blog/2013/05/14/foundation-instead-of-bootstrap.html</link>
-    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
-    <pubDate>Tue, 14 May 2013 14:03:00 -0400</pubDate>
-    <guid>http://www.jasonbutz.info/blog/2013/05/14/foundation-instead-of-bootstrap.html</guid>
-    <description><![CDATA[
-     <p>There seem to be an increasing number of people throwing rants about overuse of <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a>. This is not one of them, I like Twitter Bootstrap. It is great for people who are not designers and need to put together something that looks decent. It makes putting together a site easy. That said, you can kind of tell when it is used. The buttons are usually a dead giveaway, and customizing it is not for the faint of heart.</p>
-
-<p>For those reasons I decided to give something else a try for a <a href="http://www.bottlesapp.in">project</a> I am putting together. I decided to give <a href="http://foundation.zurb.com">Foundation</a> a try. It has a gem available, so it is designed to work nicely with Ruby on Rails, and it seems to be very flexible.</p>
-
-<p>The documentation on the grid system requires you to read the whole thing, not just skim it and start going. One very nice thing about their grid system is that there are different classes for different size screens. It’s great for when you want space on either side of the screen on large screens, but want to lose the extra space on a smaller one. If you don’t understand what I mean take at the <a href="http://www.bottlesapp.in">Bottles</a> coming soon page. Compare it between your computer and phone.</p>
-
-<p>I haven’t had to do too much customizing to Foundation yet, but it looks like it is meant to handle that a bit better than Bootstrap.</p>
 
      ]]></description>
    </item>
