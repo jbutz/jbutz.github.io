@@ -11,6 +11,30 @@
    
    
    <item>
+    <title>C# Memory Leaks</title>
+    <link>http://www.jasonbutz.info/blog/2015/01/18/csharp-memory-leaks.html</link>
+    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
+    <pubDate>Sun, 18 Jan 2015 12:00:00 -0500</pubDate>
+    <guid>http://www.jasonbutz.info/blog/2015/01/18/csharp-memory-leaks.html</guid>
+    <description><![CDATA[
+     <p>For the past three or four work days I have been trying to find a memory leak in a Windows Service we created that is used to synchronize data between two systems on a nightly basis. I had just added a single method to it for a new job and the memory usage was climbing until it hit the 2GB process limit.</p>
+
+<p>At first I thought it might be something going wrong in my <code>foreach</code> loop. That was the only thing I added running enough to create that kind of usage. I was looping over 200,000 items for the initial sync so all it wouldn’t be that hard if I had a object keeping track of everything I synced. But I didn’t have any of that. I went through my loop several times. Then I started wondering about the method generating the API calls to the other system. If something was going wrong there it would easily explain the memory usage. I had to make up to 3 API calls for each loop iteration.</p>
+
+<p>At first I thought it might be because the class for making the API calls was static and I saw an article that said static objects aren’t garbage collected, so I started digging through there but couldn’t find anything. Then I decided I needed to confirm a memory leak. I pulled out Performance Monitor and set it to track the <em>Private Bytes</em> for my process. Sure enough as soon as I triggered the sync the memory usage steadily took off. Once I had whittled down the objects I had to work on so I wouldn’t run out of process memory I saw that when it was done it wouldn’t release the memory. Now I really had to find the problem, restarting the service nightly wouldn’t be viable.</p>
+
+<p>I found a tool called <a href="http://www.microsoft.com/en-us/download/details.aspx?id=42933">DebugDiag</a> and that proved invaluable. I was able to create a dump of the process and then generate a report. That report had a great warning at the top that lead me to an <a href="http://blogs.msdn.com/b/tess/archive/2006/02/15/532804.aspx">article</a> explaining exactly what was going on.</p>
+
+<p><img src="http://www.jasonbutz.info/assets/img/posts/csharp-memory-leaks00.png" alt="DebugDiag Results" /></p>
+
+<p>As it turns out <code>XmlSerializer</code> will generate a new temporary assembly when the constructor is called. In my case, up to 6 calls for each loop iteration covers the memory issue I was having. XmlSerializer was being used for tracing and was surrounded by preprocessor directives, so if I had compiled for production instead of debugging the issue would never have shown itself. One of my coworkers had that code there because he needed it for debugging some issues, so I commented it out and added a warning about the memory issue.</p>
+
+<p>Now the service runs with a maximum of 56MB of memory as opposed to shooting up to 2GB. The problem may not have shown up in production, but at least we know about <code>XmlSerializer</code> for the future. If you can help it instantiate it once and use that over and over.</p>
+
+     ]]></description>
+   </item>
+   
+   <item>
     <title>ServiceNow Record Producer Caveats</title>
     <link>http://www.jasonbutz.info/blog/2014/09/24/servicenow-record-producers.html</link>
     <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
@@ -500,27 +524,6 @@ current.setAbortAction(true);
 <p>I was initially only going to handle the projects that I post, since that is the biggest part of this site. Then I decided I wanted to add in the blog I had started. That work working well, but they I ran into some difficulty with having pagination on the blog, but not on the projects. Luckily, I was able to find a <a href="http://realjenius.com/2012/12/01/jekyll-category-tag-paging-feeds/">blog post</a> that lead me down the path to a plugin that would work for my situation.</p>
 
 <p><a href="http://jekyllrb.com">Jekyll</a> seems to be amazing and I look forward to seeing what else I can do with it.</p>
-
-     ]]></description>
-   </item>
-   
-   <item>
-    <title>Service Now</title>
-    <link>http://www.jasonbutz.info/blog/2013/06/21/service-now.html</link>
-    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
-    <pubDate>Fri, 21 Jun 2013 16:03:00 -0400</pubDate>
-    <guid>http://www.jasonbutz.info/blog/2013/06/21/service-now.html</guid>
-    <description><![CDATA[
-     <p>I recently switched jobs, and at the new company my department makes use of <a href="http://www.servicenow.com">Service Now</a>. I must say, I am impressed with the product. It is sold as an ITIL compatible help desk solution, but it is so much more. You are able to customize nearly every aspect of the system if you wish. Want to rearrange a page? Done. Want a wizard so people enter their issues correctly? Done. All of this customization is done through their interface, which I expect you can customize, and through JavaScript scripts.</p>
-
-<p>Their platform runs on Java and uses Mozilla’s rhino JavaScript engine for the server-side script processing. Everything is stored in a relational database, but you don’t really have direct access to it.</p>
-
-<p>The system is very flexible, and it even has some build in functionality for web services. You can connect to their service using WSDL and SOAP or by using HTTP requests to get JSON, XML, CSV responses back. I think there may also be PDF responses? I’m not sure since I haven’t used them. Here is one of the big issues: I said you could use HTTP requests, but you don’t really get to make RESTful requests. You end up with these horrendous lists of parameters on your requests that can get very unruly.</p>
-
-<p>There is one other big issue in my mind. Everything is done with JavaScript, which isn’t bad. However, their JavaScript does not look especially nice. It also doesn’t promote very good practices. Some things get put into functions, and then the functions are called. Others are just monolithic in nature and have no functions and are all “global”. I have been using a lot of IIFEs since I have no idea what the environment is like for my code, and I have no clue if the scripts are all thrown together, or if they are run individually.</p>
-
-<p>That is really it for big issues. They have taken a lot of the annoying aspects out of making a web application. They take care of rendering for the most part, they have ACLs, they have logging, they have scheduled tasks. They even have decent documentation, which is always nice to find.</p>
-
 
      ]]></description>
    </item>
