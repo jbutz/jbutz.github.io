@@ -11,6 +11,61 @@
    
    
    <item>
+    <title>BT Sync & AWS</title>
+    <link>http://www.jasonbutz.info/blog/2015/03/11/btsync-aws.html</link>
+    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
+    <pubDate>Wed, 11 Mar 2015 22:00:00 -0400</pubDate>
+    <guid>http://www.jasonbutz.info/blog/2015/03/11/btsync-aws.html</guid>
+    <description><![CDATA[
+     <p><a href="https://www.getsync.com/">BitTorrent Sync (BT Sync)</a> is a tool that can be used to synchronize files between devices using <a href="http://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer (P2P)</a>, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don’t really know what it is doing beneath the covers.</p>
+
+<p>I’ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on <a href="http://aws.amazon.com">Amazon Web Services (AWS)</a> a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I’m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don’t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.</p>
+
+<ol>
+  <li>First you need to download the program to your EC2 instance. In the SSH window to your EC2 instance type/copy-paste in<br />
+<code>wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz</code><br />
+and hit enter. This will download the file.</li>
+  <li>Now we need to extract it, type in <code>tar -xvvzf BitTorrent-Sync_x64.tar.gz</code> and press enter.</li>
+  <li>In your EC2 Management Console click on the EC2 instance you created for BT Sync, then click on the link next to <em>Security groups</em>.</li>
+  <li>Now you should be looking at the Security Group used for the instance. Click the <em>Inbound</em> tab, then click the <em>Edit</em> button.</li>
+  <li>Now add a <em>Custom TCP Rule</em> with the Port Range as <em>8888</em> and the Source as <em>Anywhere</em>. Then click Save.</li>
+  <li>Head back to your SSH console and run <code>./btsync</code>. This starts BT Sync in the background</li>
+  <li>Get your <em>Public DNS</em> url from your EC2 Management Console and put that into your browser at port 8888. It will be something like <code>http://ec2-00-00-00-00.us-west.compute.amazonaws.com:8888</code>. You should see the BT Sync interface and it should help you get everything setup.</li>
+  <li>Click the cog in the upper-right corner, then click <em>Preferences</em>, then click <em>Advanced</em>. Make note of the <em>Listening Port</em>. You will want that later. Next we need to make sure BT Sync runs on startup of the EC2 instance.</li>
+  <li>In your SSH terminal type the following<br />
+<code>killall btsync</code><br />
+<code>sudo mv btsync /usr/local/bin/btsync</code><br />
+<code>sudo chown root:root /usr/local/bin/btsync</code><br />
+<code>sudo chmod 755 /usr/local/bin/btsync</code>  </li>
+  <li>Go to <a href="https://gist.github.com/MendelGusmao/5398362">this gist</a> by Mendelson Gusmao. Click the <em>Raw</em> button next to the <em>btsync</em> file. Copy the URL of that raw output.</li>
+  <li>In your SSH terminal run <code>wget [PASTE URL HERE]</code> to download the file.</li>
+  <li>Using whatever text editor you want edit the new <em>btsync</em> file. Replace <code>BTSYNC_USERS="mendel"</code> with <code>BTSYNC_USERS="ubuntu"</code></li>
+  <li>Run the following commands to move the file into place and to set the permissions<br />
+   <code>sudo mv btsync /etc/init.d/btsync</code><br />
+   <code>sudo chown root:root /etc/init.d/btsync</code><br />
+   <code>sudo chmod +x /etc/init.d/btsync</code>  </li>
+  <li>Now we need to create a config file for btsync. Run this command:<br />
+   <code>btsync --dump-sample-config &gt; /home/ubuntu/.sync/config.json</code></li>
+  <li>Open <em>/home/ubuntu/.sync/config.json</em> in your text editor. The first few lines will look like this:<br />
+   <code>{</code><br />
+   <code>"device_name": "My Sync Device",</code><br />
+   <code>"listening_port" : 0, // 0 - randomize port</code><br />
+   <code>/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in the directory where binary is located. otherwise user-defined directory will be used */</code><br />
+   <code>// "storage_path" : "/home/user/.sync",</code><br />
+   Change <em>My Sync Device</em> to whatever you want, leaving the quotes intact. Change the listening port to the value to wrote down earlier.
+   Remove the <code>//</code> before the <em>storage_path</em> line and change <code>/home/user/.sync</code> to <code>/home/ubuntu/.sync</code>. Save the file and the config is done.</li>
+  <li>Run <code>sudo update-rc.d btsync defaults</code> to make sure everything runs on startup.</li>
+  <li>Run <code>sudo /etc/init.d/btsync start</code> to start the daemon. It should say <em>Starting BTSync for ubuntu</em>. Go to the URL you used in step 7 to make sure it is running</li>
+  <li>Follow steps 3 - 5 again, only this time use the listening port number you used earlier.</li>
+</ol>
+
+<p>That’s all there is to it.</p>
+
+
+     ]]></description>
+   </item>
+   
+   <item>
     <title>C# Memory Leaks</title>
     <link>http://www.jasonbutz.info/blog/2015/01/18/csharp-memory-leaks.html</link>
     <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
@@ -508,22 +563,6 @@ current.setAbortAction(true);
 </a></p>
 
 <p>So far this has been the biggest thing that wasn’t explained. Anything else I come across I’ll add here as well.</p>
-
-     ]]></description>
-   </item>
-   
-   <item>
-    <title>New Site with Jekyll</title>
-    <link>http://www.jasonbutz.info/blog/2013/07/24/new-site-with-jekyll.html</link>
-    <dc:creator  xmlns:dc="http://purl.org/dc/elements/1.1/">Jason Butz</dc:creator>
-    <pubDate>Wed, 24 Jul 2013 15:00:00 -0400</pubDate>
-    <guid>http://www.jasonbutz.info/blog/2013/07/24/new-site-with-jekyll.html</guid>
-    <description><![CDATA[
-     <p>The old version of my site was powered by laravel, and for what I used it for that was over-kill. I have tried out <a href="http://octopress.org">Octopress</a> in the past and liked it, so I thought I would try the source and use <a href="http://jekyllrb.com">Jekyll</a>. It quickly turned into my new site! Jekyll is very easy to learn and gives you an amazing amount of flexibility out of the box. Once you add on the plugins you can create there seems to be almost no limit.</p>
-
-<p>I was initially only going to handle the projects that I post, since that is the biggest part of this site. Then I decided I wanted to add in the blog I had started. That work working well, but they I ran into some difficulty with having pagination on the blog, but not on the projects. Luckily, I was able to find a <a href="http://realjenius.com/2012/12/01/jekyll-category-tag-paging-feeds/">blog post</a> that lead me down the path to a plugin that would work for my situation.</p>
-
-<p><a href="http://jekyllrb.com">Jekyll</a> seems to be amazing and I look forward to seeing what else I can do with it.</p>
 
      ]]></description>
    </item>

@@ -59,6 +59,64 @@
 <article>
 <div class="row">
 	<div class="small-12 columns">
+		<h4><a href="/blog/2015/03/11/btsync-aws.html">BT Sync & AWS</a> <small>11 Mar 2015</small></h4>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<p><a href="https://www.getsync.com/">BitTorrent Sync (BT Sync)</a> is a tool that can be used to synchronize files between devices using <a href="http://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer (P2P)</a>, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don’t really know what it is doing beneath the covers.</p>
+
+<p>I’ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on <a href="http://aws.amazon.com">Amazon Web Services (AWS)</a> a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I’m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don’t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.</p>
+
+<ol>
+  <li>First you need to download the program to your EC2 instance. In the SSH window to your EC2 instance type/copy-paste in<br />
+<code>wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz</code><br />
+and hit enter. This will download the file.</li>
+  <li>Now we need to extract it, type in <code>tar -xvvzf BitTorrent-Sync_x64.tar.gz</code> and press enter.</li>
+  <li>In your EC2 Management Console click on the EC2 instance you created for BT Sync, then click on the link next to <em>Security groups</em>.</li>
+  <li>Now you should be looking at the Security Group used for the instance. Click the <em>Inbound</em> tab, then click the <em>Edit</em> button.</li>
+  <li>Now add a <em>Custom TCP Rule</em> with the Port Range as <em>8888</em> and the Source as <em>Anywhere</em>. Then click Save.</li>
+  <li>Head back to your SSH console and run <code>./btsync</code>. This starts BT Sync in the background</li>
+  <li>Get your <em>Public DNS</em> url from your EC2 Management Console and put that into your browser at port 8888. It will be something like <code>http://ec2-00-00-00-00.us-west.compute.amazonaws.com:8888</code>. You should see the BT Sync interface and it should help you get everything setup.</li>
+  <li>Click the cog in the upper-right corner, then click <em>Preferences</em>, then click <em>Advanced</em>. Make note of the <em>Listening Port</em>. You will want that later. Next we need to make sure BT Sync runs on startup of the EC2 instance.</li>
+  <li>In your SSH terminal type the following<br />
+<code>killall btsync</code><br />
+<code>sudo mv btsync /usr/local/bin/btsync</code><br />
+<code>sudo chown root:root /usr/local/bin/btsync</code><br />
+<code>sudo chmod 755 /usr/local/bin/btsync</code>  </li>
+  <li>Go to <a href="https://gist.github.com/MendelGusmao/5398362">this gist</a> by Mendelson Gusmao. Click the <em>Raw</em> button next to the <em>btsync</em> file. Copy the URL of that raw output.</li>
+  <li>In your SSH terminal run <code>wget [PASTE URL HERE]</code> to download the file.</li>
+  <li>Using whatever text editor you want edit the new <em>btsync</em> file. Replace <code>BTSYNC_USERS="mendel"</code> with <code>BTSYNC_USERS="ubuntu"</code></li>
+  <li>Run the following commands to move the file into place and to set the permissions<br />
+   <code>sudo mv btsync /etc/init.d/btsync</code><br />
+   <code>sudo chown root:root /etc/init.d/btsync</code><br />
+   <code>sudo chmod +x /etc/init.d/btsync</code>  </li>
+  <li>Now we need to create a config file for btsync. Run this command:<br />
+   <code>btsync --dump-sample-config &gt; /home/ubuntu/.sync/config.json</code></li>
+  <li>Open <em>/home/ubuntu/.sync/config.json</em> in your text editor. The first few lines will look like this:<br />
+   <code>{</code><br />
+   <code>"device_name": "My Sync Device",</code><br />
+   <code>"listening_port" : 0, // 0 - randomize port</code><br />
+   <code>/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in the directory where binary is located. otherwise user-defined directory will be used */</code><br />
+   <code>// "storage_path" : "/home/user/.sync",</code><br />
+   Change <em>My Sync Device</em> to whatever you want, leaving the quotes intact. Change the listening port to the value to wrote down earlier.
+   Remove the <code>//</code> before the <em>storage_path</em> line and change <code>/home/user/.sync</code> to <code>/home/ubuntu/.sync</code>. Save the file and the config is done.</li>
+  <li>Run <code>sudo update-rc.d btsync defaults</code> to make sure everything runs on startup.</li>
+  <li>Run <code>sudo /etc/init.d/btsync start</code> to start the daemon. It should say <em>Starting BTSync for ubuntu</em>. Go to the URL you used in step 7 to make sure it is running</li>
+  <li>Follow steps 3 - 5 again, only this time use the listening port number you used earlier.</li>
+</ol>
+
+<p>That’s all there is to it.</p>
+
+
+	</div>
+</div>
+</article>
+<hr>
+ 
+<article>
+<div class="row">
+	<div class="small-12 columns">
 		<h4><a href="/blog/2015/01/18/csharp-memory-leaks.html">C# Memory Leaks</a> <small>18 Jan 2015</small></h4>
 	</div>
 </div>
@@ -334,34 +392,6 @@ current.setAbortAction(true);
 </div>
 </article>
 <hr>
- 
-<article>
-<div class="row">
-	<div class="small-12 columns">
-		<h4><a href="/blog/2014/01/29/service-now-workflow-email.html">ServiceNow - Workflow E-Mails</a> <small>29 Jan 2014</small></h4>
-	</div>
-</div>
-<div class="row">
-	<div class="small-12 columns">
-		<p>Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn’t.</p>
-
-<p>This is how you normally access a variable on a Request Item from a script:</p>
-
-<script src="https://gist.github.com/8743166.js?file=example0.js"> </script>
-
-<p>In order to run a script with e-mail you have to use the <code>mail_script</code> tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:</p>
-
-<script src="https://gist.github.com/8743166.js?file=example1.html"> </script>
-
-<p>If my case I had about 20 variables that needed to go in the e-mail and I didn’t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:</p>
-
-<script src="https://gist.github.com/8743166.js?file=example2.html"> </script>
-
-
-	</div>
-</div>
-</article>
-<hr>
 
 
 <div class="row">
@@ -402,7 +432,7 @@ current.setAbortAction(true);
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation/foundation.topbar.min.js"></script>
 	<script type="text/javascript">$(document).foundation();</script>
 	<!-- <script type="text/javascript" src="/assets/js/site.js"></script> -->
-<script src='/assets/global-3fea50e611d15906396f8a960c60cb61.js' type='text/javascript'></script>
+<script src='/assets/global-165f05faaf9ee3e1184dcce0ebb5b2a7.js' type='text/javascript'></script>
 
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
