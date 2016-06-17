@@ -1,0 +1,63 @@
+$fa-font-path: '../bower_components/font-awesome/fonts';
+@import "../bower_components/font-awesome/scss/font-awesome.scss";
+@import "../bower_components/picnic/src/picnic.scss";
+
+
+jasonbutz-info-app {
+    padding: 80px 0 0;
+
+    #contentContainer.app-drawer-layout {
+        margin-left: 0 !important;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3em;
+        padding: 0;
+        background: #1A5363; //#3932FF;
+        box-shadow: 0 0 0.2em rgba(17,17,17,0.2);
+        z-index: 10;
+        transition: all .3s;
+        transform-style: preserve-3d;
+        margin-left: 0px !important;
+
+        padding: 10px 25px;
+
+        .nav-item {
+            float: left;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+
+            color: #fff;
+
+            &.center {
+                text-align: center;
+            }
+        }
+
+        .nav-menu i{
+            cursor: pointer;
+        }
+
+        .nav-brand {
+            font-weight: bold;
+        }
+
+        a {
+            color: #fff;
+        }
+    }
+
+    .loading, .loading * {
+        transition: all 0s;
+    }
+
+    app-drawer div {
+        padding: 10px;
+    }
+}
+

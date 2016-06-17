@@ -1,0 +1,97 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/jbutz-components/post-header/post-header.html">
+<link rel="import" href="../../bower_components/jbutz-components/post-page/post-page.html">
+<link rel="import" href="../../bower_components/html-include/src/html-include.html">
+
+<dom-module id="jasonbutz-info-app">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <app-location route="{{route}}" use-hash-as-path></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{data}}"></app-route>
+        <app-route route="{{route}}" pattern="/home"></app-route>
+        <app-route route="{{route}}" pattern="/blog" tail="{{routeBlog}}"></app-route>
+        <app-route route="{{routeBlog}}" pattern="/:date/:post" data="{{subrouteData}}"></app-route>
+
+        <app-drawer-layout force-narrow>
+            <app-drawer>
+                <div style="height: 100%; overflow: auto;">
+                    <a class="stack pseudo button" href="/">Home</a>
+                    <a class="stack pseudo button" href="#/blog">Blog</a>
+                    <a class="stack pseudo button" href="#/">Projects</a>
+                    <a class="stack pseudo button" href="#/">About</a>
+                    <a class="stack pseudo button" href="#/">Contact</a>
+                </div>
+            </app-drawer>
+            <app-header-layout>
+                <app-header>
+                    <app-toolbar>
+                        <nav class="loading three">
+                            <div class="nav-item nav-menu">
+                                <i class="fa fa-bars fa-2x" drawer-toggle aria-hidden="true"></i>
+                            </div>
+                            <div class="nav-item nav-brand center" title>
+                                <a href="#/home">Jason &amp; The Web</a>
+                            </div>
+                        </nav>
+                    </app-toolbar>
+                </app-header>
+
+                <main class="flex one">
+                    <div class="off-sixth two-third">
+                        <iron-ajax url="[[dataFileUrl]]" last-response="{{blogPostList}}" auto></iron-ajax>
+                        <iron-pages attr-for-selected="id" selected="{{data.page}}">
+                            <div id="home">
+                                <h2>Latest Blog Post</h2>
+                                <div dom-if="[[getFirstArrayItem(blogPostList)]]">
+                                    <div class="post-list-header">
+                                        <post-header post-data="[[getFirstArrayItem(blogPostList)]]"></post-header>
+                                    </div>
+                                    <p>[[getFirstArrayItem(blogPostList, 'excerpt')]]</p>
+                                    <p><a href="#/blog/[[getFirstArrayItem(blogPostList,'url')]]">Read More</a></p>
+                                </div>
+                            </div>
+                            <div id="blog">
+                                <iron-pages attr-for-selected="id">
+                                    <div id="blog-list">
+                                        <!--<iron-ajax url="[[dataFileUrl]]" last-response="{{blogPostList}}" auto></iron-ajax>-->
+                                        <iron-list id="postList" items="[[blogPostList]]" as="item">
+                                            <template>
+                                                <div>
+                                                    <div class="post-list-header">
+                                                        <post-header post-data="[[item]]"></post-header>
+                                                    </div>
+                                                    <p>[[item.excerpt]]</p>
+                                                    <p><a href="#/blog/[[item.url]]">Read More</a></p>
+                                                </div>
+                                            </template>
+                                        </iron-list>
+                                    </div>
+                                    <div id="blog-post">
+                                        <iron-ajax url="[[buildBlogPath(subrouteData.date, subrouteData.post)]]" on-response="handleBlogResponse" handle-as="document"
+                                            auto></iron-ajax>
+                                        <div id="blogPost"></div>
+                                    </div>
+                                </iron-pages>
+                            </div>
+                        </iron-pages>
+                    </div>
+                </main>
+
+            </app-header-layout>
+        </app-drawer-layout>
+
+    </template>
+
+    <script src="jasonbutz-info-app.js"></script>
+</dom-module>

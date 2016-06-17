@@ -1,0 +1,15 @@
+{
+  "name": "jasonbutz-info",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.html",
+  "author": "Jason Butz",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sass": "^1.2.0",
+    "load-grunt-tasks": "^3.5.0"
+  }
+}
