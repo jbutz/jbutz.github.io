@@ -1,0 +1,14 @@
+[
+    {
+        "title": "BT Sync & AWS",
+        "date": "11 Mar 2015",
+        "url": "data/one.html",
+        "excerpt": "BitTorrent Sync (BT Sync) is a tool that can be used to synchronize files between devices using peer-to-peer (P2P), technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don’t really know what it is doing beneath the covers."
+    },
+    {
+        "title": "BT Sync & AWS",
+        "date": "11 Mar 2015",
+        "url": "data/one.html",
+        "excerpt": "BitTorrent Sync (BT Sync) is a tool that can be used to synchronize files between devices using peer-to-peer (P2P), technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don’t really know what it is doing beneath the covers."
+    }
+]

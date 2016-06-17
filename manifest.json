@@ -1,0 +1,6 @@
+{
+  "name": "jasonbutz-info",
+  "short_name": "jasonbutz-info",
+  "start_url": "/",
+  "display": "standalone"
+}
