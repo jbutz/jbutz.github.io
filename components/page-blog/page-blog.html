@@ -1,0 +1,61 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../post-header/post-header.html">
+
+<dom-module id="page-blog" is="dom-bind">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <iron-pages attr-for-selected="id">
+            <div id="blog-list">
+                <iron-list id="postList" items="[[blogList]]" as="item">
+                    <template>
+                        <div>
+                            <div class="post-list-header">
+                                <post-header post-data="[[item]]"></post-header>
+                            </div>
+                            <p>[[item.excerpt]]</p>
+                            <p><a href="#/blog/[[item.url]]">Read More</a></p>
+                        </div>
+                    </template>
+                </iron-list>
+            </div>
+            <div id="blog-post">
+                <iron-ajax url="[[buildBlogPath(routeData.date, routeData.post)]]" on-response="handleBlogResponse" handle-as="document"
+                    auto></iron-ajax>
+                <div id="blogPost"></div>
+            </div>
+        </iron-pages>
+    </template>
+
+    <script>
+    Polymer({
+
+        is: 'page-blog',
+
+        properties: {
+            blogList: {
+                type: Array,
+                value: []
+            },
+            routeData: {
+                type: Object,
+                value: null
+            }
+        },
+        handleBlogResponse: function (e, ironRequest) {
+            Polymer.dom(this.$.blogPost).appendChild(ironRequest.response.body);
+        },
+        buildBlogPath: function (dateValue, postValue) {
+            if (dateValue && postValue) {
+                return dateValue + '/' + postValue;
+            }
+        }
+    });
+  </script>
+</dom-module>

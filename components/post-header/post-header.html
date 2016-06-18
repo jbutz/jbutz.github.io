@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="post-header" is="dom-bind">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div>
+            <h3>[[post-data.title]] <small>[[post-data.date]]</small></h3>
+        </div>
+    </template>
+
+    <script>
+    Polymer({
+
+      is: 'post-header',
+
+      properties: {
+        postData: {
+          type: Object,
+          value: {
+              title: "TITLE",
+              date: "DATE"
+          }
+        }
+      },
+
+    });
+  </script>
+</dom-module>

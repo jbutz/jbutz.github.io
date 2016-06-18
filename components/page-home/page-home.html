@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../post-header/post-header.html">
+
+<dom-module id="page-home" is="dom-bind">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div dom-if="[[getFirstArrayItem(blogList)]]">
+            <h2>Latest Blog Post</h2>
+
+            <div class="post-list-header">
+                <post-header post-data="[[getFirstArrayItem(blogList)]]"></post-header>
+            </div>
+            <p>[[getFirstArrayItem(blogList, 'excerpt')]]</p>
+            <p><a href="#/blog/[[getFirstArrayItem(blogList,'url')]]">Read More</a></p>
+        </div>
+    </template>
+
+    <script>
+    Polymer({
+
+      is: 'page-home',
+
+      properties: {
+        blogList: {
+          type: Array,
+          value: []
+        }
+      },
+      getFirstArrayItem: function (arr, prop) {
+            arr = arr || [];
+            prop = prop || null;
+
+            var el = arr[0] || {};
+            if (prop) {
+                return el[prop];
+            }
+
+            return el;
+        }
+    });
+  </script>
+</dom-module>

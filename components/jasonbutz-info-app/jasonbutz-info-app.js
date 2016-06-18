@@ -40,36 +40,23 @@
             if (!path) {
                 this.set('route.path', '/home/');
             }
-            window.scrollTo(0,0);
+            this.$$('app-drawer').close();
+            window.scrollTo(0, 0);
         },
-        _selectBlogPage: function(routeBlog) {
+        _selectBlogPage: function (routeBlog) {
             routeBlog = routeBlog || {};
 
             var blogPage = 'blog-list';
-            if(this.routeBlog.path !== '/' && this.routeBlog.path !== '') {
-                blogPage =  'blog-post';
+            if (this.routeBlog.path !== '/' && this.routeBlog.path !== '') {
+                blogPage = 'blog-post';
             }
 
             this.$.blog.querySelector('iron-pages').selected = blogPage;
-        },
-        handleBlogResponse: function (e, ironRequest) {
-            Polymer.dom(this.$.blogPost).appendChild(ironRequest.response.body);
-        },
-        buildBlogPath: function(dateValue, postValue) {
-            if(dateValue && postValue) {
-                return dateValue + '/' + postValue;
-            }
-        },
-        getFirstArrayItem: function(arr, prop) {
-            arr = arr || [];
-            prop = prop || null;
-
-            var el = arr[0] || {};
-            if(prop) {
-                return el[prop];
-            }
-
-            return el;
         }
     });
+
+    // Register service worker if supported.
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js');
+    }
 } ())

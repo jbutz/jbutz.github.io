@@ -39,6 +39,14 @@ jasonbutz-info-app {
             }
         }
 
+        @media (max-width: 500px) {
+            .nav-brand {
+                margin-left: 0;
+                margin-right: 0;
+                float: none;
+            }
+        }
+
         .nav-menu i{
             cursor: pointer;
         }
