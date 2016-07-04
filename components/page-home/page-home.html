@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../post-header/post-header.html">
+<link rel="stylesheet" href="../../bower_components/ideal-image-slider/ideal-image-slider.css">
+<link rel="stylesheet" href="../../bower_components/ideal-image-slider/themes/default/default.css">
 
 <dom-module id="page-home" is="dom-bind">
     <template>
@@ -8,6 +10,31 @@
                 display: block;
             }
         </style>
+        <div>
+            <div class="row one project-gallery">
+                <div class="tabs three half">
+                    <input id='tab-1' type='radio' name='projectGallery' checked />
+                    <input id='tab-2' type='radio' name='projectGallery'>
+                    <input id='tab-3' type='radio' name='projectGallery'>
+                    <div class="row">
+                        <div>
+                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=One&w=240&h=240">
+                        </div>
+
+                        <div>
+                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=Two&w=240&h=240">
+                        </div>
+
+                        <div>
+                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=Three&w=240&h=240">
+                        </div>
+                    </div>
+                    <label for="tab-1">&bull;</label>
+                    <label for="tab-2">&bull;</label>
+                    <label for="tab-3">&bull;</label>
+                </div>
+            </div>
+        </div>
         <div dom-if="[[getFirstArrayItem(blogList)]]">
             <h2>Latest Blog Post</h2>
 
@@ -18,7 +45,6 @@
             <p><a href="#/blog/[[getFirstArrayItem(blogList,'url')]]">Read More</a></p>
         </div>
     </template>
-
     <script>
     Polymer({
 
@@ -29,6 +55,30 @@
           type: Array,
           value: []
         }
+      },
+      ready: function() {
+          var gallery = this.$$('.project-gallery');
+          var mouseIsOver = false;
+
+          setInterval(function() {
+              if(!mouseIsOver) {
+                var current = gallery.querySelector('input[type="radio"]:checked');
+                var next = current.nextElementSibling;
+                if(next.tagName !== 'INPUT' || next.attributes.type.value != 'radio') {
+                    next = gallery.querySelector('input[type="radio"]');
+                }
+                current.checked = false;
+                next.checked = true;
+              }
+          }, 10000);
+
+          gallery.onmouseover = function() {
+              mouseIsOver = true;
+          };
+
+          gallery.onmouseleave = function() {
+              mouseIsOver = false;
+          };
       },
       getFirstArrayItem: function (arr, prop) {
             arr = arr || [];
