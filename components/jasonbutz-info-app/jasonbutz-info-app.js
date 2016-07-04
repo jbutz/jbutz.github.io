@@ -15,9 +15,9 @@
                 type: String,
                 value: 'data.json'
             },
-            blogPostList: {
-                type: Array,
-                value: []
+            siteData: {
+                type: Object,
+                value: {}
             },
             selectedPost: {
                 type: Object,

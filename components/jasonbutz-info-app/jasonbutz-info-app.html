@@ -49,10 +49,10 @@
 
                 <main class="flex one">
                     <div class="off-sixth two-third">
-                        <iron-ajax url="[[dataFileUrl]]" last-response="{{blogPostList}}" auto></iron-ajax>
+                        <iron-ajax url="[[dataFileUrl]]" last-response="{{siteData}}" auto></iron-ajax>
                         <iron-pages attr-for-selected="id" selected="{{data.page}}">
-                            <page-home id="home" blog-list="[[blogPostList]]"></page-home>
-                            <page-blog id="blog" blog-list="[[blogPostList]]" route-data="[[subrouteData]]"></page-blog>
+                            <page-home id="home" site-data="[[siteData]]"></page-home>
+                            <page-blog id="blog" blog-list="[[siteData.blog]]" route-data="[[subrouteData]]"></page-blog>
                         </iron-pages>
                     </div>
                 </main>

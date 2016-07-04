@@ -11,23 +11,17 @@
             }
         </style>
         <div>
-            <div class="row one project-gallery">
+            <div class="row one project-gallery" dom-if="[[getFirstArrayItem(siteData.projects)]]">
                 <div class="tabs three half">
                     <input id='tab-1' type='radio' name='projectGallery' checked />
                     <input id='tab-2' type='radio' name='projectGallery'>
                     <input id='tab-3' type='radio' name='projectGallery'>
                     <div class="row">
-                        <div>
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=One&w=240&h=240">
-                        </div>
-
-                        <div>
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=Two&w=240&h=240">
-                        </div>
-
-                        <div>
-                            <img src="https://placeholdit.imgix.net/~text?txtsize=23&txt=Three&w=240&h=240">
-                        </div>
+                        <template is="dom-repeat" items="[[getFirstThreeArrayItems(siteData.projects)]]" style="display: none;">
+                            <div>
+                                <img src="[[item.thumbnail]]">
+                            </div>
+                        </template>
                     </div>
                     <label for="tab-1">&bull;</label>
                     <label for="tab-2">&bull;</label>
@@ -35,14 +29,14 @@
                 </div>
             </div>
         </div>
-        <div dom-if="[[getFirstArrayItem(blogList)]]">
+        <div dom-if="[[getFirstArrayItem(siteData.blog)]]">
             <h2>Latest Blog Post</h2>
 
             <div class="post-list-header">
-                <post-header post-data="[[getFirstArrayItem(blogList)]]"></post-header>
+                <post-header post-data="[[getFirstArrayItem(siteData.blog)]]"></post-header>
             </div>
-            <p>[[getFirstArrayItem(blogList, 'excerpt')]]</p>
-            <p><a href="#/blog/[[getFirstArrayItem(blogList,'url')]]">Read More</a></p>
+            <p>[[getFirstArrayItem(siteData.blog, 'excerpt')]]</p>
+            <p><a href="#/blog/[[getFirstArrayItem(siteData.blog,'url')]]">Read More</a></p>
         </div>
     </template>
     <script>
@@ -51,9 +45,9 @@
       is: 'page-home',
 
       properties: {
-        blogList: {
-          type: Array,
-          value: []
+        siteData: {
+          type: Object,
+          value: {}
         }
       },
       ready: function() {
@@ -64,7 +58,7 @@
               if(!mouseIsOver) {
                 var current = gallery.querySelector('input[type="radio"]:checked');
                 var next = current.nextElementSibling;
-                if(next.tagName !== 'INPUT' || next.attributes.type.value != 'radio') {
+                if(next.tagName !== 'INPUT' || next.attributes.type.value !== 'radio') {
                     next = gallery.querySelector('input[type="radio"]');
                 }
                 current.checked = false;
@@ -81,16 +75,21 @@
           };
       },
       getFirstArrayItem: function (arr, prop) {
-            arr = arr || [];
-            prop = prop || null;
+        arr = arr || [];
+        prop = prop || null;
 
-            var el = arr[0] || {};
-            if (prop) {
-                return el[prop];
-            }
-
-            return el;
+        var el = arr[0] || {};
+        if (prop) {
+            return el[prop];
         }
+
+        return el;
+    },
+    getFirstThreeArrayItems: function (arr) {
+        arr = arr || [];
+
+        return arr.slice(0,3);
+    }
     });
   </script>
 </dom-module>
