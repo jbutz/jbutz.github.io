@@ -29,7 +29,7 @@
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["components/jasonbutz-info-app/jasonbutz-info-app.html","5a5d48c253ebfdbae18a8f4e9adba6f8"],["components/jasonbutz-info-app/jasonbutz-info-app.js","548c850353c9c2a1e300715b360ddf5f"],["components/page-blog/page-blog.html","2202ea39d59a61cc08eeb8c337231ad9"],["components/page-home/page-home.html","3bdd0af1f115f3bbcc9f9e5afeda599a"],["components/post-header/post-header.html","2a92f7797529a5c5988ce99c7382f216"],["css/style.css","ab9d46d216ed8e8aacc63d2487a18ead"],["data.json","d473c3b62874a6ecbc2a2c81d5ef4f8f"],["index.html","49176511a059186b4b454a18eed47b1c"],["js/service-worker-registration.js","c1ee5aec388e1ed07d6d290693b72547"]];
+var PrecacheConfig = [["components/jasonbutz-info-app/jasonbutz-info-app.html","c38821ff86f93841be842b055037891e"],["components/jasonbutz-info-app/jasonbutz-info-app.js","61e7e29ed63aec9173af1088ad2b4436"],["components/page-blog/page-blog.html","3249c9726a8686cb0ee8c36af6b8b1eb"],["components/page-home/page-home.html","096701d60195d837e926bb1bd0b257bc"],["components/page-projects/page-projects.html","3b08c86d91ae5ffe7da0ab78be7d2a13"],["components/post-header/post-header.html","2a92f7797529a5c5988ce99c7382f216"],["css/style.css","7b0827f27010afa248fe75e2f2a36239"],["data.json","30b137a364b4dc72f7723133a6968f2d"],["index.html","49176511a059186b4b454a18eed47b1c"],["js/service-worker-registration.js","c1ee5aec388e1ed07d6d290693b72547"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1-jasonbutz-info-' + (self.registration ? self.registration.scope : '') + '-';
 

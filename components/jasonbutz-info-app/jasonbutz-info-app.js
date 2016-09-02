@@ -8,6 +8,9 @@
             routeBlog: {
                 type: Object
             },
+            routeProject: {
+                type: Object
+            },
             subrouteData: {
                 type: Object
             },
@@ -34,7 +37,8 @@
         },
         observers: [
             '_onRoutePathChanged(route.path)',
-            '_selectBlogPage(routeBlog)'
+            '_selectBlogPage(routeBlog)',
+            '_selectProjectPage(routeProject)'
         ],
         _onRoutePathChanged: function (path) {
             if (!path) {
@@ -47,11 +51,21 @@
             routeBlog = routeBlog || {};
 
             var blogPage = 'blog-list';
-            if (this.routeBlog.path !== '/' && this.routeBlog.path !== '') {
+            if (this.routeBlog.path !== '/' && this.routeBlog.path) {
                 blogPage = 'blog-post';
             }
 
             this.$.blog.querySelector('iron-pages').selected = blogPage;
+        },
+        _selectProjectPage: function (routeProject) {
+            routeProject = routeProject || {};
+
+            var projectPage = 'project-list';
+            if (this.routeProject.path !== '/' && this.routeProject.path) {
+                projectPage = 'project-post';
+            }
+
+            this.$.project.querySelector('iron-pages').selected = projectPage;
         }
     });
 

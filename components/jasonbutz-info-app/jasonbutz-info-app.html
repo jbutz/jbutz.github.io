@@ -4,11 +4,11 @@
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../post-header/post-header.html">
 <link rel="import" href="../page-home/page-home.html">
 <link rel="import" href="../page-blog/page-blog.html">
+<link rel="import" href="../page-projects/page-projects.html">
 
 <dom-module id="jasonbutz-info-app">
     <template>
@@ -22,13 +22,15 @@
         <app-route route="{{route}}" pattern="/home"></app-route>
         <app-route route="{{route}}" pattern="/blog" tail="{{routeBlog}}"></app-route>
         <app-route route="{{routeBlog}}" pattern="/:date/:post" data="{{subrouteData}}"></app-route>
+        <app-route route="{{route}}" pattern="/project" tail="{{routeProject}}"></app-route>
+        <app-route route="{{routeProject}}" pattern="/:folder/:project" data="{{subrouteData}}"></app-route>
 
         <app-drawer-layout force-narrow>
             <app-drawer>
                 <div style="height: 100%; overflow: auto;">
                     <a class="stack pseudo button" href="/">Home</a>
                     <a class="stack pseudo button" href="#/blog">Blog</a>
-                    <a class="stack pseudo button" href="#/">Projects</a>
+                    <a class="stack pseudo button" href="#/project">Projects</a>
                     <a class="stack pseudo button" href="#/">About</a>
                     <a class="stack pseudo button" href="#/">Contact</a>
                 </div>
@@ -53,6 +55,7 @@
                         <iron-pages attr-for-selected="id" selected="{{data.page}}">
                             <page-home id="home" site-data="[[siteData]]"></page-home>
                             <page-blog id="blog" blog-list="[[siteData.blog]]" route-data="[[subrouteData]]"></page-blog>
+                            <page-projects id="project" project-list="[[siteData.projects]]" route-data="[[subrouteData]]"></page-projects>
                         </iron-pages>
                     </div>
                 </main>

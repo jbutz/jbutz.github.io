@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../post-header/post-header.html">
 
@@ -13,8 +12,8 @@
         </style>
         <iron-pages attr-for-selected="id">
             <div id="blog-list">
-                <iron-list id="postList" items="[[blogList]]" as="item">
-                    <template>
+                <template is="dom-repeat" id="postList" items="[[blogList]]">
+                    <article>
                         <div>
                             <div class="post-list-header">
                                 <post-header post-data="[[item]]"></post-header>
@@ -22,8 +21,8 @@
                             <p>[[item.excerpt]]</p>
                             <p><a href="#/blog/[[item.url]]">Read More</a></p>
                         </div>
-                    </template>
-                </iron-list>
+                    </article>
+                </template>
             </div>
             <div id="blog-post">
                 <iron-ajax url="[[buildBlogPath(routeData.date, routeData.post)]]" on-response="handleBlogResponse" handle-as="document"
@@ -35,7 +34,6 @@
 
     <script>
     Polymer({
-
         is: 'page-blog',
 
         properties: {

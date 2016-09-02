@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="page-projects" is="dom-bind">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <iron-pages attr-for-selected="id">
+            <div id="project-list">
+                <template is="dom-repeat" id="projectList" items="[[projectList]]">
+                    <article>
+                        <div class="flex three">
+                            <div class="third">
+                                <img src="[[item.thumbnail]]" />
+                            </div>
+                            <div class="two-third">
+                                <h3>[[item.title]]</h3>
+                                <p>[[item.excerpt]]</p>
+                                <p><a href="#/project/[[item.url]]">Read More</a></p>
+                            </div>
+                        </div>
+                    </article>
+                </template>
+            </div>
+            <div id="project-post">
+                <iron-ajax url="[[buildAjaxPath(routeData.folder, routeData.project)]]" on-response="handleResponse" handle-as="document" auto></iron-ajax>
+                <div id="projectPost"></div>
+            </div>
+        </iron-pages>
+    </template>
+
+    <script>
+    Polymer({
+        is: 'page-projects',
+
+        properties: {
+            projectList: {
+                type: Array,
+                value: []
+            },
+            routeData: {
+                type: Object,
+                value: null
+            }
+        },
+
+        handleResponse: function (e, ironRequest) {
+            Polymer.dom(this.$.projectPost).appendChild(ironRequest.response.body);
+        },
+
+        buildAjaxPath: function(folder, project) {
+            if(folder && project) {
+                return folder + '/' + project;
+            }
+        }
+    });
+  </script>
+</dom-module>
