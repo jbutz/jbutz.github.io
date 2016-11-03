@@ -1,7 +1,8 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../post-header/post-header.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/components/post-header/post-header.html">
+<link rel="import" href="/bower_components/juicy-html/juicy-html.html">
 
 <dom-module id="page-blog" is="dom-bind">
     <template>
@@ -25,9 +26,7 @@
                 </template>
             </div>
             <div id="blog-post">
-                <iron-ajax url="[[buildBlogPath(routeData.date, routeData.post)]]" on-response="handleBlogResponse" handle-as="document"
-                    auto></iron-ajax>
-                <div id="blogPost"></div>
+                <template is="juicy-html" content$="[[buildBlogPath(routeData.date, routeData.post)]]"></template>
             </div>
         </iron-pages>
     </template>
@@ -46,12 +45,9 @@
                 value: null
             }
         },
-        handleBlogResponse: function (e, ironRequest) {
-            Polymer.dom(this.$.blogPost).appendChild(ironRequest.response.body);
-        },
         buildBlogPath: function (dateValue, postValue) {
             if (dateValue && postValue) {
-                return dateValue + '/' + postValue;
+                return '/' + dateValue + '/' + postValue;
             }
         }
     });

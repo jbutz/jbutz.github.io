@@ -1,6 +1,7 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/juicy-html/juicy-html.html">
 
 <dom-module id="page-projects" is="dom-bind">
     <template>
@@ -13,9 +14,9 @@
             <div id="project-list">
                 <template is="dom-repeat" id="projectList" items="[[projectList]]">
                     <article>
-                        <div class="flex three">
+                        <div class="flex two">
                             <div class="third">
-                                <img src="[[item.thumbnail]]" />
+                                <img class="project-thumbnail" src="[[item.thumbnail]]" />
                             </div>
                             <div class="two-third">
                                 <h3>[[item.title]]</h3>
@@ -27,8 +28,7 @@
                 </template>
             </div>
             <div id="project-post">
-                <iron-ajax url="[[buildAjaxPath(routeData.folder, routeData.project)]]" on-response="handleResponse" handle-as="document" auto></iron-ajax>
-                <div id="projectPost"></div>
+                <template is="juicy-html" content$="[[buildAjaxPath(routeData.folder, routeData.project)]]"></template>
             </div>
         </iron-pages>
     </template>
@@ -54,7 +54,7 @@
 
         buildAjaxPath: function(folder, project) {
             if(folder && project) {
-                return folder + '/' + project;
+                return '/' + folder + '/' + project;
             }
         }
     });

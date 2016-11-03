@@ -1,7 +1,7 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../post-header/post-header.html">
-<link rel="stylesheet" href="../../bower_components/ideal-image-slider/ideal-image-slider.css">
-<link rel="stylesheet" href="../../bower_components/ideal-image-slider/themes/default/default.css">
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/components/post-header/post-header.html">
+<link rel="stylesheet" href="/bower_components/ideal-image-slider/ideal-image-slider.css">
+<link rel="stylesheet" href="/bower_components/ideal-image-slider/themes/default/default.css">
 
 <dom-module id="page-home" is="dom-bind">
     <template>
@@ -10,7 +10,7 @@
                 display: block;
             }
         </style>
-        <div>
+        <!--<div>
             <div class="row one project-gallery" dom-if="[[getFirstArrayItem(siteData.projects)]]">
                 <div class="tabs three half">
                     <input id='tab-1' type='radio' name='projectGallery' checked />
@@ -28,9 +28,9 @@
                     <label for="tab-3">&bull;</label>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div dom-if="[[getFirstArrayItem(siteData.blog)]]">
-            <h2>Latest Blog Post</h2>
+            <!--<h2>Latest Blog Post</h2>-->
 
             <div class="post-list-header">
                 <post-header post-data="[[getFirstArrayItem(siteData.blog)]]"></post-header>
@@ -51,7 +51,7 @@
         }
       },
       ready: function() {
-          var gallery = this.$$('.project-gallery');
+          /*var gallery = this.$$('.project-gallery');
           var mouseIsOver = false;
 
           setInterval(function() {
@@ -72,7 +72,7 @@
 
           gallery.onmouseleave = function() {
               mouseIsOver = false;
-          };
+          };*/
       },
       getFirstArrayItem: function (arr, prop) {
         arr = arr || [];
