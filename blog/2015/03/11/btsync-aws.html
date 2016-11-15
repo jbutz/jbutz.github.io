@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Jason Butz - BT Sync & AWS</title>
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="alternate" type="application/rss+xml" title="Blog Feed" href="http://www.jasonbutz.info/blog/atom.xml" />
+	<link rel="alternate" type="application/rss+xml" title="Projects Feed" href="http://www.jasonbutz.info/project/atom.xml" />
+
+	<!-- Foundation -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/css/normalize.min.css"/>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/css/foundation.min.css"/>
+	<link rel="stylesheet" href="/assets/css/social_foundicons.css"/>
+
+	<link rel="stylesheet" href="/assets/css/syntax.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.min.js"></script>
+	<script type="text/javascript" src="/assets/js/plugins.js"></script>
+</head>
+<body>
+	<header>
+		<div class="row">
+			<div class="small-8 large-6 columns">
+				<h1><a href="/">Jason Butz</a></h1>
+			</div>
+			<div class="small-4 large-6 columns">
+				<nav class="contain-to-grid">
+					<div class="top-bar">
+						<ul class="title-area">
+							<li class="name"><!-- Leave this empty --></li>
+							<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+						</ul>
+						<section class="top-bar-section">
+							<ul class="right">
+								<li class="active"><a href="/">Home</a></li>
+								<li><a href="/projects.html">Projects</a></li>
+								<li><a href="/blog">Blog</a></li>
+								<li><a href="/contact.html">Contact Me</a></li>
+							</ul>
+						</section>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</header>
+
+	<section id="mainContent">
+		<div class="small-12 large-8 large-centered columns">
+<div class="row">
+	<div class="small-12 columns">
+		<h2>BT Sync & AWS <small>11 Mar 2015</small></h2>
+	</div>
+</div>
+<div class="row">
+	<div class="small-12 columns">
+		<div class="post">
+			<p><a href="https://www.getsync.com/">BitTorrent Sync (BT Sync)</a> is a tool that can be used to synchronize files between devices using <a href="http://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer (P2P)</a>, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don’t really know what it is doing beneath the covers.</p>
+
+<p>I’ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on <a href="http://aws.amazon.com">Amazon Web Services (AWS)</a> a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I’m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don’t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.</p>
+
+<ol>
+  <li>First you need to download the program to your EC2 instance. In the SSH window to your EC2 instance type/copy-paste in<br />
+<code>wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz</code><br />
+and hit enter. This will download the file.</li>
+  <li>Now we need to extract it, type in <code>tar -xvvzf BitTorrent-Sync_x64.tar.gz</code> and press enter.</li>
+  <li>In your EC2 Management Console click on the EC2 instance you created for BT Sync, then click on the link next to <em>Security groups</em>.</li>
+  <li>Now you should be looking at the Security Group used for the instance. Click the <em>Inbound</em> tab, then click the <em>Edit</em> button.</li>
+  <li>Now add a <em>Custom TCP Rule</em> with the Port Range as <em>8888</em> and the Source as <em>Anywhere</em>. Then click Save.</li>
+  <li>Head back to your SSH console and run <code>./btsync</code>. This starts BT Sync in the background</li>
+  <li>Get your <em>Public DNS</em> url from your EC2 Management Console and put that into your browser at port 8888. It will be something like <code>http://ec2-00-00-00-00.us-west.compute.amazonaws.com:8888</code>. You should see the BT Sync interface and it should help you get everything setup.</li>
+  <li>Click the cog in the upper-right corner, then click <em>Preferences</em>, then click <em>Advanced</em>. Make note of the <em>Listening Port</em>. You will want that later. Next we need to make sure BT Sync runs on startup of the EC2 instance.</li>
+  <li>In your SSH terminal type the following<br />
+<code>killall btsync</code><br />
+<code>sudo mv btsync /usr/local/bin/btsync</code><br />
+<code>sudo chown root:root /usr/local/bin/btsync</code><br />
+<code>sudo chmod 755 /usr/local/bin/btsync</code>  </li>
+  <li>Go to <a href="https://gist.github.com/MendelGusmao/5398362">this gist</a> by Mendelson Gusmao. Click the <em>Raw</em> button next to the <em>btsync</em> file. Copy the URL of that raw output.</li>
+  <li>In your SSH terminal run <code>wget [PASTE URL HERE]</code> to download the file.</li>
+  <li>Using whatever text editor you want edit the new <em>btsync</em> file. Replace <code>BTSYNC_USERS="mendel"</code> with <code>BTSYNC_USERS="ubuntu"</code></li>
+  <li>Run the following commands to move the file into place and to set the permissions<br />
+   <code>sudo mv btsync /etc/init.d/btsync</code><br />
+   <code>sudo chown root:root /etc/init.d/btsync</code><br />
+   <code>sudo chmod +x /etc/init.d/btsync</code>  </li>
+  <li>Now we need to create a config file for btsync. Run this command:<br />
+   <code>btsync --dump-sample-config &gt; /home/ubuntu/.sync/config.json</code></li>
+  <li>Open <em>/home/ubuntu/.sync/config.json</em> in your text editor. The first few lines will look like this:<br />
+   <code>{</code><br />
+   <code>"device_name": "My Sync Device",</code><br />
+   <code>"listening_port" : 0, // 0 - randomize port</code><br />
+   <code>/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in the directory where binary is located. otherwise user-defined directory will be used */</code><br />
+   <code>// "storage_path" : "/home/user/.sync",</code><br />
+   Change <em>My Sync Device</em> to whatever you want, leaving the quotes intact. Change the listening port to the value to wrote down earlier.
+   Remove the <code>//</code> before the <em>storage_path</em> line and change <code>/home/user/.sync</code> to <code>/home/ubuntu/.sync</code>. Save the file and the config is done.</li>
+  <li>Run <code>sudo update-rc.d btsync defaults</code> to make sure everything runs on startup.</li>
+  <li>Run <code>sudo /etc/init.d/btsync start</code> to start the daemon. It should say <em>Starting BTSync for ubuntu</em>. Go to the URL you used in step 7 to make sure it is running</li>
+  <li>Follow steps 3 - 5 again, only this time use the listening port number you used earlier.</li>
+</ol>
+
+<p>That’s all there is to it.</p>
+
+
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="small-12 columns">
+		<hr>
+		<div id="disqus_thread"></div>
+		<script type="text/javascript">
+			/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+			var disqus_shortname = 'jasonbutzblog'; // required: replace example with your forum shortname
+			var disqus_identifier = '/blog/2015/03/11/btsync-aws';
+			var disqus_title = 'BT Sync & AWS';
+			var disqus_url = 'http://www.jasonbutz.info/blog/2015/03/11/btsync-aws.html';
+
+			/* * * DON'T EDIT BELOW THIS LINE * * */
+			(function() {
+				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			})();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	</div>
+</div>
+
+		</div>
+	</section>
+	<footer>
+		<div class="row">
+			<div class="small-12 columns">
+				<p>
+					<small><a href="http://www.jasonbutz.info/blog/atom.xml" title="Blog RSS Feed"><i class="foundicon-rss">&nbsp;Blog RSS Feed</i></a></small>
+					&nbsp;&nbsp;
+					<small><a href="http://www.jasonbutz.info/project/atom.xml" title="Projects RSS Feed"><i class="foundicon-rss">&nbsp;Projects RSS Feed</i></a></small>
+					<br />
+					<small>Jason Butz &copy; 2012 - 2015</small><br>
+				</p>
+			</div>
+		</div>
+	</footer>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation/foundation.topbar.min.js"></script>
+	<script type="text/javascript">$(document).foundation();</script>
+	<!-- <script type="text/javascript" src="/assets/js/site.js"></script> -->
+<script src='/assets/global-165f05faaf9ee3e1184dcce0ebb5b2a7.js' type='text/javascript'></script>
+
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-45171709-1', 'jasonbutz.info');
+		ga('send', 'pageview');
+	</script>
+	<!--[if !(lte IE 8)]><!--> 
+	<script type="text/javascript"> 
+	(function(){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src=document.location.protocol+"//d1agz031tafz8n.cloudfront.net/thedaywefightback.js/widget.min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})()
+	</script>
+	<!--<![endif]-->
+</body>
+</html>

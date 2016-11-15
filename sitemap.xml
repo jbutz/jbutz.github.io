@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2015/03/11/btsync-aws.html</loc>
+    
+    <lastmod>2015-03-11T22:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2015/01/18/csharp-memory-leaks.html</loc>
+    
+    <lastmod>2015-01-18T12:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2014/09/24/servicenow-record-producers.html</loc>
+    
+    <lastmod>2014-09-24T12:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2014/05/23/goruck-light.html</loc>
+    
+    <lastmod>2014-05-23T12:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2014/01/31/service-now-navigation-handler.html</loc>
+    
+    <lastmod>2014-01-31T10:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2014/01/29/service-now-workflow-email.html</loc>
+    
+    <lastmod>2014-01-29T12:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/10/25/service-now-passing-data.html</loc>
+    
+    <lastmod>2013-10-25T10:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/09/10/i-got-mentioned.html</loc>
+    
+    <lastmod>2013-09-10T16:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/08/23/importance-urgency.html</loc>
+    
+    <lastmod>2013-08-23T11:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/timetracker.html</loc>
+    
+    <lastmod>2013-08-21T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments.html</loc>
+    
+    <lastmod>2013-07-31T11:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/07/24/new-site-with-jekyll.html</loc>
+    
+    <lastmod>2013-07-24T15:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/06/21/service-now.html</loc>
+    
+    <lastmod>2013-06-21T16:03:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/servicenowcli.html</loc>
+    
+    <lastmod>2013-06-18T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/sublimetest-glide.html</loc>
+    
+    <lastmod>2013-06-04T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/05/14/foundation-instead-of-bootstrap.html</loc>
+    
+    <lastmod>2013-05-14T14:03:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/05/03/bootstrap-lightbox-update.html</loc>
+    
+    <lastmod>2013-05-03T16:09:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/2013/04/12/ruby-on-rails-exceptions.html</loc>
+    
+    <lastmod>2013-04-12T16:45:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/redmine-mailstatus.html</loc>
+    
+    <lastmod>2013-03-13T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/chrome-wordpress.html</loc>
+    
+    <lastmod>2013-02-08T10:09:52-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/laravel-akismet.html</loc>
+    
+    <lastmod>2013-01-16T19:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/push-drive.html</loc>
+    
+    <lastmod>2012-12-31T19:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/docgraph.html</loc>
+    
+    <lastmod>2012-09-30T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/android-webview.html</loc>
+    
+    <lastmod>2012-07-01T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/gapps-tool.html</loc>
+    
+    <lastmod>2012-06-30T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/cleanup-voicemail.html</loc>
+    
+    <lastmod>2012-05-31T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/bootstrap-lightbox.html</loc>
+    
+    <lastmod>2012-04-19T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/node-webserver.html</loc>
+    
+    <lastmod>2012-02-21T19:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/wotrk.html</loc>
+    
+    <lastmod>2011-09-15T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/backbone-ajaxqueue.html</loc>
+    
+    <lastmod>2011-09-15T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/prodsched.html</loc>
+    
+    <lastmod>2011-08-31T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/html5-tictactoe.html</loc>
+    
+    <lastmod>2011-08-12T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/html5-blog.html</loc>
+    
+    <lastmod>2011-08-11T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/php-rest.html</loc>
+    
+    <lastmod>2011-06-06T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/other/etools.html</loc>
+    
+    <lastmod>2010-12-31T19:00:00-05:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.jasonbutz.info/project/personal/phpdaycare.html</loc>
+    
+    <lastmod>2010-04-30T20:00:00-04:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/contact.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/projects.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page2/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page3/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page2/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page3/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page4/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page5/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page6/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page7/index.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>http://www.jasonbutz.info/blog/page8/index.html</loc>
+  </url>
+  
+  
+</urlset>
