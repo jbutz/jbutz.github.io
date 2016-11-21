@@ -1,0 +1,157 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/page-title/page-title.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="my-app">
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #4285f4;
+                --app-secondary-color: black;
+                display: block;
+            }
+            
+            app-header {
+                color: #fff;
+                background-color: var(--app-primary-color);
+            }
+            
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+            
+            .drawer-list {
+                margin: 0 20px;
+            }
+            
+            .drawer-list a {
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 40px;
+            }
+            
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .menu-profile .profile {
+                width: 75%;
+                border-radius: 50%;
+            }
+            .menu-profile hr {
+                width: 50%;
+            }
+        </style>
+        <page-title base-title="Jason Butz" title="[[selectedPage.title]]"></page-title>
+
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+        <app-drawer-layout fullbleed responsive-width="992px">
+            <!-- Drawer content -->
+            <app-drawer>
+                <!-- <app-toolbar>Menu</app-toolbar> -->
+                <template is="dom-if" if="[[wideLayout]]">
+                    <div class="menu-profile text-center">
+                        <p><img class="profile" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8" /></p>
+                        <p>Jason Butz<br />Software Engineer</p>
+                        <hr />
+                    </div>
+                </template>
+                <iron-selector selected="[[page]]" attr-for-selected="name" selected-item="{{selectedPage}}" class="drawer-list" role="navigation">
+                    <a name="home"    title="Home"       href="/">Home</a>
+                    <a name="blog"    title="Blog"       href="/blog/list">Blog</a>
+                    <a name="project" title="Projects"   href="/project">Projects</a>
+                    <a name="view3"   title="Contact Me" href="/view3">Contact Me</a>
+                </iron-selector>
+            </app-drawer>
+
+            <!-- Main content -->
+            <app-header-layout has-scrolling-region>
+
+                <app-header condenses reveals effects="waterfall">
+                    <template is="dom-if" if="[[!wideLayout]]">
+                        <app-toolbar>
+                            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+                            <div main-title>Jason Butz - Software Engineer</div>
+                        </app-toolbar>
+                    </template>
+                </app-header>
+
+                <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+                    <my-home name="home"></my-home>
+                    <my-blog name="blog" subroute="{{subroute}}"></my-blog>
+                    <my-project name="project"></my-project>
+                    <my-view404 name="view404"></my-view404>
+                </iron-pages>
+            </app-header-layout>
+        </app-drawer-layout>
+        <iron-media-query query="min-width: 992px" query-matches="{{wideLayout}}"></iron-media-query>
+    </template>
+
+    <script>
+    Polymer({
+      is: 'my-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+        subroute: Object,
+        wideLayout: Boolean
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)',
+        '_output(wideLayout)'
+      ],
+
+      _output: function(v) {
+          console.log(v)
+      },
+      _routePageChanged: function(page) {
+        this.page = page || 'home';
+      },
+
+      _pageChanged: function(page) {
+        var resolvedPageUrl = this.resolveUrl(page + '.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function() {
+        this.page = 'view404';
+      }
+    });
+  </script>
+</dom-module>

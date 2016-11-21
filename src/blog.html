@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/page-title/page-title.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-blog">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+
+            .Xcard h1 a {
+                color: #212121;
+                text-decoration: none;
+            }
+            small {
+                font-size: .5em;
+                color: #666;
+            }
+        </style>
+        
+        <app-route route="{{subroute}}" pattern="/:post" data="{{routeData}}"></app-route>
+        <page-title base-title="Jason Butz" title="[[selectedPage.title]]"></page-title>
+
+        <iron-pages selected="[[post]]" attr-for-selected="name" selected-item="{{selectedPage}}" fallback-selection="view404" role="main">
+            <div name="list" title = "Blog">
+
+                <template is="dom-repeat" items="{{data}}" as="post">
+                    <div class="card">
+                        <h1><a href="[[post.link]]">[[post.title]]</a> <small>2015-03-11</small></h1>
+                        <p>[[post.snippet]]</p>
+                    </div>
+                </template>
+            </div>
+            <blog-2015-03-11-btsync name="2015-03-11-btsync" title="BitTorrent Sync"></blog-2015-03-11-btsync>
+            <my-view404 name="view404"></my-view404>
+        </iron-pages>
+    </template>
+
+    <script>
+    Polymer({
+        is: 'my-blog',
+
+        properties: {
+            post: {
+                type: String,
+                reflectToAttribute: true,
+                observer: '_pageChanged'
+            },
+            subroute: {
+                type: Object
+            },
+            data: {
+                type: Array,
+                value: [
+                    {
+                        title: 'BT Sync',
+                        snippet: 'Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World ',
+                        link: '/blog/2015-03-11-btsync'
+                    }
+                ]
+            }
+        },
+
+        observers: [
+            '_routePostChanged(routeData)',
+        ],
+
+        _pageChanged: function(post) {
+            console.log('POST CHANGE', post)
+            var file = 'blog/' + post;
+
+            if(post === 'view404') {
+                file = post;
+            } else if(post === 'list') {
+                return;
+            }
+            var resolvedPageUrl = this.resolveUrl(file + '.html');
+            this.importHref(resolvedPageUrl, null, function() {
+                this.post = 'view404';
+            }, true);
+        },
+
+        _routePostChanged: function(routeData) {
+            this.post = routeData.post || 'list'
+        }
+    });
+  </script>
+</dom-module>
