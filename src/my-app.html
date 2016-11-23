@@ -82,7 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- <app-toolbar>Menu</app-toolbar> -->
                 <template is="dom-if" if="[[wideLayout]]">
                     <div class="menu-profile text-center">
-                        <p><img class="profile" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8" /></p>
+                        <p hidden="[[lowHeight]]"><img class="profile" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8" /></p>
                         <p>Jason Butz<br />Software Engineer</p>
                         <hr />
                     </div>
@@ -116,6 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-header-layout>
         </app-drawer-layout>
         <iron-media-query query="min-width: 992px" query-matches="{{wideLayout}}"></iron-media-query>
+        <iron-media-query query="max-height: 600px" query-matches="{{lowHeight}}"></iron-media-query>
     </template>
 
     <script>
@@ -129,7 +130,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_pageChanged'
         },
         subroute: Object,
-        wideLayout: Boolean
+        wideLayout: Boolean,
+        lowHeight: Boolean,
+        hideProfilePic: Boolean
       },
 
       observers: [

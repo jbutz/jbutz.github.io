@@ -9,29 +9,77 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-project">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles app-grid-style">
+            :host {
+                --app-grid-columns: 3;
+                --app-grid-expandible-item-columns: 3;
+                
+            }
+            @media(max-width: 992px) {
+                :host {
+                    --app-grid-columns: 1;
+                    --app-grid-expandible-item-columns: 1;
+                }
+            }
+            
+            .item:first-child {
+                @apply(--app-grid-expandible-item);
+            }
 
-        padding: 10px;
-      }
-    </style>
+            
+        </style>
+        <div class="app-grid" >
+            <div class="item">
+            <div class="pcard">
+                <h1>My Work</h1>
+                <p>If you are looking for some of my code checkout the sites below.</p>
+            </div>
+            </div>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>View project</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
-  </template>
+            <div class="item">
+            <div class="pcard">
+                <h3><i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/jbutz">GitHub</a></h3>
+                <p>GitHub has the majority of my public code, as well as my contributions.</p>
+                <p>In addition to the repos on my personal account there are a few I have contributed to with my old team.
+                    You can find those repos on the <a href="https://github.com/inincaas">inincaas team</a></p>
+            </div>
+            </div>
 
-  <script>
+            <div class="item">
+            <div class="pcard">
+                <h3><i class="fa fa-gitlab" aria-hidden="true"></i> <a href="https://gitlab.com/jbutz">GitLab</a></h3>
+                <p>GitLab has so many features, and has free private repos. I don't have much public here, but it is where I expect to put more overtime.</p>
+            </div>
+            </div>
+
+            <div class="item">
+            <div class="pcard">
+                <h3><i class="fa fa-bitbucket" aria-hidden="true"></i> <a href="https://bitbucket.org/jbutz/">BitBucket</a></h3>
+                <p>We use BitBucket for work, so there may be a few public tidbits that will show up from time to time.</p>
+            </div>
+            </div>
+
+        </div>
+    </template>
+
+    <script>
     Polymer({
-      is: 'my-project'
+      is: 'my-project',
+
+      attached: function() {
+            this._updateGridStyles = this._updateGridStyles || function() {
+              this.updateStyles();
+            }.bind(this);
+            window.addEventListener('resize', this._updateGridStyles);
+          },
+          detached: function() {
+            window.removeEventListener('resize', this._updateGridStyles);
+          }
     });
   </script>
 </dom-module>

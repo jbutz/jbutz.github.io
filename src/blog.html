@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/page-title/page-title.html">
 <link rel="import" href="shared-styles.html">
 
+
 <dom-module id="my-blog">
     <template>
         <style include="shared-styles">
@@ -28,8 +29,8 @@
             <div name="list" title = "Blog">
 
                 <template is="dom-repeat" items="{{data}}" as="post">
-                    <div class="card">
-                        <h1><a href="[[post.link]]">[[post.title]]</a> <small>2015-03-11</small></h1>
+                    <div class="pcard">
+                        <h2><a href="[[post.link]]">[[post.title]]</a> <small>2015-03-11</small></h2>
                         <p>[[post.snippet]]</p>
                     </div>
                 </template>
