@@ -1,0 +1,9 @@
+{{> top }}
+{{# collections.blog }}
+    <div class="page-card">
+        {{> post-heading .}}
+
+        {{{ contents }}}
+    </div>
+{{/ collections.blog }}
+{{> bottom }}
