@@ -36,8 +36,8 @@
         doPushState = doPushState === undefined ? true : doPushState;
         // Create our request and run it
         var pageURL = url;
-        var pageRequest = new Request(pageURL);
-        fetch(pageRequest)
+        //var pageRequest = new Request(pageURL);
+        fetch(pageURL)
             .then(function (response) {
                 return response.text();
             })
@@ -79,7 +79,7 @@
         // Stop real link functionality
         e.preventDefault();
 
-        pageNavigate(this.href);
+        pageNavigate(this.pathname || this.href);
 
         return false;
     };
