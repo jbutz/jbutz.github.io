@@ -3,15 +3,15 @@
 
 <channel>
     <title>Jason Butz</title>
-    <link>http://jasonbutz.info</link>
-    <atom:link href="http://jasonbutz.info/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://jasonbutz.info</link>
+    <atom:link href="https://jasonbutz.info/feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
     <pubDate>Fri, 30 Dec 2016 00:00:00 -0500</pubDate>
 
     <item>
-        <guid>http://jasonbutz.info/blog/2015/03/11/bt-sync-aws</guid>
+        <guid>https://jasonbutz.info/blog/2015/03/11/bt-sync-aws</guid>
         <title>BT Sync &amp; AWS</title>
-        <link>http://jasonbutz.info/blog/2015/03/11/bt-sync-aws</link>
+        <link>https://jasonbutz.info/blog/2015/03/11/bt-sync-aws</link>
         <description>&lt;p&gt;&lt;a href&#x3D;&quot;https://www.getsync.com/&quot;&gt;BitTorrent Sync (BT Sync)&lt;/a&gt; is a tool that can be used to synchronize files between devices using &lt;a href&#x3D;&quot;http://en.wikipedia.org/wiki/Peer-to-peer&quot;&gt;peer-to-peer (P2P)&lt;/a&gt;, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don&amp;#39;t really know what it is doing beneath the covers.&lt;/p&gt;
 &lt;p&gt;I&amp;#39;ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on &lt;a href&#x3D;&quot;http://aws.amazon.com&quot;&gt;Amazon Web Services (AWS)&lt;/a&gt; a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I&amp;#39;m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don&amp;#39;t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.&lt;/p&gt;
 &lt;ol&gt;
@@ -40,9 +40,9 @@ Remove the &lt;code&gt;//&lt;/code&gt; before the &lt;em&gt;storage_path&lt;/em&
         <pubDate>Tue, 10 Mar 2015 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2015/01/18/c-memory-leaks</guid>
+        <guid>https://jasonbutz.info/blog/2015/01/18/c-memory-leaks</guid>
         <title>C# Memory Leaks</title>
-        <link>http://jasonbutz.info/blog/2015/01/18/c-memory-leaks</link>
+        <link>https://jasonbutz.info/blog/2015/01/18/c-memory-leaks</link>
         <description>&lt;p&gt;For the past three or four work days I have been trying to find a memory leak in a Windows Service we created that is used to synchronize data between two systems on a nightly basis. I had just added a single method to it for a new job and the memory usage was climbing until it hit the 2GB process limit.&lt;/p&gt;
 &lt;p&gt;At first I thought it might be something going wrong in my &lt;code&gt;foreach&lt;/code&gt; loop. That was the only thing I added running enough to create that kind of usage. I was looping over 200,000 items for the initial sync so all it wouldn&amp;#39;t be that hard if I had a object keeping track of everything I synced. But I didn&amp;#39;t have any of that. I went through my loop several times. Then I started wondering about the method generating the API calls to the other system. If something was going wrong there it would easily explain the memory usage. I had to make up to 3 API calls for each loop iteration.&lt;/p&gt;
 &lt;p&gt;At first I thought it might be because the class for making the API calls was static and I saw an article that said static objects aren&amp;#39;t garbage collected, so I started digging through there but couldn&amp;#39;t find anything. Then I decided I needed to confirm a memory leak. I pulled out Performance Monitor and set it to track the &lt;em&gt;Private Bytes&lt;/em&gt; for my process. Sure enough as soon as I triggered the sync the memory usage steadily took off. Once I had whittled down the objects I had to work on so I wouldn&amp;#39;t run out of process memory I saw that when it was done it wouldn&amp;#39;t release the memory. Now I really had to find the problem, restarting the service nightly wouldn&amp;#39;t be viable.&lt;/p&gt;
@@ -54,9 +54,9 @@ Remove the &lt;code&gt;//&lt;/code&gt; before the &lt;em&gt;storage_path&lt;/em&
         <pubDate>Sat, 17 Jan 2015 19:00:00 -0500</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</guid>
+        <guid>https://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</guid>
         <title>ServiceNow Record Producer Caveats</title>
-        <link>http://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</link>
+        <link>https://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</link>
         <description>&lt;p&gt;I recently ran into a problem when using Record Producers. In the script for the Record Producer I am using the &lt;code&gt;applyTemplate&lt;/code&gt; function on the &lt;code&gt;current&lt;/code&gt; GlideRecord. The template used varies, which is why I can&amp;#39;t use the template field on the Record Producer. I kept ending up with duplicate task records with the exact same value in the number field.&lt;/p&gt;
 &lt;p&gt;After some tinkering I came to the conclusion that the &lt;code&gt;applyTemplate&lt;/code&gt; method causes an insert, and that the Record Producer also does an insert after running the Record Producer script. After a lot of frustration I was looking through the Sandbox instance of ServiceNow when I noticed that the &lt;em&gt;New LDAP Server&lt;/em&gt; inserted the &lt;code&gt;current&lt;/code&gt; GlideRecord and they used the &lt;code&gt;setAbortAction&lt;/code&gt; method. So I decided to give that a try.&lt;/p&gt;
 &lt;p&gt;Here is what I ended up with at the end of my Record Producer:&lt;/p&gt;
@@ -68,9 +68,9 @@ current.setAbortAction(&lt;span class&#x3D;&quot;hljs-literal&quot;&gt;true&lt;/
         <pubDate>Tue, 23 Sep 2014 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2014/05/23/goruck-light</guid>
+        <guid>https://jasonbutz.info/blog/2014/05/23/goruck-light</guid>
         <title>GORUCK Light</title>
-        <link>http://jasonbutz.info/blog/2014/05/23/goruck-light</link>
+        <link>https://jasonbutz.info/blog/2014/05/23/goruck-light</link>
         <description>&lt;p&gt;&lt;strong&gt;Disclaimer: This post will have absolutely nothing to do with programming&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Last month I took part in an event called &lt;a href&#x3D;&quot;https://www.goruck.com/light&quot;&gt;GORUCK Light&lt;/a&gt;. The company that puts these events on is called &lt;a href&#x3D;&quot;https://www.goruck.com&quot;&gt;GORUCK&lt;/a&gt;. They make amazing rucksacks and other gear. Don&amp;#39;t be surprised when you see the prices. They aren&amp;#39;t cheap, but that is because they are well made and made in the USA. The company was founded in 2008 by Jason McCarthy, a special forces veteran.&lt;/p&gt;
 &lt;p&gt;The first of their events started as a way to test their gear. They want the gear to hold up to what special forces can put it through. From that event a new business for them was born. They have 4 levels of &lt;em&gt;Good Livin&amp;#39;&lt;/em&gt; events. Light, Challenge, Heavy, and Selection.&lt;/p&gt;
@@ -97,9 +97,9 @@ current.setAbortAction(&lt;span class&#x3D;&quot;hljs-literal&quot;&gt;true&lt;/
         <pubDate>Thu, 22 May 2014 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</guid>
+        <guid>https://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</guid>
         <title>ServiceNow - Navigation Handlers</title>
-        <link>http://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</link>
+        <link>https://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</link>
         <description>&lt;p&gt;Today I had a need to toy with a default ServiceNow functionality called Navigation Handlers. This is a feature that doesn&amp;#39;t show up at all on the Wiki. The only reference I could find to it was on a &lt;a href&#x3D;&quot;http://www.servicenowguru.com/system-ui/ui-pages-system-ui/overriding-ess-checkout-view-catalog-requests/&quot;&gt;ServiceNow Guru article&lt;/a&gt; that my predecessor had followed to disable it. Since there is no wiki article on Navigation Handlers I thought I might do a small write up about what I have figured out about them.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Navigation Handlers&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;A navigation handler can be used to re-write URLs and change where a user goes based on the record they are trying to view. The only default navigation handler is used to send users to the Order Status page when opening a request record in the Self-Service view.&lt;/p&gt;
@@ -266,9 +266,9 @@ g_request.wait()
         <pubDate>Thu, 30 Jan 2014 19:00:00 -0500</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</guid>
+        <guid>https://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</guid>
         <title>ServiceNow - Workflow E-Mails</title>
-        <link>http://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</link>
+        <link>https://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</link>
         <description>&lt;p&gt;Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&amp;#39;t.&lt;/p&gt;
 &lt;p&gt;This is how you normally access a variable on a Request Item from a script:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;current.variables[&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;variable_name&#x27;&lt;/span&gt;].getGlideObject().getDisplayValue(); &lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// For the displayed value&lt;/span&gt;
@@ -297,9 +297,9 @@ var item_var &#x3D; function(key)
         <pubDate>Tue, 28 Jan 2014 19:00:00 -0500</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</guid>
+        <guid>https://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</guid>
         <title>ServiceNow - Passing Data</title>
-        <link>http://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</link>
+        <link>https://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</link>
         <description>&lt;p&gt;At work we came across an interesting issue when dealing with ServiceNow this week. We are working on implimenting Incident and needed to be able to create a change or a request from the incident. The new record needed to have its &lt;code&gt;parent&lt;/code&gt; field set to reference the inicident. Some of the original code does this for requests by redirecting the user to the Service Catalog and setting a parameter in the URL that is meant to will in a field on the form. Unfortunatly that doesn&amp;#39;t work in our case. Our changes are generated by using a wizard, and our requests are done with a record producer. We figured out a way to work around the issue and pass the values to the wizard and record producer. I thought it was something people might like to see.&lt;/p&gt;
 &lt;p&gt;Here is what the &lt;em&gt;Create Request&lt;/em&gt; UI action looks like:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// Update saves incidents before going to the catalog homepage&lt;/span&gt;
@@ -324,18 +324,18 @@ action.setRedirectURL(url);
         <pubDate>Thu, 24 Oct 2013 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2013/09/10/i-got-mentioned</guid>
+        <guid>https://jasonbutz.info/blog/2013/09/10/i-got-mentioned</guid>
         <title>I Got Mentioned</title>
-        <link>http://jasonbutz.info/blog/2013/09/10/i-got-mentioned</link>
+        <link>https://jasonbutz.info/blog/2013/09/10/i-got-mentioned</link>
         <description>&lt;p&gt;Last week a newletter went out that I had never heard of. It is called &amp;quot;Hacks &amp;amp;&amp;amp; Happenings&amp;quot; and it is put out by a group called &lt;a href&#x3D;&quot;http://indyhackers.org/&quot;&gt;Indy Hackers&lt;/a&gt;. In their &lt;a href&#x3D;&quot;http://us6.campaign-archive1.com/?u&#x3D;244b5370d41b5cf4146ec517c&amp;amp;id&#x3D;c5483caef3&quot;&gt;September 2013 Issue&lt;/a&gt; my &lt;a href&#x3D;&quot;/project/personal/timetracker.html&quot;&gt;Time Track&lt;/a&gt; project was mentioned! I didn&amp;#39;t even know about it until my boss forwarded me the newsletter.&lt;/p&gt;
 &lt;p&gt;Needless to say, I am now following the newletter and keeping an eye on the Indy Hackers website for any meetups I want to take part in. Thank you Indy Hackers.&lt;/p&gt;
 </description>
         <pubDate>Mon, 09 Sep 2013 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</guid>
+        <guid>https://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</guid>
         <title>Importance vs. Urgency</title>
-        <link>http://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</link>
+        <link>https://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</link>
         <description>&lt;p&gt;A little while back my boss introduced me to the Importance vs. Urgency Matrix. It was a nice concept and I saw the reasoning behind it, but I didn&amp;#39;t pay it much heed. More recently I have started using it a great deal. I have two white boards in my office. One I keep blank for use as needed. The other one has a list of the primary things that are on my radar listed, with a color coded letter next to them. Then at the top I have a matrix similar to the one below and each letter is placed in a quadrant. That is how I keep track of the major things I have to do, and which I should pay the most attention to. Let me explain the matrix.&lt;/p&gt;
 &lt;p&gt;Along one axis is the importance, along the other is urgency. Things that are important and urgent fall into the quadrant I labeled &amp;quot;1&amp;quot;. Things that are important, but not urgent fall into the quadrant labeled &amp;quot;2&amp;quot;. Things that are urgent but not important fall into quadrant &amp;quot;3&amp;quot;. I think you can figure out quadrant &amp;quot;4&amp;quot;. I only break things down into the four quadrants and then let them vie for priority amongst themselves. You can use the whole setup and have things broken down every more finely.&lt;/p&gt;
 &lt;p&gt;&lt;a href&#x3D;&quot;/img/posts/importance-urgency-00.png&quot; class&#x3D;&quot;th radius&quot; style&#x3D;&quot;display: inline-block;&quot;&gt;
@@ -351,9 +351,9 @@ action.setRedirectURL(url);
         <pubDate>Thu, 22 Aug 2013 20:00:00 -0400</pubDate>
     </item>
     <item>
-        <guid>http://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</guid>
+        <guid>https://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</guid>
         <title>Etsy Deployinator Environments</title>
-        <link>http://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</link>
+        <link>https://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</link>
         <description>&lt;p&gt;Etsy open-sourced their deployment tool a while back, but I didn&amp;#39;t learn about it until more recently. It is called &lt;a href&#x3D;&quot;https://github.com/etsy/deployinator&quot;&gt;Deployinator&lt;/a&gt; and runs on Ruby. I&amp;#39;m looking at using it for a project at work, but I ran into a horrible lack of documentation. The one example that is in the repo isn&amp;#39;t bad, it just doesn&amp;#39;t show you how to have multiple deploy buttons. In the case I may use it in, I will need multiple. If you aren&amp;#39;t sure what I mean by &amp;quot;multiple deploy buttons&amp;quot; check out the picture on &lt;a href&#x3D;&quot;http://codeascraft.com/2010/05/20/quantum-of-deployment/&quot;&gt;this page&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;After digging through the code I finally got that working and I think others might want to avoid digging through the code.&lt;/p&gt;
 &lt;p&gt;If you don&amp;#39;t configure the buttons, called environments, then you get one &amp;quot;Deploy production&amp;quot; button, like you see below.&lt;/p&gt;
