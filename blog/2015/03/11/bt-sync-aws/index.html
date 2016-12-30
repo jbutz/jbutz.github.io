@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="Jason Butz">
+
+    <title>BT Sync &amp; AWS</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/highlight.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4 pure-u-lg-1-5">
+            <div class="header">
+                <img class="pure-img-responsive rounded-circle" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8">
+                <h1 class="brand-title">Jason Butz</h1>
+                <h2 class="brand-tagline">Sr. Software Engineer<br />@ <a href="http://www.genesys.com/" target="_blank">Genesys</a></h2>
+
+                <nav class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="/work" class="pure-menu-link">My Work</a></li>
+                        <li class="pure-menu-item"><a href="/contact" class="pure-menu-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5">            <div class="page-card">
+                <div class="post-header">
+                    <h1><a href="/blog/2015/03/11/bt-sync-aws">BT Sync &amp; AWS</a> <small>March 10th 2015</small></h1>
+                </div>                
+                <p><a href="https://www.getsync.com/">BitTorrent Sync (BT Sync)</a> is a tool that can be used to synchronize files between devices using <a href="http://en.wikipedia.org/wiki/Peer-to-peer">peer-to-peer (P2P)</a>, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don&#39;t really know what it is doing beneath the covers.</p>
+<p>I&#39;ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on <a href="http://aws.amazon.com">Amazon Web Services (AWS)</a> a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I&#39;m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don&#39;t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.</p>
+<ol>
+<li>First you need to download the program to your EC2 instance. In the SSH window to your EC2 instance type/copy-paste in<br><code>wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz</code><br>and hit enter. This will download the file.</li>
+<li>Now we need to extract it, type in <code>tar -xvvzf BitTorrent-Sync_x64.tar.gz</code> and press enter.</li>
+<li>In your EC2 Management Console click on the EC2 instance you created for BT Sync, then click on the link next to <em>Security groups</em>.</li>
+<li>Now you should be looking at the Security Group used for the instance. Click the <em>Inbound</em> tab, then click the <em>Edit</em> button.</li>
+<li>Now add a <em>Custom TCP Rule</em> with the Port Range as <em>8888</em> and the Source as <em>Anywhere</em>. Then click Save.</li>
+<li>Head back to your SSH console and run <code>./btsync</code>. This starts BT Sync in the background</li>
+<li>Get your <em>Public DNS</em> url from your EC2 Management Console and put that into your browser at port 8888. It will be something like <code>http://ec2-00-00-00-00.us-west.compute.amazonaws.com:8888</code>. You should see the BT Sync interface and it should help you get everything setup.</li>
+<li>Click the cog in the upper-right corner, then click <em>Preferences</em>, then click <em>Advanced</em>. Make note of the <em>Listening Port</em>. You will want that later. Next we need to make sure BT Sync runs on startup of the EC2 instance.</li>
+<li>In your SSH terminal type the following<br><code>killall btsync</code><br><code>sudo mv btsync /usr/local/bin/btsync</code><br><code>sudo chown root:root /usr/local/bin/btsync</code><br><code>sudo chmod 755 /usr/local/bin/btsync</code>  </li>
+<li>Go to <a href="https://gist.github.com/MendelGusmao/5398362">this gist</a> by Mendelson Gusmao. Click the <em>Raw</em> button next to the <em>btsync</em> file. Copy the URL of that raw output.</li>
+<li>In your SSH terminal run <code>wget [PASTE URL HERE]</code> to download the file.</li>
+<li>Using whatever text editor you want edit the new <em>btsync</em> file. Replace <code>BTSYNC_USERS=&quot;mendel&quot;</code> with <code>BTSYNC_USERS=&quot;ubuntu&quot;</code></li>
+<li>Run the following commands to move the file into place and to set the permissions<br><code>sudo mv btsync /etc/init.d/btsync</code><br><code>sudo chown root:root /etc/init.d/btsync</code><br><code>sudo chmod +x /etc/init.d/btsync</code>  </li>
+<li>Now we need to create a config file for btsync. Run this command:<br><code>btsync --dump-sample-config &gt; /home/ubuntu/.sync/config.json</code></li>
+<li>Open <em>/home/ubuntu/.sync/config.json</em> in your text editor. The first few lines will look like this:<br><code>{</code><br><code>&quot;device_name&quot;: &quot;My Sync Device&quot;,</code><br><code>&quot;listening_port&quot; : 0, // 0 - randomize port</code><br><code>/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in the directory where binary is located. otherwise user-defined directory will be used */</code><br><code>// &quot;storage_path&quot; : &quot;/home/user/.sync&quot;,</code><br>Change <em>My Sync Device</em> to whatever you want, leaving the quotes intact. Change the listening port to the value to wrote down earlier.
+Remove the <code>//</code> before the <em>storage_path</em> line and change <code>/home/user/.sync</code> to <code>/home/ubuntu/.sync</code>. Save the file and the config is done.</li>
+<li>Run <code>sudo update-rc.d btsync defaults</code> to make sure everything runs on startup.</li>
+<li>Run <code>sudo /etc/init.d/btsync start</code> to start the daemon. It should say <em>Starting BTSync for ubuntu</em>. Go to the URL you used in step 7 to make sure it is running</li>
+<li>Follow steps 3 - 5 again, only this time use the listening port number you used earlier.</li>
+</ol>
+<p>That&#39;s all there is to it.</p>
+
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+    
+</body>
+
+</html>

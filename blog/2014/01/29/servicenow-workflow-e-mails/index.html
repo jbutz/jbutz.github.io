@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="Jason Butz">
+
+    <title>ServiceNow - Workflow E-Mails</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/highlight.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4 pure-u-lg-1-5">
+            <div class="header">
+                <img class="pure-img-responsive rounded-circle" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8">
+                <h1 class="brand-title">Jason Butz</h1>
+                <h2 class="brand-tagline">Sr. Software Engineer<br />@ <a href="http://www.genesys.com/" target="_blank">Genesys</a></h2>
+
+                <nav class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="/work" class="pure-menu-link">My Work</a></li>
+                        <li class="pure-menu-item"><a href="/contact" class="pure-menu-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5">            <div class="page-card">
+                <div class="post-header">
+                    <h1><a href="/blog/2014/01/29/servicenow-workflow-e-mails">ServiceNow - Workflow E-Mails</a> <small>January 28th 2014</small></h1>
+                </div>                
+                <p>Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&#39;t.</p>
+<p>This is how you normally access a variable on a Request Item from a script:</p>
+<pre><code class="lang-js">current.variables[<span class="hljs-string">'variable_name'</span>].getGlideObject().getDisplayValue(); <span class="hljs-comment">// For the displayed value</span>
+current.variables[<span class="hljs-string">'variable_name'</span>].getGlideObject().getValue(); <span class="hljs-comment">// For the real value (sys_id when it is a reference)</span>
+</code></pre>
+<p>In order to run a script with e-mail you have to use the <code>mail_script</code> tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">mail_script</span>&gt;</span>
+template.print( current.variables['primary_contact'].getGlideObject().getDisplayValue() );
+<span class="hljs-tag">&lt;/<span class="hljs-name">mail_script</span>&gt;</span>
+</code></pre>
+<p>If my case I had about 20 variables that needed to go in the e-mail and I didn&#39;t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">mail_script</span>&gt;</span>
+var item_var = function(key)
+{
+    template.print( current.variables[key].getGlideObject().getDisplayValue() );
+}
+<span class="hljs-tag">&lt;/<span class="hljs-name">mail_script</span>&gt;</span>
+
+... blah blah blah ...
+<span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Variable One:<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mail_script</span>&gt;</span>item_var('var1')<span class="hljs-tag">&lt;/<span class="hljs-name">mail_script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Variable Two:<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mail_script</span>&gt;</span>item_var('var2')<span class="hljs-tag">&lt;/<span class="hljs-name">mail_script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Variable Three:<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mail_script</span>&gt;</span>item_var('var3')<span class="hljs-tag">&lt;/<span class="hljs-name">mail_script</span>&gt;</span>
+...
+</code></pre>
+
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+    
+</body>
+
+</html>

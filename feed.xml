@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+    <title>Jason Butz</title>
+    <link>http://jasonbutz.info</link>
+    <atom:link href="http://jasonbutz.info/feed.xml" rel="self" type="application/rss+xml" />
+    <description></description>
+    <pubDate>Fri, 30 Dec 2016 00:00:00 -0500</pubDate>
+
+    <item>
+        <guid>http://jasonbutz.info/blog/2015/03/11/bt-sync-aws</guid>
+        <title>BT Sync &amp; AWS</title>
+        <link>http://jasonbutz.info/blog/2015/03/11/bt-sync-aws</link>
+        <description>&lt;p&gt;&lt;a href&#x3D;&quot;https://www.getsync.com/&quot;&gt;BitTorrent Sync (BT Sync)&lt;/a&gt; is a tool that can be used to synchronize files between devices using &lt;a href&#x3D;&quot;http://en.wikipedia.org/wiki/Peer-to-peer&quot;&gt;peer-to-peer (P2P)&lt;/a&gt;, technology. Using this method means that no server is storing the files between your devices. Think of it as a theoretically more secure Dropbox. I say theoretically because BT Sync is not open source, so we don&amp;#39;t really know what it is doing beneath the covers.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve been trying out BT Sync for a little while now and I think it is pretty good. The recent update to version 2.0 was much needed. I have it setup on my phone and my home computer. The one thing I miss is the ability to shutdown my home computer but still be able to sync files. Since BT Sync has a linux version I decided to give installing it on &lt;a href&#x3D;&quot;http://aws.amazon.com&quot;&gt;Amazon Web Services (AWS)&lt;/a&gt; a try. It turned out to be fairly easy. Below are some rough steps to get it setup. I&amp;#39;m not going to include anything to walk you through the setup of an EC2 instance, but I used the Ubuntu Server quick start option and set the instance type to t2.micro. All you are doing is running Bt Sync, you don&amp;#39;t need much power. A Raspberry Pi B+ can run it without issue, trust me I did it. I will assume you used the Ubuntu quick start and have logged in to your instance via SSH. Be sure to keep the EC2 Management Console up as well, we will need to open a few ports.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;First you need to download the program to your EC2 instance. In the SSH window to your EC2 instance type/copy-paste in&lt;br&gt;&lt;code&gt;wget https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz&lt;/code&gt;&lt;br&gt;and hit enter. This will download the file.&lt;/li&gt;
+&lt;li&gt;Now we need to extract it, type in &lt;code&gt;tar -xvvzf BitTorrent-Sync_x64.tar.gz&lt;/code&gt; and press enter.&lt;/li&gt;
+&lt;li&gt;In your EC2 Management Console click on the EC2 instance you created for BT Sync, then click on the link next to &lt;em&gt;Security groups&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Now you should be looking at the Security Group used for the instance. Click the &lt;em&gt;Inbound&lt;/em&gt; tab, then click the &lt;em&gt;Edit&lt;/em&gt; button.&lt;/li&gt;
+&lt;li&gt;Now add a &lt;em&gt;Custom TCP Rule&lt;/em&gt; with the Port Range as &lt;em&gt;8888&lt;/em&gt; and the Source as &lt;em&gt;Anywhere&lt;/em&gt;. Then click Save.&lt;/li&gt;
+&lt;li&gt;Head back to your SSH console and run &lt;code&gt;./btsync&lt;/code&gt;. This starts BT Sync in the background&lt;/li&gt;
+&lt;li&gt;Get your &lt;em&gt;Public DNS&lt;/em&gt; url from your EC2 Management Console and put that into your browser at port 8888. It will be something like &lt;code&gt;http://ec2-00-00-00-00.us-west.compute.amazonaws.com:8888&lt;/code&gt;. You should see the BT Sync interface and it should help you get everything setup.&lt;/li&gt;
+&lt;li&gt;Click the cog in the upper-right corner, then click &lt;em&gt;Preferences&lt;/em&gt;, then click &lt;em&gt;Advanced&lt;/em&gt;. Make note of the &lt;em&gt;Listening Port&lt;/em&gt;. You will want that later. Next we need to make sure BT Sync runs on startup of the EC2 instance.&lt;/li&gt;
+&lt;li&gt;In your SSH terminal type the following&lt;br&gt;&lt;code&gt;killall btsync&lt;/code&gt;&lt;br&gt;&lt;code&gt;sudo mv btsync /usr/local/bin/btsync&lt;/code&gt;&lt;br&gt;&lt;code&gt;sudo chown root:root /usr/local/bin/btsync&lt;/code&gt;&lt;br&gt;&lt;code&gt;sudo chmod 755 /usr/local/bin/btsync&lt;/code&gt;  &lt;/li&gt;
+&lt;li&gt;Go to &lt;a href&#x3D;&quot;https://gist.github.com/MendelGusmao/5398362&quot;&gt;this gist&lt;/a&gt; by Mendelson Gusmao. Click the &lt;em&gt;Raw&lt;/em&gt; button next to the &lt;em&gt;btsync&lt;/em&gt; file. Copy the URL of that raw output.&lt;/li&gt;
+&lt;li&gt;In your SSH terminal run &lt;code&gt;wget [PASTE URL HERE]&lt;/code&gt; to download the file.&lt;/li&gt;
+&lt;li&gt;Using whatever text editor you want edit the new &lt;em&gt;btsync&lt;/em&gt; file. Replace &lt;code&gt;BTSYNC_USERS&#x3D;&amp;quot;mendel&amp;quot;&lt;/code&gt; with &lt;code&gt;BTSYNC_USERS&#x3D;&amp;quot;ubuntu&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Run the following commands to move the file into place and to set the permissions&lt;br&gt;&lt;code&gt;sudo mv btsync /etc/init.d/btsync&lt;/code&gt;&lt;br&gt;&lt;code&gt;sudo chown root:root /etc/init.d/btsync&lt;/code&gt;&lt;br&gt;&lt;code&gt;sudo chmod +x /etc/init.d/btsync&lt;/code&gt;  &lt;/li&gt;
+&lt;li&gt;Now we need to create a config file for btsync. Run this command:&lt;br&gt;&lt;code&gt;btsync --dump-sample-config &amp;gt; /home/ubuntu/.sync/config.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Open &lt;em&gt;/home/ubuntu/.sync/config.json&lt;/em&gt; in your text editor. The first few lines will look like this:&lt;br&gt;&lt;code&gt;{&lt;/code&gt;&lt;br&gt;&lt;code&gt;&amp;quot;device_name&amp;quot;: &amp;quot;My Sync Device&amp;quot;,&lt;/code&gt;&lt;br&gt;&lt;code&gt;&amp;quot;listening_port&amp;quot; : 0, // 0 - randomize port&lt;/code&gt;&lt;br&gt;&lt;code&gt;/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in the directory where binary is located. otherwise user-defined directory will be used */&lt;/code&gt;&lt;br&gt;&lt;code&gt;// &amp;quot;storage_path&amp;quot; : &amp;quot;/home/user/.sync&amp;quot;,&lt;/code&gt;&lt;br&gt;Change &lt;em&gt;My Sync Device&lt;/em&gt; to whatever you want, leaving the quotes intact. Change the listening port to the value to wrote down earlier.
+Remove the &lt;code&gt;//&lt;/code&gt; before the &lt;em&gt;storage_path&lt;/em&gt; line and change &lt;code&gt;/home/user/.sync&lt;/code&gt; to &lt;code&gt;/home/ubuntu/.sync&lt;/code&gt;. Save the file and the config is done.&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;sudo update-rc.d btsync defaults&lt;/code&gt; to make sure everything runs on startup.&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;sudo /etc/init.d/btsync start&lt;/code&gt; to start the daemon. It should say &lt;em&gt;Starting BTSync for ubuntu&lt;/em&gt;. Go to the URL you used in step 7 to make sure it is running&lt;/li&gt;
+&lt;li&gt;Follow steps 3 - 5 again, only this time use the listening port number you used earlier.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That&amp;#39;s all there is to it.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 10 Mar 2015 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2015/01/18/c-memory-leaks</guid>
+        <title>C# Memory Leaks</title>
+        <link>http://jasonbutz.info/blog/2015/01/18/c-memory-leaks</link>
+        <description>&lt;p&gt;For the past three or four work days I have been trying to find a memory leak in a Windows Service we created that is used to synchronize data between two systems on a nightly basis. I had just added a single method to it for a new job and the memory usage was climbing until it hit the 2GB process limit.&lt;/p&gt;
+&lt;p&gt;At first I thought it might be something going wrong in my &lt;code&gt;foreach&lt;/code&gt; loop. That was the only thing I added running enough to create that kind of usage. I was looping over 200,000 items for the initial sync so all it wouldn&amp;#39;t be that hard if I had a object keeping track of everything I synced. But I didn&amp;#39;t have any of that. I went through my loop several times. Then I started wondering about the method generating the API calls to the other system. If something was going wrong there it would easily explain the memory usage. I had to make up to 3 API calls for each loop iteration.&lt;/p&gt;
+&lt;p&gt;At first I thought it might be because the class for making the API calls was static and I saw an article that said static objects aren&amp;#39;t garbage collected, so I started digging through there but couldn&amp;#39;t find anything. Then I decided I needed to confirm a memory leak. I pulled out Performance Monitor and set it to track the &lt;em&gt;Private Bytes&lt;/em&gt; for my process. Sure enough as soon as I triggered the sync the memory usage steadily took off. Once I had whittled down the objects I had to work on so I wouldn&amp;#39;t run out of process memory I saw that when it was done it wouldn&amp;#39;t release the memory. Now I really had to find the problem, restarting the service nightly wouldn&amp;#39;t be viable.&lt;/p&gt;
+&lt;p&gt;I found a tool called &lt;a href&#x3D;&quot;http://www.microsoft.com/en-us/download/details.aspx?id&#x3D;42933&quot;&gt;DebugDiag&lt;/a&gt; and that proved invaluable. I was able to create a dump of the process and then generate a report. That report had a great warning at the top that lead me to an &lt;a href&#x3D;&quot;http://blogs.msdn.com/b/tess/archive/2006/02/15/532804.aspx&quot;&gt;article&lt;/a&gt; explaining exactly what was going on.&lt;/p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;/img/posts/csharp-memory-leaks00.png&quot; alt&#x3D;&quot;DebugDiag Results&quot;&gt;&lt;/p&gt;
+&lt;p&gt;As it turns out &lt;code&gt;XmlSerializer&lt;/code&gt; will generate a new temporary assembly when the constructor is called. In my case, up to 6 calls for each loop iteration covers the memory issue I was having. XmlSerializer was being used for tracing and was surrounded by preprocessor directives, so if I had compiled for production instead of debugging the issue would never have shown itself. One of my coworkers had that code there because he needed it for debugging some issues, so I commented it out and added a warning about the memory issue.&lt;/p&gt;
+&lt;p&gt;Now the service runs with a maximum of 56MB of memory as opposed to shooting up to 2GB. The problem may not have shown up in production, but at least we know about &lt;code&gt;XmlSerializer&lt;/code&gt; for the future. If you can help it instantiate it once and use that over and over.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 17 Jan 2015 19:00:00 -0500</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</guid>
+        <title>ServiceNow Record Producer Caveats</title>
+        <link>http://jasonbutz.info/blog/2014/09/24/servicenow-record-producer-caveats</link>
+        <description>&lt;p&gt;I recently ran into a problem when using Record Producers. In the script for the Record Producer I am using the &lt;code&gt;applyTemplate&lt;/code&gt; function on the &lt;code&gt;current&lt;/code&gt; GlideRecord. The template used varies, which is why I can&amp;#39;t use the template field on the Record Producer. I kept ending up with duplicate task records with the exact same value in the number field.&lt;/p&gt;
+&lt;p&gt;After some tinkering I came to the conclusion that the &lt;code&gt;applyTemplate&lt;/code&gt; method causes an insert, and that the Record Producer also does an insert after running the Record Producer script. After a lot of frustration I was looking through the Sandbox instance of ServiceNow when I noticed that the &lt;em&gt;New LDAP Server&lt;/em&gt; inserted the &lt;code&gt;current&lt;/code&gt; GlideRecord and they used the &lt;code&gt;setAbortAction&lt;/code&gt; method. So I decided to give that a try.&lt;/p&gt;
+&lt;p&gt;Here is what I ended up with at the end of my Record Producer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-javascript&quot;&gt;current.update();
+current.setAbortAction(&lt;span class&#x3D;&quot;hljs-literal&quot;&gt;true&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This works because the insert done by the Record Producer is aborted, and thus stops the duplicates.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 23 Sep 2014 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2014/05/23/goruck-light</guid>
+        <title>GORUCK Light</title>
+        <link>http://jasonbutz.info/blog/2014/05/23/goruck-light</link>
+        <description>&lt;p&gt;&lt;strong&gt;Disclaimer: This post will have absolutely nothing to do with programming&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Last month I took part in an event called &lt;a href&#x3D;&quot;https://www.goruck.com/light&quot;&gt;GORUCK Light&lt;/a&gt;. The company that puts these events on is called &lt;a href&#x3D;&quot;https://www.goruck.com&quot;&gt;GORUCK&lt;/a&gt;. They make amazing rucksacks and other gear. Don&amp;#39;t be surprised when you see the prices. They aren&amp;#39;t cheap, but that is because they are well made and made in the USA. The company was founded in 2008 by Jason McCarthy, a special forces veteran.&lt;/p&gt;
+&lt;p&gt;The first of their events started as a way to test their gear. They want the gear to hold up to what special forces can put it through. From that event a new business for them was born. They have 4 levels of &lt;em&gt;Good Livin&amp;#39;&lt;/em&gt; events. Light, Challenge, Heavy, and Selection.&lt;/p&gt;
+&lt;p&gt;I took part in GORUCK Light #263 in Indianapolis, IN. The gist behind the light is 4 - 5 hours, 7 - 10 miles, and 10 or 20 lbs of weight in your ruck (based on your weight). Sounds easy, right? I mean, it called &amp;quot;light&amp;quot;... but it is anything but. I had to push and dig deep to make it through. I hurt for a solid 3 days afterwards, and I am planning to do it all again. It was the most physically demanding thing I have ever done and I am glad I did it. I&amp;#39;ve give you a run down of what we did as best as I can remember it.&lt;/p&gt;
+&lt;p&gt;We started off at the Circle where Cadre Matt had us form up into ranks, then he did an inspection of our gear. After all the administrative stuff was done we put on our rucks and headed off to some green space near the Eiteljorg Museum and White River. That was an easy and I let me guard down at that point, wondering if the light was going to be too easy. Then we started PT at the green space. I don&amp;#39;t remember what all we did, but here is a short list:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Bear crawls&lt;/li&gt;
+&lt;li&gt;Inchworms&lt;/li&gt;
+&lt;li&gt;Lunges&lt;/li&gt;
+&lt;li&gt;Wheelbarrows&lt;/li&gt;
+&lt;li&gt;Push ups&lt;/li&gt;
+&lt;li&gt;Leg lifts&lt;/li&gt;
+&lt;li&gt;The tunnel of love (40+ people)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Everything was done as a team and with our rucks on. It was the second hardest part of the whole event for me. We had one guy who was throwing up in the bushes and another who looked like he was going to pass out. Both were made to drinks tons of water to get hydrated. We had no quitters.&lt;/p&gt;
+&lt;p&gt;At this point a team leader was selected and we were told our mission. I don&amp;#39;t remember the details, but we had to go to the zoo to &amp;quot;rescue animals&amp;quot;. And since we were going to save some animals we had to carry our packs at our sides, not on our backs. After a little confusion we ended up across the street from the zoo near the railroad tracks. I can&amp;#39;t remember the story for this part, but we got some 5 gallon water jugs out of the bushes and had to carry those now. We went a little further down Washington Street and then cut through the bushes to get to the railroad tracks and we started going down those. As we were going Cadre saw a railroad tie and decided we needed to bring that with us, so a group of guys picked that up and started lugging it.&lt;/p&gt;
+&lt;p&gt;We kept going down the tracks for a ways until we got to an overpass. We slid down the underside of the overpass to get to the street below. We kept going along that street for a bit until we got to a place we could easily get into White River. We dropped the jugs and railroad tie and were told to lock arms and walk into the water. We were &amp;quot;checking if a hovercraft could land&amp;quot;. We went out until everyone was between knee and thigh deep. The water was freezing. Cadre told us to drop our arms, turn around, and assume the push-up position. We were all a little concerned at this point. Then he called out &amp;quot;DOWN!....UP!&amp;quot;. I think we did around 10 reps. He then made the observation that we were trying to keep our faces out of the water, which he said needed fixing. He comforted us by saying that it had been done in the Hudson River. We then did what he called Dive Bombers, and he wanted to year sound effects. I&amp;#39;ve seen a yoga move like it, but you basically start with your butt in the air, take your face down, then angle it back up. Then we would reverse it. He made sure all of us had our face in the water.&lt;/p&gt;
+&lt;p&gt;Once that was done we got out, and a new leader was selected. We climbed up the bank with our jugs and railroad tie and kept going towards our next checkpoint. As bad as the water was it brought us all some relief from whatever was ailing us. We were weren&amp;#39;t moving very fast towards the next checkpoint, and that was a serious mistake. When our time expired we were 0.2 miles from our checkpoint. Cadre said that those with team weight, water jugs, or the railroad tie could continue on to the checkpoint. The rest of us had to bear crawl that 0.2 miles. This was the hardest part of the whole thing. Bear crawling short distances sucks but is do-able. Add 20+ lbs in a pack and make it 0.2 miles and you have a recipe for pain.&lt;/p&gt;
+&lt;p&gt;After everyone got there Cadre gave us a little speech about how he had to demonstrate to us why we had to be taught a lesson for missing the time to the checkpoint. We had a few minute rest while he talked with our new leader and then we kept going. This time we were really moving fast. None of us wanted to do that ever again. I think we got to the checkpoint with 8 to 10 minutes to spare. At this checkpoint we got to sit down and have story time. If I remember correctly Cadre read us the story of how Kyle J. White earned his Medal of Honor.&lt;/p&gt;
+&lt;p&gt;After the story we got to leave our railroad tie behind. We were all glad to be rid of it, but we should have known we weren&amp;#39;t out of the woods yet. Our next checkpoint was near Banker&amp;#39;s Life Fieldhouse. We got there in time without too much issue. We did have one person roll their ankle.&lt;/p&gt;
+&lt;p&gt;Once we were at the checkpoint Cadre announced that we had taken casualties. Guys could only carry guys, girls could only carry girls. He then proceeded to pick the casualties. Of course he picked the biggest guy there as one of them. And because he had a heart he had a canvas stretcher with him that we could use. Then we were told our checkpoint was the Circle, so we knew this was the end. We barely made it in time. We had less than 60 seconds to spare. Once at the circle Cadre has us do some push ups to make sure we were a little more tired, and then we got our patches.&lt;/p&gt;
+&lt;p&gt;Going into the challenge I thought that it might be too easy; I thought I was in really good shape. I was wrong. It was hard and I have more work to do to get into better shape. I took part because I wanted to see what I was capable of, and I found out. I didn&amp;#39;t find my breaking point but I know a little better how far I can be pushed before I get there. I highly recommend GORUCK Events, and I highly recommend GORUCK&amp;#39;s gear. They make amazing stuff and I can&amp;#39;t wait for my next event.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 22 May 2014 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</guid>
+        <title>ServiceNow - Navigation Handlers</title>
+        <link>http://jasonbutz.info/blog/2014/01/31/servicenow-navigation-handlers</link>
+        <description>&lt;p&gt;Today I had a need to toy with a default ServiceNow functionality called Navigation Handlers. This is a feature that doesn&amp;#39;t show up at all on the Wiki. The only reference I could find to it was on a &lt;a href&#x3D;&quot;http://www.servicenowguru.com/system-ui/ui-pages-system-ui/overriding-ess-checkout-view-catalog-requests/&quot;&gt;ServiceNow Guru article&lt;/a&gt; that my predecessor had followed to disable it. Since there is no wiki article on Navigation Handlers I thought I might do a small write up about what I have figured out about them.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Navigation Handlers&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A navigation handler can be used to re-write URLs and change where a user goes based on the record they are trying to view. The only default navigation handler is used to send users to the Order Status page when opening a request record in the Self-Service view.&lt;/p&gt;
+&lt;p&gt;You can access the Navigation Handlers by typing in &lt;code&gt;sys_navigator.list&lt;/code&gt; in the navigation search bar on the left.&lt;/p&gt;
+&lt;p&gt;There are three important fields on the Navigation Handler record. The table, a class, and the script. I don&amp;#39;t know what the class is for. The table specifies which table&amp;#39;s records the script should be run for. The script is used to rewrite the URL.&lt;/p&gt;
+&lt;p&gt;This is the default Navigation Handler script on the Request (sc_request) table:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; view &#x3D; g_request.getParameter(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;sysparm_view&#x27;&lt;/span&gt;);
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!view &amp;amp;&amp;amp; ! gs.getUser().hasRoles())
+    view &#x3D; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;ess&#x27;&lt;/span&gt;;
+
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (view &#x3D;&#x3D; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;ess&#x27;&lt;/span&gt; || view &#x3D;&#x3D; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;checkout&#x27;&lt;/span&gt;) {
+   &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; checkOutForm &#x3D; gs.getProperty(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;glide.sc.checkout.form&#x27;&lt;/span&gt;, &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;com.glideapp.servicecatalog_checkout_view&#x27;&lt;/span&gt;);
+   &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (checkOutForm &#x3D;&#x3D; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;com.glideapp.servicecatalog_checkout_view&#x27;&lt;/span&gt;) {
+       &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; realID &#x3D; g_uri.get(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;sys_id&#x27;&lt;/span&gt;);
+       g_uri.set(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;sysparm_sys_id&#x27;&lt;/span&gt;, realID);
+       answer &#x3D;  g_uri.toString(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;com.glideapp.servicecatalog_checkout_view.do&#x27;&lt;/span&gt;);
+   }
+}
+
+answer;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This script checks if the view being loaded is the Self-Service (ess) or checkout view, or if the user is unprivilleged. If any of those are the case the URL is changed to load &lt;code&gt;com.glideapp.servicecatalog_checkout_view.do&lt;/code&gt; instead of &lt;code&gt;sc_request.do&lt;/code&gt; for the page.&lt;/p&gt;
+&lt;p&gt;There are two objects in there that you won&amp;#39;t find documented on the wiki. They are &lt;code&gt;g_uri&lt;/code&gt; and &lt;code&gt;g_request&lt;/code&gt;. At the end of the article I&amp;#39;ll include a list of all of the methods they have. I don&amp;#39;t have information on most of the functions, but atleast you can see what exists. &lt;code&gt;g_request&lt;/code&gt; seems to be information from the HTTP request. &lt;code&gt;g_uri&lt;/code&gt; seems to be used to build a URL, but it also starts of holding the URL of the page you are currently trying to access. By setting &lt;code&gt;answer&lt;/code&gt; to the value of g_uri the page gets redirected to the new URL. If &lt;code&gt;answer&lt;/code&gt; is null then there is no redirect.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;g_request.getParameter(parameter)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This method gets a parameter from the request URL and returns it as a string. For example if the requested URL is &lt;code&gt;https://demo.service-now.com/sc_request.do?sys_id&#x3D;abcdef0123456789&amp;amp;sysparam_view&#x3D;ess&lt;/code&gt; and you call &lt;code&gt;g_request.getParameter(&amp;#39;sys_param_view&amp;#39;)&lt;/code&gt; it will return &lt;code&gt;ess&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;g_uri.get(parameter)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This method gets the a parameter from the URL and returns it as a string. For example if the  URL is &lt;code&gt;sc_request.do?sys_id&#x3D;abcdef0123456789&amp;amp;sysparam_view&#x3D;ess&lt;/code&gt; and you call &lt;code&gt;g_uri.get(&amp;#39;sys_id&amp;#39;)&lt;/code&gt; it will return &lt;code&gt;abcdef0123456789&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;g_uri.set(parameter,value)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This method sets a parameter on the URL. It will either add the parameter or update it if it already exists. For example, if the URL is currently &amp;#39;sc_request.do&amp;#39; and you call &lt;code&gt;g_uri.set(&amp;#39;sys_id&amp;#39;,&amp;#39;abcdef0123456789&amp;#39;)&lt;/code&gt; the URL will be &lt;code&gt;sc_request.do?sys_id&#x3D;abcdef0123456789&lt;/code&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// These are the available methods for g_uri and g_request&lt;/span&gt;
+g_uri.action()
+g_uri.addIgnoreParam()
+g_uri.class()
+g_uri.deleteMatchingParameter()
+g_uri.deleteParmameter()
+g_uri.equals()
+g_uri.fileFromPath()
+g_uri.get()
+g_uri.getAction()
+g_uri.getClass()
+g_uri.getFileFromPath()
+g_uri.getMap()
+g_uri.getPath()
+g_uri.hashCode()
+g_uri.isSetAsDefault()
+g_uri.map()
+g_uri.notify()
+g_uri.notifyAll()
+g_uri.path()
+g_uri.set()
+g_uri.setAbsoluteURI()
+g_uri.setAction()
+g_uri.setAsDefault()
+g_uri.setFilter()
+g_uri.setParameter()
+g_uri.setRelatedQuery()
+g_uri.toString()
+g_uri.wait()
+
+
+g_request.asyncStarted()
+g_request.asyncSupported()
+g_request.authType()
+g_request.contentLength()
+g_request.contextPath()
+g_request.cookies()
+g_request.dispatcherType()
+g_request.equals()
+g_request.getAsyncContext()
+g_request.getAttribute()
+g_request.getAttributeNames()
+g_request.getAuthType()
+g_request.getCharacterEncoding()
+g_request.getContentLength()
+g_request.getContentType()
+g_request.getCookies()
+g_request.getDispatcherType()
+g_request.getHeader()
+g_request.getHeaderNames()
+g_request.getInputStream()
+g_request.getIntHeader()
+g_request.getLocalAddr()
+g_request.getLocale()
+g_request.getLocales()
+g_request.getLocalName()
+g_request.getMethod()
+g_request.getOriginalParameterMap()
+g_request.getParameterMap()
+g_request.getParameterNames()
+g_request.getParameterValues()
+g_request.getPart()
+g_request.getParts()
+g_request.getPathInfo()
+g_request.getPathTranslated()
+g_request.getProtocol()
+g_request.getRealPath()
+g_request.getRemoteAddr()
+g_request.getRemoteUser()
+g_request.getRequestDispatcher()
+g_request.getRequestedSessionId()
+g_request.getRequestURI()
+g_request.getRequestURL()
+g_request.getScheme()
+g_request.getServletPath()
+g_request.getSession()
+g_request.getSiteID()
+g_request.getSiteName()
+g_request.getUserPrincipal()
+g_request.headerNames()
+g_request.inputStream()
+g_request.isAsyncStarted()
+g_request.isAsyncSupported()
+g_request.isPublic()
+g_request.isRequestedSessionIdFromCookie()
+g_request.isRequestedSessionIdFromUrl()
+g_request.isRequestedSessionIdFromURL()
+g_request.isRequestedSessionIdValid()
+g_request.isSecure()
+g_request.isVirtual()
+g_request.localAddr()
+g_request.locale()
+g_request.locales()
+g_request.login()
+g_request.logout()
+g_request.method()
+g_request.notify()
+g_request.notifyAll()
+g_request.originalParameterMap()
+g_request.parameterMap()
+g_request.parameterNames()
+g_request.parts()
+g_request.pathInfo()
+g_request.pathTranslated()
+g_request.protocol()
+g_request.queryString()
+g_request.reader()
+g_request.remoteAddr()
+g_request.remoteHost()
+g_request.remotePort()
+g_request.removeAttribute()
+g_request.requestedSessionId()
+g_request.requestedSessionIdFromCookie()
+g_request.requestedSessionIdFromURL()
+g_request.requestedSessionIdValid()
+g_request.requestURI()
+g_request.requestURL()
+g_request.scheme()
+g_request.secure()
+g_request.serverPort()
+g_request.servletPath()
+g_request.setAttribute()
+g_request.setCharacterEncoding()
+g_request.setParameter()
+g_request.siteID()
+g_request.startAsync()
+g_request.toString()
+g_request.updateSessionLastAccessedTime()
+g_request.userPrincipal()
+g_request.virtual()
+g_request.wait()
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Thu, 30 Jan 2014 19:00:00 -0500</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</guid>
+        <title>ServiceNow - Workflow E-Mails</title>
+        <link>http://jasonbutz.info/blog/2014/01/29/servicenow-workflow-e-mails</link>
+        <description>&lt;p&gt;Sending an e-mail from a workflow is ServiceNow is very easy. It barely takes any work. What happens when you need to include Request Item variables? Things get ugly. I had to dig around to find out how to do it; then I hoped I could find a better looking way. I didn&amp;#39;t.&lt;/p&gt;
+&lt;p&gt;This is how you normally access a variable on a Request Item from a script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;current.variables[&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;variable_name&#x27;&lt;/span&gt;].getGlideObject().getDisplayValue(); &lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// For the displayed value&lt;/span&gt;
+current.variables[&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;variable_name&#x27;&lt;/span&gt;].getGlideObject().getValue(); &lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// For the real value (sys_id when it is a reference)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In order to run a script with e-mail you have to use the &lt;code&gt;mail_script&lt;/code&gt; tag. So if we wanted to output the display value of a variable in the body of our e-mail we could do this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-html&quot;&gt;&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+template.print( current.variables[&#x27;primary_contact&#x27;].getGlideObject().getDisplayValue() );
+&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If my case I had about 20 variables that needed to go in the e-mail and I didn&amp;#39;t want to have that ugly mess throughout my message body. This is the best way I have come up with to accomplish what I needed in less space:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-html&quot;&gt;&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+var item_var &#x3D; function(key)
+{
+    template.print( current.variables[key].getGlideObject().getDisplayValue() );
+}
+&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+
+... blah blah blah ...
+&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;Variable One:&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;item_var(&#x27;var1&#x27;)&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;Variable Two:&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;item_var(&#x27;var2&#x27;)&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;Variable Three:&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;strong&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;item_var(&#x27;var3&#x27;)&lt;span class&#x3D;&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class&#x3D;&quot;hljs-name&quot;&gt;mail_script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+...
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Tue, 28 Jan 2014 19:00:00 -0500</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</guid>
+        <title>ServiceNow - Passing Data</title>
+        <link>http://jasonbutz.info/blog/2013/10/25/servicenow-passing-data</link>
+        <description>&lt;p&gt;At work we came across an interesting issue when dealing with ServiceNow this week. We are working on implimenting Incident and needed to be able to create a change or a request from the incident. The new record needed to have its &lt;code&gt;parent&lt;/code&gt; field set to reference the inicident. Some of the original code does this for requests by redirecting the user to the Service Catalog and setting a parameter in the URL that is meant to will in a field on the form. Unfortunatly that doesn&amp;#39;t work in our case. Our changes are generated by using a wizard, and our requests are done with a record producer. We figured out a way to work around the issue and pass the values to the wizard and record producer. I thought it was something people might like to see.&lt;/p&gt;
+&lt;p&gt;Here is what the &lt;em&gt;Create Request&lt;/em&gt; UI action looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// Update saves incidents before going to the catalog homepage&lt;/span&gt;
+current.update();
+&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// Build the URL&lt;/span&gt;
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; url &#x3D; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;com.glideapp.servicecatalog_cat_item_view.do?sysparm_id&#x3D;abcdef0123456789&amp;amp;incident_sysid&#x3D;&quot;&lt;/span&gt;;
+url +&#x3D; current.sys_id;
+&lt;span class&#x3D;&quot;hljs-comment&quot;&gt;// Redirect the user&lt;/span&gt;
+action.setRedirectURL(url);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What I am doing here is setting the URL for the record producer. Then I am adding a custom parameter on the end, &lt;code&gt;incident_sysid&lt;/code&gt;, and setting it to the incident&amp;#39;s &lt;code&gt;sys_id&lt;/code&gt;. You can do the same thing for a wizard. Then on the first panel of the wizard, or on the record producer, you need to add a field to put the value into. I added the field and then used a UI Policy to hide the field. Then I created an onLoad Client Script that takes the parameter from the URL and fills in the form field. Here is the client script I am using with both the wizard and record producer.&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-js&quot;&gt;&lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;onLoad&lt;/span&gt;(&lt;span class&#x3D;&quot;hljs-params&quot;&gt;&lt;/span&gt;)
+&lt;/span&gt;{
+   &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; url &#x3D; &lt;span class&#x3D;&quot;hljs-built_in&quot;&gt;window&lt;/span&gt;.location.href;
+   &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; match &#x3D; url.match(&lt;span class&#x3D;&quot;hljs-regexp&quot;&gt;/&amp;amp;incident_sysid&#x3D;([a-zA-Z0-9]+)/&lt;/span&gt;);
+   &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; sysid &#x3D; match[&lt;span class&#x3D;&quot;hljs-number&quot;&gt;1&lt;/span&gt;];
+   g_form.setValue(&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&#x27;parent&#x27;&lt;/span&gt;, sysid);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The script runs a regular expression against the current URL to pull out the &lt;code&gt;sys_id&lt;/code&gt; and set it to the value of the field. Keep in mind that if you are using a wizard you will need to update the record producer at the end to set the value on the new record. If you are using just a record producer you can name the field the same thing in both the producer and the dictionary and it will automatically copy over.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 24 Oct 2013 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2013/09/10/i-got-mentioned</guid>
+        <title>I Got Mentioned</title>
+        <link>http://jasonbutz.info/blog/2013/09/10/i-got-mentioned</link>
+        <description>&lt;p&gt;Last week a newletter went out that I had never heard of. It is called &amp;quot;Hacks &amp;amp;&amp;amp; Happenings&amp;quot; and it is put out by a group called &lt;a href&#x3D;&quot;http://indyhackers.org/&quot;&gt;Indy Hackers&lt;/a&gt;. In their &lt;a href&#x3D;&quot;http://us6.campaign-archive1.com/?u&#x3D;244b5370d41b5cf4146ec517c&amp;amp;id&#x3D;c5483caef3&quot;&gt;September 2013 Issue&lt;/a&gt; my &lt;a href&#x3D;&quot;/project/personal/timetracker.html&quot;&gt;Time Track&lt;/a&gt; project was mentioned! I didn&amp;#39;t even know about it until my boss forwarded me the newsletter.&lt;/p&gt;
+&lt;p&gt;Needless to say, I am now following the newletter and keeping an eye on the Indy Hackers website for any meetups I want to take part in. Thank you Indy Hackers.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 09 Sep 2013 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</guid>
+        <title>Importance vs. Urgency</title>
+        <link>http://jasonbutz.info/blog/2013/08/23/importance-vs-urgency</link>
+        <description>&lt;p&gt;A little while back my boss introduced me to the Importance vs. Urgency Matrix. It was a nice concept and I saw the reasoning behind it, but I didn&amp;#39;t pay it much heed. More recently I have started using it a great deal. I have two white boards in my office. One I keep blank for use as needed. The other one has a list of the primary things that are on my radar listed, with a color coded letter next to them. Then at the top I have a matrix similar to the one below and each letter is placed in a quadrant. That is how I keep track of the major things I have to do, and which I should pay the most attention to. Let me explain the matrix.&lt;/p&gt;
+&lt;p&gt;Along one axis is the importance, along the other is urgency. Things that are important and urgent fall into the quadrant I labeled &amp;quot;1&amp;quot;. Things that are important, but not urgent fall into the quadrant labeled &amp;quot;2&amp;quot;. Things that are urgent but not important fall into quadrant &amp;quot;3&amp;quot;. I think you can figure out quadrant &amp;quot;4&amp;quot;. I only break things down into the four quadrants and then let them vie for priority amongst themselves. You can use the whole setup and have things broken down every more finely.&lt;/p&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;/img/posts/importance-urgency-00.png&quot; class&#x3D;&quot;th radius&quot; style&#x3D;&quot;display: inline-block;&quot;&gt;
+    &lt;img src&#x3D;&quot;/img/posts/importance-urgency-00.png&quot; alt&#x3D;&quot;Importance vs. Urgency Matrix&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I work on things based on the order of the quadrant they fall in. If something is in quadrant 1 that is where I will try and focus most of my time. I work on things from quadrant 2 and people bring them up and progress is needed. If something falls in quadrant 3 I will work on it a little bit as people as. I treat it like quadrant 2, but with less priority. If something is in quadrant 4 then I will more or less ignore it until it moves somewhere else.&lt;/p&gt;
+&lt;p&gt;Let me go into the reasoning behind this ordering. If something is both important and urgent then it makes sense to work on that first, right? I think that is fairly apparent, so I won&amp;#39;t spend much time on that. The next bit could be taken differently by different people. I put important but not urgent things ahead of urgent but not important things. My reasoning on that is people freak out over small things. If someone is freaking out over an e-mail not arriving in a timely manner then you could say that is considered an urgent issue, they certainly think so. But is it really that important? Most of the time it&amp;#39;s not. You have to try and be unbiased when judging these things. If a problem or project is especially dear to someone then they will consider it more important, but you have to look at the bigger picture to decide. If something isn&amp;#39;t important and isn&amp;#39;t urgent then you will probably waste your time if you focus on it. In my experience things in this category will gain some urgency every once in a while and then drop back down to not being urgent.&lt;/p&gt;
+&lt;p&gt;Here is an example of what my whiteboard looks like, except my list goes all the way up to N. I don&amp;#39;t have it written anywhere what the different colors mean so that people don&amp;#39;t know, but the red items are ones I should focus on as much as possible. Green means to focus on every once in a while so I can show progress. Blue means ignore it until someone else brings it up. I&amp;#39;m planning to get some painters tape and use that to make better lines on my board since they are hand drawn right now. I&amp;#39;ll probably post an update to this with a picture once I have that done.&lt;/p&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;/img/posts/importance-urgency-01.png&quot; class&#x3D;&quot;th radius&quot; style&#x3D;&quot;display: inline-block;&quot;&gt;
+    &lt;img src&#x3D;&quot;/img/posts/importance-urgency-01.png&quot; alt&#x3D;&quot;Importance vs. Urgency Whiteboard&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;</description>
+        <pubDate>Thu, 22 Aug 2013 20:00:00 -0400</pubDate>
+    </item>
+    <item>
+        <guid>http://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</guid>
+        <title>Etsy Deployinator Environments</title>
+        <link>http://jasonbutz.info/blog/2013/07/31/etsy-deployinator-environments</link>
+        <description>&lt;p&gt;Etsy open-sourced their deployment tool a while back, but I didn&amp;#39;t learn about it until more recently. It is called &lt;a href&#x3D;&quot;https://github.com/etsy/deployinator&quot;&gt;Deployinator&lt;/a&gt; and runs on Ruby. I&amp;#39;m looking at using it for a project at work, but I ran into a horrible lack of documentation. The one example that is in the repo isn&amp;#39;t bad, it just doesn&amp;#39;t show you how to have multiple deploy buttons. In the case I may use it in, I will need multiple. If you aren&amp;#39;t sure what I mean by &amp;quot;multiple deploy buttons&amp;quot; check out the picture on &lt;a href&#x3D;&quot;http://codeascraft.com/2010/05/20/quantum-of-deployment/&quot;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;After digging through the code I finally got that working and I think others might want to avoid digging through the code.&lt;/p&gt;
+&lt;p&gt;If you don&amp;#39;t configure the buttons, called environments, then you get one &amp;quot;Deploy production&amp;quot; button, like you see below.&lt;/p&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;/img/posts/etsy-deployinator-00.png&quot; class&#x3D;&quot;th radius&quot; style&#x3D;&quot;display: inline-block;&quot;&gt;
+    &lt;img src&#x3D;&quot;/img/posts/etsy-deployinator-00.png&quot; alt&#x3D;&quot;Deployinator default enviroment&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Below is what you get for the demo stack. Only a few of the methods are actually required for the default setup. The required methods for the default setup are &lt;code&gt;demo_production&lt;/code&gt;, &lt;code&gt;demo_production_version&lt;/code&gt;, and &lt;code&gt;demo_head_build&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-ruby&quot;&gt;&lt;span class&#x3D;&quot;hljs-class&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;module&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;Deployinator&lt;/span&gt;&lt;/span&gt;
+  &lt;span class&#x3D;&quot;hljs-class&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;module&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;Stacks&lt;/span&gt;&lt;/span&gt;
+    &lt;span class&#x3D;&quot;hljs-class&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;module&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;Demo&lt;/span&gt;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_git_repo_url&lt;/span&gt;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;git://github.com/etsy/statsd.git&quot;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_git_checkout_path&lt;/span&gt;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{checkout_root}&lt;/span&gt;/&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;&quot;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;checkout_root&lt;/span&gt;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;/tmp&quot;&lt;/span&gt;
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_production_version&lt;/span&gt;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-string&quot;&gt;%x{cat &lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{demo_git_checkout_path}&lt;/span&gt;/version.txt}&lt;/span&gt;
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_production_build&lt;/span&gt;&lt;/span&gt;
+        Version.get_build(demo_production_version)
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_head_build&lt;/span&gt;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-string&quot;&gt;%x{git ls-remote &lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{demo_git_repo_url}&lt;/span&gt; HEAD | cut -c1-7}&lt;/span&gt;.chomp
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_production&lt;/span&gt;&lt;span class&#x3D;&quot;hljs-params&quot;&gt;(options&#x3D;{})&lt;/span&gt;&lt;/span&gt;
+        old_build &#x3D; Version.get_build(demo_production_version)
+
+        git_cmd &#x3D; old_build ? &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:git_freshen_clone&lt;/span&gt; : &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:github_clone&lt;/span&gt;
+        send(git_cmd, stack, &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;sh -c&quot;&lt;/span&gt;)
+
+        git_bump_version stack, &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&quot;&lt;/span&gt;
+
+        build &#x3D; demo_head_build
+
+        &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt;
+          run_cmd &lt;span class&#x3D;&quot;hljs-string&quot;&gt;%Q{echo &quot;ssh host do_something&quot;}&lt;/span&gt;
+          log_and_stream &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Done!&amp;lt;br&amp;gt;&quot;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;rescue&lt;/span&gt;
+          log_and_stream &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Failed!&amp;lt;br&amp;gt;&quot;&lt;/span&gt;
+        &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+
+        &lt;span class&#x3D;&quot;hljs-comment&quot;&gt;# log this deploy / timing&lt;/span&gt;
+        log_and_shout(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:old_build&lt;/span&gt; &#x3D;&amp;gt; old_build, &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:build&lt;/span&gt; &#x3D;&amp;gt; build, &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:send_email&lt;/span&gt; &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-literal&quot;&gt;true&lt;/span&gt;)
+      &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+    &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+  &lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The code that sets up the environments is in &lt;code&gt;helpers.rb&lt;/code&gt;. The environments are defined by an array of hashes, this is what the code for the default environment looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-ruby&quot;&gt;[{
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt;            &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;production&quot;&lt;/span&gt;,
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:title&lt;/span&gt;           &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Deploy &lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt; production&quot;&lt;/span&gt;,
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:method&lt;/span&gt;          &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production&quot;&lt;/span&gt;,
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_version&lt;/span&gt; &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production_version&quot;&lt;/span&gt;&lt;/span&gt;)},
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_build&lt;/span&gt;   &#x3D;&amp;gt; proc{Version.get_build(send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production_version&quot;&lt;/span&gt;&lt;/span&gt;))},
+  &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:next_build&lt;/span&gt;      &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:head_build&lt;/span&gt;)}
+}]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once I found this code, and found the typo in my method name I was easily able to add more environments. To add environments to the demo stack that is provided all you have to do is define a &lt;code&gt;demo_environments&lt;/code&gt; method in the stack file. Below is an example with a qa and production environment defined in a dynamic way.&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-ruby&quot;&gt;&lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_environment&lt;/span&gt;&lt;/span&gt;
+  [{
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt;            &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:title&lt;/span&gt;           &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Deploy &lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt; qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:method&lt;/span&gt;          &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_version&lt;/span&gt; &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_qa_version&quot;&lt;/span&gt;&lt;/span&gt;)},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_build&lt;/span&gt;   &#x3D;&amp;gt; proc{Version.get_build(send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_qa_version&quot;&lt;/span&gt;&lt;/span&gt;))},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:next_build&lt;/span&gt;      &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:head_build&lt;/span&gt;)}
+  },
+  {
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt;            &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:title&lt;/span&gt;           &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Deploy &lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt; production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:method&lt;/span&gt;          &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_version&lt;/span&gt; &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production_version&quot;&lt;/span&gt;&lt;/span&gt;)},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_build&lt;/span&gt;   &#x3D;&amp;gt; proc{Version.get_build(send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:&lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;&lt;span class&#x3D;&quot;hljs-subst&quot;&gt;#{stack}&lt;/span&gt;_production_version&quot;&lt;/span&gt;&lt;/span&gt;))},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:next_build&lt;/span&gt;      &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:head_build&lt;/span&gt;)}
+  }]
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After adding this environment you will need to add a few additional methods ( &lt;code&gt;demo_qa&lt;/code&gt; and &lt;code&gt;demo_qa_version&lt;/code&gt; ). If you wanted you could also define the environments like so:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;lang-ruby&quot;&gt;&lt;span class&#x3D;&quot;hljs-function&quot;&gt;&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;def&lt;/span&gt; &lt;span class&#x3D;&quot;hljs-title&quot;&gt;demo_environment&lt;/span&gt;&lt;/span&gt;
+  [{
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt;            &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:title&lt;/span&gt;           &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Deploy demo qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:method&lt;/span&gt;          &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;demo_qa&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_version&lt;/span&gt; &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:demo_qa_version&lt;/span&gt;)},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_build&lt;/span&gt;   &#x3D;&amp;gt; proc{Version.get_build(send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:demo_qa_version&lt;/span&gt;))},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:next_build&lt;/span&gt;      &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:head_build&lt;/span&gt;)}
+  },
+  {
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt;            &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:title&lt;/span&gt;           &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;Deploy demo production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:method&lt;/span&gt;          &#x3D;&amp;gt; &lt;span class&#x3D;&quot;hljs-string&quot;&gt;&quot;demo_production&quot;&lt;/span&gt;,
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_version&lt;/span&gt; &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:demo_production_version&lt;/span&gt;)},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:current_build&lt;/span&gt;   &#x3D;&amp;gt; proc{Version.get_build(send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:demo_production_version&lt;/span&gt;))},
+    &lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:next_build&lt;/span&gt;      &#x3D;&amp;gt; proc{send(&lt;span class&#x3D;&quot;hljs-symbol&quot;&gt;:head_build&lt;/span&gt;)}
+  }]
+&lt;span class&#x3D;&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here is what you end up with.&lt;/p&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;/img/posts/etsy-deployinator-01.png&quot; class&#x3D;&quot;th radius&quot; style&#x3D;&quot;display: inline-block;&quot;&gt;
+    &lt;img src&#x3D;&quot;/img/posts/etsy-deployinator-01.png&quot; alt&#x3D;&quot;Deployinator default enviroment&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So far this has been the biggest thing that wasn&amp;#39;t explained. Anything else I come across I&amp;#39;ll add here as well.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 30 Jul 2013 20:00:00 -0400</pubDate>
+    </item>
+
+</channel>
+
+</rss>

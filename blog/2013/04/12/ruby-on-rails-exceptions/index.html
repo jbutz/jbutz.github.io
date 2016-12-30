@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="Jason Butz">
+
+    <title>Ruby on Rails Exceptions</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/highlight.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4 pure-u-lg-1-5">
+            <div class="header">
+                <img class="pure-img-responsive rounded-circle" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8">
+                <h1 class="brand-title">Jason Butz</h1>
+                <h2 class="brand-tagline">Sr. Software Engineer<br />@ <a href="http://www.genesys.com/" target="_blank">Genesys</a></h2>
+
+                <nav class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="/work" class="pure-menu-link">My Work</a></li>
+                        <li class="pure-menu-item"><a href="/contact" class="pure-menu-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5">            <div class="page-card">
+                <div class="post-header">
+                    <h1><a href="/blog/2013/04/12/ruby-on-rails-exceptions">Ruby on Rails Exceptions</a> <small>April 11th 2013</small></h1>
+                </div>                
+                <p>I&#39;ve been learning Ruby and Ruby on Rails recently, and I was working on an application today that gave me some trouble in one particular area. The application is a simple application to allow IT to post the status of different systems so people can be aware of any issues. There are three models involved:</p>
+<ul>
+<li>Services</li>
+<li>Statuses</li>
+<li>Events</li>
+</ul>
+<p>An event references both a service and a status. I needed to be able to ensure a status being deleted wasn&#39;t referenced by any events. The callback and the database query were easy, but I was having issues when it came to showing an error as to why the status wasn&#39;t deleted. After a bit of Googling I found that exceptions seems to be the best way to do this. That was good to know, but I still had to figure out how to use them for this case. I had trouble finding any good example of an exception being used, so I figure I ought to post what I came up with.</p>
+<p><em>status_controller.rb</em></p>
+<pre><code class="lang-ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatusesController</span> &lt; ApplicationController</span>
+...
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">destroy</span></span>
+    @status = Status.find(params[<span class="hljs-symbol">:id</span>])
+    <span class="hljs-keyword">begin</span>
+      @status.destroy
+    <span class="hljs-keyword">rescue</span> Exception =&gt; e
+      flash[<span class="hljs-symbol">:error</span>] = e.message
+      redirect_to statuses_url
+      <span class="hljs-keyword">return</span>
+    <span class="hljs-keyword">end</span>
+
+    respond_to <span class="hljs-keyword">do</span> <span class="hljs-params">|format|</span>
+      format.html { redirect_to statuses_url }
+      format.json { head <span class="hljs-symbol">:no_content</span> }
+    <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p><em>status.rb</em></p>
+<pre><code class="lang-ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Status</span> &lt; ActiveRecord::Base</span>
+...
+  before_destroy <span class="hljs-symbol">:check_existing_events</span>
+
+  private
+...
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check_existing_events</span></span>
+    raise Exception.new(<span class="hljs-string">"Events exist that use that status."</span>) unless Event.where(<span class="hljs-symbol">:status_id</span> =&gt; <span class="hljs-keyword">self</span>.id).count == <span class="hljs-number">0</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+    
+</body>
+
+</html>

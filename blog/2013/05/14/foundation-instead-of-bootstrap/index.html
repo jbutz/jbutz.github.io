@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Jason Butz">
 
-    <title>Contact Me</title>
+    <title>Foundation instead of Bootstrap?</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
     <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
@@ -37,25 +37,14 @@
         </div>
 
         <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5">            <div class="page-card">
-                <p>If you would like to contact me please use the form below or contact me via my <a href="https://www.linkedin.com/in/jasonbutz" target="_blank">LinkedIn Profile</a>.</p>
+                <div class="post-header">
+                    <h1><a href="/blog/2013/05/14/foundation-instead-of-bootstrap">Foundation instead of Bootstrap?</a> <small>May 13th 2013</small></h1>
+                </div>                
+                <p>There seem to be an increasing number of people throwing rants about overuse of <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a>. This is not one of them, I like Twitter Bootstrap. It is great for people who are not designers and need to put together something that looks decent. It makes putting together a site easy. That said, you can kind of tell when it is used. The buttons are usually a dead giveaway, and customizing it is not for the faint of heart.</p>
+<p>For those reasons I decided to give something else a try for a <a href="http://www.bottlesapp.in">project</a> I am putting together. I decided to give <a href="http://foundation.zurb.com">Foundation</a> a try. It has a gem available, so it is designed to work nicely with Ruby on Rails, and it seems to be very flexible.</p>
+<p>The documentation on the grid system requires you to read the whole thing, not just skim it and start going. One very nice thing about their grid system is that there are different classes for different size screens. It&#39;s great for when you want space on either side of the screen on large screens, but want to lose the extra space on a smaller one. If you don&#39;t understand what I mean take at the <a href="http://www.bottlesapp.in">Bottles</a> coming soon page. Compare it between your computer and phone.</p>
+<p>I haven&#39;t had to do too much customizing to Foundation yet, but it looks like it is meant to handle that a bit better than Bootstrap.</p>
 
-<div class="pure-g">
-    <div class="pure-u-1-5"></div>
-    <div class="pure-u-3-5">
-        <form class="pure-form pure-form-stacked" method="POST" action="https://formspree.io/jason@jasonbutz.info">
-            <label for="name">Your Name</label>
-            <input class="pure-input-1" name="name" type="text">
-            <label for="email">Your E-Mail Address</label>
-            <input class="pure-input-1" name="email" type="email">
-            <label for="message">Your Message</label>
-            <textarea class="pure-input-1" name="message"></textarea>
-            <input type="hidden" name="_next" value="/thanks" />
-            <input type="hidden" name="_subject" value="Website Contact" />
-            <input type="text" name="_gotcha" style="display:none" />
-            <button type="submit" class="pure-button pure-button-primary">Send</button>
-        </form>
-    </div>
-</div>
             </div>
             </div>
         </div>

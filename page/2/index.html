@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="Jason Butz">
+
+    <title>Jason Butz</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/highlight.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4 pure-u-lg-1-5">
+            <div class="header">
+                <img class="pure-img-responsive rounded-circle" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8">
+                <h1 class="brand-title">Jason Butz</h1>
+                <h2 class="brand-tagline">Sr. Software Engineer<br />@ <a href="http://www.genesys.com/" target="_blank">Genesys</a></h2>
+
+                <nav class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="/work" class="pure-menu-link">My Work</a></li>
+                        <li class="pure-menu-item"><a href="/contact" class="pure-menu-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5"><div class="page-card">
+<div class="post-header">
+    <h1><a href="/blog/2013/07/24/new-site-with-jekyll">New Site with Jekyll</a> <small>July 23rd 2013</small></h1>
+</div>
+<p>The old version of my site was powered by laravel, and for what I used it for that was over-kill. I have tried out <a href="http://octopress.org">Octopress</a> in the past and liked it, so I thought I would try the source and use <a href="http://jekyllrb.com">Jekyll</a>. It quickly turned into my new site! Jekyll is very easy to learn and gives you an amazing amount of flexibility out of the box. Once you add on the plugins you can create there seems to be almost no limit.</p>
+<p>I was initially only going to handle the projects that I post, since that is the biggest part of this site. Then I decided I wanted to add in the blog I had started. That work working well, but they I ran into some difficulty with having pagination on the blog, but not on the projects. Luckily, I was able to find a <a href="http://realjenius.com/2012/12/01/jekyll-category-tag-paging-feeds/">blog post</a> that lead me down the path to a plugin that would work for my situation.</p>
+<p><a href="http://jekyllrb.com">Jekyll</a> seems to be amazing and I look forward to seeing what else I can do with it.</p>
+
+</div><div class="page-card">
+<div class="post-header">
+    <h1><a href="/blog/2013/06/21/service-now">Service Now</a> <small>June 20th 2013</small></h1>
+</div>
+<p>I recently switched jobs, and at the new company my department makes use of <a href="http://www.servicenow.com">Service Now</a>. I must say, I am impressed with the product. It is sold as an ITIL compatible help desk solution, but it is so much more. You are able to customize nearly every aspect of the system if you wish. Want to rearrange a page? Done. Want a wizard so people enter their issues correctly? Done. All of this customization is done through their interface, which I expect you can customize, and through JavaScript scripts.</p>
+<p>Their platform runs on Java and uses Mozilla&#39;s rhino JavaScript engine for the server-side script processing. Everything is stored in a relational database, but you don&#39;t really have direct access to it.</p>
+<p>The system is very flexible, and it even has some build in functionality for web services. You can connect to their service using WSDL and SOAP or by using HTTP requests to get JSON, XML, CSV responses back. I think there may also be PDF responses? I&#39;m not sure since I haven&#39;t used them. Here is one of the big issues: I said you could use HTTP requests, but you don&#39;t really get to make RESTful requests. You end up with these horrendous lists of parameters on your requests that can get very unruly.</p>
+<p>There is one other big issue in my mind. Everything is done with JavaScript, which isn&#39;t bad. However, their JavaScript does not look especially nice. It also doesn&#39;t promote very good practices. Some things get put into functions, and then the functions are called. Others are just monolithic in nature and have no functions and are all &quot;global&quot;. I have been using a lot of IIFEs since I have no idea what the environment is like for my code, and I have no clue if the scripts are all thrown together, or if they are run individually.</p>
+<p>That is really it for big issues. They have taken a lot of the annoying aspects out of making a web application. They take care of rendering for the most part, they have ACLs, they have logging, they have scheduled tasks. They even have decent documentation, which is always nice to find.</p>
+
+</div><div class="page-card">
+<div class="post-header">
+    <h1><a href="/blog/2013/05/14/foundation-instead-of-bootstrap">Foundation instead of Bootstrap?</a> <small>May 13th 2013</small></h1>
+</div>
+<p>There seem to be an increasing number of people throwing rants about overuse of <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a>. This is not one of them, I like Twitter Bootstrap. It is great for people who are not designers and need to put together something that looks decent. It makes putting together a site easy. That said, you can kind of tell when it is used. The buttons are usually a dead giveaway, and customizing it is not for the faint of heart.</p>
+<p>For those reasons I decided to give something else a try for a <a href="http://www.bottlesapp.in">project</a> I am putting together. I decided to give <a href="http://foundation.zurb.com">Foundation</a> a try. It has a gem available, so it is designed to work nicely with Ruby on Rails, and it seems to be very flexible.</p>
+<p>The documentation on the grid system requires you to read the whole thing, not just skim it and start going. One very nice thing about their grid system is that there are different classes for different size screens. It&#39;s great for when you want space on either side of the screen on large screens, but want to lose the extra space on a smaller one. If you don&#39;t understand what I mean take at the <a href="http://www.bottlesapp.in">Bottles</a> coming soon page. Compare it between your computer and phone.</p>
+<p>I haven&#39;t had to do too much customizing to Foundation yet, but it looks like it is meant to handle that a bit better than Bootstrap.</p>
+
+</div><div class="page-card">
+<div class="post-header">
+    <h1><a href="/blog/2013/05/03/bootstrap-lightbox-update">Bootstrap Lightbox Update</a> <small>May 2nd 2013</small></h1>
+</div>
+<p>I took a bit of a break from working on <a href="https://github.com/jbutz/bootstrap-lightbox">Bootstrap Lightbox</a>. I just needed to get away and be lazy for a while, but I am back. The other week I re-wrote the whole thing again. I&#39;m sure that gets tiring for some, but I had several reasons:</p>
+<ul class="no-bullet">
+<li>I wanted to do a little as necessary as Twitter updates Bootstrap</li>
+<li>I wanted Bootstrap Lightbox to focus on images</li>
+<li>I needed more JavaScript practice</li>
+</ul>
+
+<p>So, here is what is going on. The <a href="http://twitter.github.io/bootstrap/javascript.html#modals">modal JavaScript</a> is now a dependency. I take its functions and extend them and only modify the ones for lightbox that need it. This reduced the amount of work required significantly. If people want to extend or tweak Bootstrap Lightbox to use with non-image content or with carousels then they are welcome to do so, but that isn&#39;t what Bootstrap Lightbox is for. I&#39;m focusing on images and that makes the code much easier to work with. This will make it a lot easier to add in some image gallery functionality. The old JavaScript was a mess, but now it is a lot cleaner and easier to understand.</p>
+<p>So, what do I plan to do next? I am thinking about adding a feature so that you don&#39;t need to add any extra HTML to your page. The feature would be optional, but it would provide a good basis to take care of image galleries.</p>
+<p>The new version is still a work in progress, but I think I have it all working. It should be released soon.</p>
+
+</div><div class="page-card">
+<div class="post-header">
+    <h1><a href="/blog/2013/04/12/ruby-on-rails-exceptions">Ruby on Rails Exceptions</a> <small>April 11th 2013</small></h1>
+</div>
+<p>I&#39;ve been learning Ruby and Ruby on Rails recently, and I was working on an application today that gave me some trouble in one particular area. The application is a simple application to allow IT to post the status of different systems so people can be aware of any issues. There are three models involved:</p>
+<ul>
+<li>Services</li>
+<li>Statuses</li>
+<li>Events</li>
+</ul>
+<p>An event references both a service and a status. I needed to be able to ensure a status being deleted wasn&#39;t referenced by any events. The callback and the database query were easy, but I was having issues when it came to showing an error as to why the status wasn&#39;t deleted. After a bit of Googling I found that exceptions seems to be the best way to do this. That was good to know, but I still had to figure out how to use them for this case. I had trouble finding any good example of an exception being used, so I figure I ought to post what I came up with.</p>
+<p><em>status_controller.rb</em></p>
+<pre><code class="lang-ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">StatusesController</span> &lt; ApplicationController</span>
+...
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">destroy</span></span>
+    @status = Status.find(params[<span class="hljs-symbol">:id</span>])
+    <span class="hljs-keyword">begin</span>
+      @status.destroy
+    <span class="hljs-keyword">rescue</span> Exception =&gt; e
+      flash[<span class="hljs-symbol">:error</span>] = e.message
+      redirect_to statuses_url
+      <span class="hljs-keyword">return</span>
+    <span class="hljs-keyword">end</span>
+
+    respond_to <span class="hljs-keyword">do</span> <span class="hljs-params">|format|</span>
+      format.html { redirect_to statuses_url }
+      format.json { head <span class="hljs-symbol">:no_content</span> }
+    <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p><em>status.rb</em></p>
+<pre><code class="lang-ruby"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Status</span> &lt; ActiveRecord::Base</span>
+...
+  before_destroy <span class="hljs-symbol">:check_existing_events</span>
+
+  private
+...
+  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check_existing_events</span></span>
+    raise Exception.new(<span class="hljs-string">"Events exist that use that status."</span>) unless Event.where(<span class="hljs-symbol">:status_id</span> =&gt; <span class="hljs-keyword">self</span>.id).count == <span class="hljs-number">0</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+
+</div>    <nav class="pagination">
+            <a class="pure-button pure-button-primary pure-button-disabled" href="/"><i class="fa fa-chevron-left" aria-hidden="true"></i> Older Posts</a>
+
+            <a class="pure-button pure-button-primary" href="/">Newer Posts <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+    </nav>
+            </div>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+    
+</body>
+
+</html>

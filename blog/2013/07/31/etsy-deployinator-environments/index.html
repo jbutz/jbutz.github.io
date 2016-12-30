@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="Jason Butz">
+
+    <title>Etsy Deployinator Environments</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/page.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/highlight.css" rel="stylesheet" data-attr="shadow-page">
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="layout" class="pure-g">
+        <div class="sidebar pure-u-1 pure-u-md-1-4 pure-u-lg-1-5">
+            <div class="header">
+                <img class="pure-img-responsive rounded-circle" src="https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/13256141_2930854828151_3836105531451032844_n.jpg?oh=bbb35a5506578767d23a6b49aa2a83eb&oe=588723A8">
+                <h1 class="brand-title">Jason Butz</h1>
+                <h2 class="brand-tagline">Sr. Software Engineer<br />@ <a href="http://www.genesys.com/" target="_blank">Genesys</a></h2>
+
+                <nav class="pure-menu">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                        <li class="pure-menu-item"><a href="/work" class="pure-menu-link">My Work</a></li>
+                        <li class="pure-menu-item"><a href="/contact" class="pure-menu-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div id="main" class="content pure-u-1 pure-u-md-3-4 pure-u-lg-4-5">            <div class="page-card">
+                <div class="post-header">
+                    <h1><a href="/blog/2013/07/31/etsy-deployinator-environments">Etsy Deployinator Environments</a> <small>July 30th 2013</small></h1>
+                </div>                
+                <p>Etsy open-sourced their deployment tool a while back, but I didn&#39;t learn about it until more recently. It is called <a href="https://github.com/etsy/deployinator">Deployinator</a> and runs on Ruby. I&#39;m looking at using it for a project at work, but I ran into a horrible lack of documentation. The one example that is in the repo isn&#39;t bad, it just doesn&#39;t show you how to have multiple deploy buttons. In the case I may use it in, I will need multiple. If you aren&#39;t sure what I mean by &quot;multiple deploy buttons&quot; check out the picture on <a href="http://codeascraft.com/2010/05/20/quantum-of-deployment/">this page</a>.</p>
+<p>After digging through the code I finally got that working and I think others might want to avoid digging through the code.</p>
+<p>If you don&#39;t configure the buttons, called environments, then you get one &quot;Deploy production&quot; button, like you see below.</p>
+<p><a href="/img/posts/etsy-deployinator-00.png" class="th radius" style="display: inline-block;">
+    <img src="/img/posts/etsy-deployinator-00.png" alt="Deployinator default enviroment" />
+</a></p>
+
+<p>Below is what you get for the demo stack. Only a few of the methods are actually required for the default setup. The required methods for the default setup are <code>demo_production</code>, <code>demo_production_version</code>, and <code>demo_head_build</code>.</p>
+<pre><code class="lang-ruby"><span class="hljs-class"><span class="hljs-keyword">module</span> <span class="hljs-title">Deployinator</span></span>
+  <span class="hljs-class"><span class="hljs-keyword">module</span> <span class="hljs-title">Stacks</span></span>
+    <span class="hljs-class"><span class="hljs-keyword">module</span> <span class="hljs-title">Demo</span></span>
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_git_repo_url</span></span>
+        <span class="hljs-string">"git://github.com/etsy/statsd.git"</span>
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_git_checkout_path</span></span>
+        <span class="hljs-string">"<span class="hljs-subst">#{checkout_root}</span>/<span class="hljs-subst">#{stack}</span>"</span>
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">checkout_root</span></span>
+        <span class="hljs-string">"/tmp"</span>
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_production_version</span></span>
+        <span class="hljs-string">%x{cat <span class="hljs-subst">#{demo_git_checkout_path}</span>/version.txt}</span>
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_production_build</span></span>
+        Version.get_build(demo_production_version)
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_head_build</span></span>
+        <span class="hljs-string">%x{git ls-remote <span class="hljs-subst">#{demo_git_repo_url}</span> HEAD | cut -c1-7}</span>.chomp
+      <span class="hljs-keyword">end</span>
+
+      <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_production</span><span class="hljs-params">(options={})</span></span>
+        old_build = Version.get_build(demo_production_version)
+
+        git_cmd = old_build ? <span class="hljs-symbol">:git_freshen_clone</span> : <span class="hljs-symbol">:github_clone</span>
+        send(git_cmd, stack, <span class="hljs-string">"sh -c"</span>)
+
+        git_bump_version stack, <span class="hljs-string">""</span>
+
+        build = demo_head_build
+
+        <span class="hljs-keyword">begin</span>
+          run_cmd <span class="hljs-string">%Q{echo "ssh host do_something"}</span>
+          log_and_stream <span class="hljs-string">"Done!&lt;br&gt;"</span>
+        <span class="hljs-keyword">rescue</span>
+          log_and_stream <span class="hljs-string">"Failed!&lt;br&gt;"</span>
+        <span class="hljs-keyword">end</span>
+
+        <span class="hljs-comment"># log this deploy / timing</span>
+        log_and_shout(<span class="hljs-symbol">:old_build</span> =&gt; old_build, <span class="hljs-symbol">:build</span> =&gt; build, <span class="hljs-symbol">:send_email</span> =&gt; <span class="hljs-literal">true</span>)
+      <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>The code that sets up the environments is in <code>helpers.rb</code>. The environments are defined by an array of hashes, this is what the code for the default environment looks like:</p>
+<pre><code class="lang-ruby">[{
+  <span class="hljs-symbol">:name</span>            =&gt; <span class="hljs-string">"production"</span>,
+  <span class="hljs-symbol">:title</span>           =&gt; <span class="hljs-string">"Deploy <span class="hljs-subst">#{stack}</span> production"</span>,
+  <span class="hljs-symbol">:method</span>          =&gt; <span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production"</span>,
+  <span class="hljs-symbol">:current_version</span> =&gt; proc{send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production_version"</span></span>)},
+  <span class="hljs-symbol">:current_build</span>   =&gt; proc{Version.get_build(send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production_version"</span></span>))},
+  <span class="hljs-symbol">:next_build</span>      =&gt; proc{send(<span class="hljs-symbol">:head_build</span>)}
+}]
+</code></pre>
+<p>Once I found this code, and found the typo in my method name I was easily able to add more environments. To add environments to the demo stack that is provided all you have to do is define a <code>demo_environments</code> method in the stack file. Below is an example with a qa and production environment defined in a dynamic way.</p>
+<pre><code class="lang-ruby"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_environment</span></span>
+  [{
+    <span class="hljs-symbol">:name</span>            =&gt; <span class="hljs-string">"qa"</span>,
+    <span class="hljs-symbol">:title</span>           =&gt; <span class="hljs-string">"Deploy <span class="hljs-subst">#{stack}</span> qa"</span>,
+    <span class="hljs-symbol">:method</span>          =&gt; <span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_qa"</span>,
+    <span class="hljs-symbol">:current_version</span> =&gt; proc{send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_qa_version"</span></span>)},
+    <span class="hljs-symbol">:current_build</span>   =&gt; proc{Version.get_build(send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_qa_version"</span></span>))},
+    <span class="hljs-symbol">:next_build</span>      =&gt; proc{send(<span class="hljs-symbol">:head_build</span>)}
+  },
+  {
+    <span class="hljs-symbol">:name</span>            =&gt; <span class="hljs-string">"production"</span>,
+    <span class="hljs-symbol">:title</span>           =&gt; <span class="hljs-string">"Deploy <span class="hljs-subst">#{stack}</span> production"</span>,
+    <span class="hljs-symbol">:method</span>          =&gt; <span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production"</span>,
+    <span class="hljs-symbol">:current_version</span> =&gt; proc{send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production_version"</span></span>)},
+    <span class="hljs-symbol">:current_build</span>   =&gt; proc{Version.get_build(send(<span class="hljs-symbol">:<span class="hljs-string">"<span class="hljs-subst">#{stack}</span>_production_version"</span></span>))},
+    <span class="hljs-symbol">:next_build</span>      =&gt; proc{send(<span class="hljs-symbol">:head_build</span>)}
+  }]
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>After adding this environment you will need to add a few additional methods ( <code>demo_qa</code> and <code>demo_qa_version</code> ). If you wanted you could also define the environments like so:</p>
+<pre><code class="lang-ruby"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">demo_environment</span></span>
+  [{
+    <span class="hljs-symbol">:name</span>            =&gt; <span class="hljs-string">"qa"</span>,
+    <span class="hljs-symbol">:title</span>           =&gt; <span class="hljs-string">"Deploy demo qa"</span>,
+    <span class="hljs-symbol">:method</span>          =&gt; <span class="hljs-string">"demo_qa"</span>,
+    <span class="hljs-symbol">:current_version</span> =&gt; proc{send(<span class="hljs-symbol">:demo_qa_version</span>)},
+    <span class="hljs-symbol">:current_build</span>   =&gt; proc{Version.get_build(send(<span class="hljs-symbol">:demo_qa_version</span>))},
+    <span class="hljs-symbol">:next_build</span>      =&gt; proc{send(<span class="hljs-symbol">:head_build</span>)}
+  },
+  {
+    <span class="hljs-symbol">:name</span>            =&gt; <span class="hljs-string">"production"</span>,
+    <span class="hljs-symbol">:title</span>           =&gt; <span class="hljs-string">"Deploy demo production"</span>,
+    <span class="hljs-symbol">:method</span>          =&gt; <span class="hljs-string">"demo_production"</span>,
+    <span class="hljs-symbol">:current_version</span> =&gt; proc{send(<span class="hljs-symbol">:demo_production_version</span>)},
+    <span class="hljs-symbol">:current_build</span>   =&gt; proc{Version.get_build(send(<span class="hljs-symbol">:demo_production_version</span>))},
+    <span class="hljs-symbol">:next_build</span>      =&gt; proc{send(<span class="hljs-symbol">:head_build</span>)}
+  }]
+<span class="hljs-keyword">end</span>
+</code></pre>
+<p>Here is what you end up with.</p>
+<p><a href="/img/posts/etsy-deployinator-01.png" class="th radius" style="display: inline-block;">
+    <img src="/img/posts/etsy-deployinator-01.png" alt="Deployinator default enviroment" />
+</a></p>
+
+<p>So far this has been the biggest thing that wasn&#39;t explained. Anything else I come across I&#39;ll add here as well.</p>
+
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/index.js"></script>
+    
+</body>
+
+</html>
