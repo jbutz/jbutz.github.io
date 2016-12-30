@@ -43,7 +43,7 @@ Metalsmith(__dirname)
     .metadata({
         title: "Jason Butz",
         author: 'Jason Butz',
-        siteurl: "http://jasonbutz.info",
+        siteurl: "https://jasonbutz.info",
         description: ""
     })
     .source('./src')
