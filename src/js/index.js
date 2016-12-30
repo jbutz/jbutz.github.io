@@ -6,17 +6,26 @@
     while (mainEl.firstChild) {
         mainEl.removeChild(mainEl.firstChild);
     }
-    // Summon the shadow (dom)
-    var contentShadow = document.querySelector('#main').createShadowRoot();
     // Create a div to use in the shadow dom and fill it
-    var pageContainer = document.createElement('div');
-    pageContainer.innerHTML = mainContent;
-    // Find and add our shadow styles
-    document.querySelectorAll('link[data-attr="shadow-page"]').forEach(function (el) {
-        contentShadow.appendChild(el.cloneNode());
-    });
-    // Add our div to the shadow dom
-    contentShadow.appendChild(pageContainer);
+    var pageContainer;
+    // Summon the shadow (dom)
+    var contentShadow = document.querySelector('#main').shadowRoot;
+    if (!contentShadow) {
+        contentShadow = document.querySelector('#main').createShadowRoot();
+
+        // Create a div to use in the shadow dom and fill it
+        pageContainer = document.createElement('div');
+        pageContainer.innerHTML = mainContent;
+        // Find and add our shadow styles
+        document.querySelectorAll('link[data-attr="shadow-page"]').forEach(function (el) {
+            contentShadow.appendChild(el.cloneNode());
+        });
+        // Add our div to the shadow dom
+        contentShadow.appendChild(pageContainer);
+    } else {
+        pageContainer = contentShadow.querySelector('div');
+    }
+
 
     // Create somewhere to hold loaded pages
     var templateEl = document.createElement('template');

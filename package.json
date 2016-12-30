@@ -31,5 +31,8 @@
     "metalsmith-writemetadata": "^0.4.5",
     "moment": "^2.17.1",
     "sass-lint": "^1.10.2"
+  },
+  "optionalDependencies": {
+    "http-server": "^0.9.0"
   }
 }
